@@ -3,13 +3,10 @@ package com.john_halaka.notes.presentaion
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
+import com.john_halaka.notes.R
+import com.john_halaka.notes.feature_note.domain.model.Note
+import com.john_halaka.notes.presentaion.notes.components.NoteItem
 import com.john_halaka.notes.ui.theme.NotesTheme
 
 class MainActivity : ComponentActivity() {
@@ -19,6 +16,9 @@ class MainActivity : ComponentActivity() {
             NotesTheme {
                 // A surface container using the 'background' color from the theme
 
+                NoteItem(note = Note(1, "Test", "TestContent", color = (R.color.teal_200), timestamp = 1L ), modifier = Modifier) {
+
+                }
                 }
             }
         }
