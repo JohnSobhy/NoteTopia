@@ -150,7 +150,6 @@ fun AddEditNoteScreen(
                 hint = titleState.hint,
                 onValueChange = {
                              viewModel.onEvent(AddEditNoteEvent.EnteredTitle (it))
-
                 },
                 onFocusChange = {
                     viewModel.onEvent(AddEditNoteEvent.ChangeTitleFocus (it))

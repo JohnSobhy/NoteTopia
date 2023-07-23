@@ -18,10 +18,10 @@ fun TransparentHintTextField (
     isHintVisible : Boolean = true,
     onValueChange: (String) -> Unit,
     textStyle: TextStyle = TextStyle(),
-    singleLine : Boolean = true,
+    singleLine : Boolean = false,
     onFocusChange: (FocusState) -> Unit
 ) {
-    Box(modifier = Modifier) {
+    Box(modifier = modifier) {
         BasicTextField(
             value = text,
             onValueChange = onValueChange,
