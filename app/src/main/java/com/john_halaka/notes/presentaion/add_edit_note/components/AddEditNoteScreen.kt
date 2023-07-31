@@ -22,6 +22,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Send
+import androidx.compose.material.icons.rounded.Done
+import androidx.compose.material.icons.rounded.Send
+import androidx.compose.material.icons.rounded.Share
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -36,10 +39,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.john_halaka.notes.R
 import com.john_halaka.notes.feature_note.domain.model.Note
 import com.john_halaka.notes.presentaion.add_edit_note.AddEditNoteEvent
 import com.john_halaka.notes.presentaion.add_edit_note.AddEditNoteViewModel
@@ -92,7 +98,8 @@ fun AddEditNoteScreen(
             },
                 Modifier.background(color = MaterialTheme.colorScheme.primary)
             ) {
-                Icon(imageVector = Icons.Default.Send , contentDescription = "Save note")
+                Icon(painter = painterResource(R.drawable.baseline_save_24), contentDescription = "Save")
+
             }
         } ,
         snackbarHost = {
