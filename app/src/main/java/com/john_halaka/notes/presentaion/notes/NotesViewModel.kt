@@ -8,6 +8,7 @@ import com.john_halaka.notes.feature_note.domain.model.Note
 import com.john_halaka.notes.feature_note.domain.use_case.NoteUseCases
 import com.john_halaka.notes.feature_note.domain.util.NoteOrder
 import com.john_halaka.notes.feature_note.domain.util.OrderType
+import com.john_halaka.notes.feature_note.domain.util.notesSearch
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.launchIn
@@ -58,6 +59,13 @@ class NotesViewModel @Inject constructor(
                 _state.value = state.value.copy(
                     isOrderSectionVisible = !state.value.isOrderSectionVisible
                 )
+            }
+
+            is NotesEvent.SearchNotes -> {
+                _state.value = state.value.copy(
+                    searchResult = notesSearch(state.value.notes, event.searchPhrase )
+                )
+
             }
         }
 

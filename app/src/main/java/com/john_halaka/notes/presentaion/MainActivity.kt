@@ -17,6 +17,7 @@ import com.john_halaka.notes.feature_note.domain.model.Note
 import com.john_halaka.notes.presentaion.add_edit_note.components.AddEditNoteScreen
 import com.john_halaka.notes.presentaion.notes.NotesScreen
 import com.john_halaka.notes.presentaion.notes.components.NoteItem
+import com.john_halaka.notes.presentaion.search_notes.components.NotesSearchScreen
 import com.john_halaka.notes.ui.Screen
 import com.john_halaka.notes.ui.theme.NotesTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -38,6 +39,9 @@ class MainActivity : ComponentActivity() {
                     ) {
                         composable(route = Screen.NotesScreen.route) {
                             NotesScreen(navController = navController)
+                        }
+                        composable(route = Screen.NotesSearchScreen.route) {
+                            NotesSearchScreen (navController = navController)
                         }
                         composable(
                             route = Screen.AddEditNoteScreen.route +
