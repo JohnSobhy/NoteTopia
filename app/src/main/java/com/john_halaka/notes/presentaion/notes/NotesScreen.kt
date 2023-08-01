@@ -86,6 +86,7 @@ fun NotesScreen (
 ) {
     val state = viewModel.state.value
     val snackbarHostState = remember { SnackbarHostState() }
+
     val scope = rememberCoroutineScope()
 //    var notesList by remember { mutableStateOf(state.notes) }
     var currentViewType by remember { mutableStateOf(ViewType.GRID) }
@@ -94,6 +95,7 @@ fun NotesScreen (
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {
+
                     navController.navigate(Screen.AddEditNoteScreen.route)
                 },
                 Modifier.background(color = MaterialTheme.colorScheme.primary)

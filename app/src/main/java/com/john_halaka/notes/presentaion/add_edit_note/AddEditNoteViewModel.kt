@@ -10,6 +10,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.john_halaka.notes.feature_note.domain.model.InvalidNoteException
 import com.john_halaka.notes.feature_note.domain.model.Note
 import com.john_halaka.notes.feature_note.domain.use_case.NoteUseCases
+import com.john_halaka.notes.presentaion.notes.NotesEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -39,6 +40,8 @@ class AddEditNoteViewModel @Inject constructor(
     val eventFlow = _eventFlow.asSharedFlow()
 
     private var currentNoteId : Int? = null
+    val noteId : Int = currentNoteId?: -1
+    private var recentlyDeletedNote: Note? = null
 
     init {
         savedStateHandle.get<Int> ("noteId")?.let {noteId ->
@@ -113,11 +116,27 @@ class AddEditNoteViewModel @Inject constructor(
                     }
                 }
             }
+
+            is AddEditNoteEvent.DeleteNote -> {
+                    viewModelScope.launch {
+
+                        currentNoteId?.let { noteUseCases.getNoteById (it) }
+                            ?.let {note ->
+                                noteUseCases.deleteNotes (note)
+                                recentlyDeletedNote = note
+                                _eventFlow.emit(UiEvent.DeleteNote)
+                            }
+
+                }
+            }
+
         }
     }
     sealed class UiEvent {
         data class ShowSnackbar (val message: String): UiEvent()
         object SaveNote : UiEvent()
+
+        object DeleteNote : UiEvent()
     }
 
 }

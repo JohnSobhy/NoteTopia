@@ -21,16 +21,24 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Send
 import androidx.compose.material.icons.rounded.Done
 import androidx.compose.material.icons.rounded.Send
 import androidx.compose.material.icons.rounded.Share
+import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -49,9 +57,15 @@ import com.john_halaka.notes.R
 import com.john_halaka.notes.feature_note.domain.model.Note
 import com.john_halaka.notes.presentaion.add_edit_note.AddEditNoteEvent
 import com.john_halaka.notes.presentaion.add_edit_note.AddEditNoteViewModel
+import com.john_halaka.notes.presentaion.notes.NotesEvent
+import com.john_halaka.notes.presentaion.notes.NotesViewModel
+import com.john_halaka.notes.ui.Screen
+import com.john_halaka.notes.ui.theme.Typography
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
+
+@OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun AddEditNoteScreen(
@@ -59,9 +73,10 @@ fun AddEditNoteScreen(
     noteColor: Int,
     viewModel: AddEditNoteViewModel = hiltViewModel()
 ) {
+
     val titleState = viewModel.noteTitle.value
     val contentState = viewModel.noteContent.value
-
+    val noteId = viewModel.noteId
     val snackbarHostState = remember { SnackbarHostState ()}
 
     val noteBackgroundAnimatable = remember {
@@ -84,6 +99,10 @@ fun AddEditNoteScreen(
                     snackbarHostState.showSnackbar(
                         message = event.message
                     )
+                }
+                is AddEditNoteViewModel.UiEvent.DeleteNote ->{
+                    navController.navigateUp()
+
                 }
             }
 
@@ -112,6 +131,36 @@ fun AddEditNoteScreen(
                 .background(noteBackgroundAnimatable.value)
                 .padding(16.dp)
         ) {
+            CenterAlignedTopAppBar(
+                modifier = Modifier.padding(4.dp),
+                title = {
+
+                },
+                navigationIcon = {
+                    IconButton(onClick = {
+                        viewModel.onEvent(AddEditNoteEvent.SaveNote)
+
+                    })
+                    {
+                        Icon(Icons.Filled.ArrowBack, contentDescription = "back")
+                    }
+
+                },
+                actions = {
+
+                    IconButton(
+                        onClick = {
+                            viewModel.onEvent(AddEditNoteEvent.DeleteNote(noteId))
+                        }
+                    ) {
+                        Icon(
+                            Icons.Default.Delete,
+                            contentDescription = "Delete note"
+                        )
+
+                    }
+                }
+            )
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
