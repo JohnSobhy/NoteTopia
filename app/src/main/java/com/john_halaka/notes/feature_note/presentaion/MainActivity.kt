@@ -1,4 +1,4 @@
-package com.john_halaka.notes.presentaion
+package com.john_halaka.notes.feature_note.presentaion
 
 import android.os.Build
 import android.os.Bundle
@@ -17,10 +17,10 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.john_halaka.notes.R
 import com.john_halaka.notes.feature_note.domain.model.Note
-import com.john_halaka.notes.presentaion.add_edit_note.components.AddEditNoteScreen
-import com.john_halaka.notes.presentaion.notes.NotesScreen
-import com.john_halaka.notes.presentaion.notes.components.NoteItem
-import com.john_halaka.notes.presentaion.search_notes.components.NotesSearchScreen
+import com.john_halaka.notes.feature_note.presentaion.add_edit_note.components.AddEditNoteScreen
+import com.john_halaka.notes.feature_note.presentaion.notes.NotesScreen
+import com.john_halaka.notes.feature_note.presentaion.notes.components.NoteItem
+import com.john_halaka.notes.feature_note.presentaion.search_notes.components.NotesSearchScreen
 import com.john_halaka.notes.ui.Screen
 import com.john_halaka.notes.ui.theme.NotesTheme
 import dagger.hilt.android.AndroidEntryPoint

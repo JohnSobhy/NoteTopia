@@ -1,4 +1,4 @@
-package com.john_halaka.notes.presentaion.notes
+package com.john_halaka.notes.feature_note.presentaion.notes
 
 import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedVisibility
@@ -68,10 +68,10 @@ import com.john_halaka.notes.R
 import com.john_halaka.notes.feature_note.domain.model.Note
 import com.john_halaka.notes.feature_note.domain.util.ViewType
 import com.john_halaka.notes.feature_note.domain.util.notesSearch
-import com.john_halaka.notes.presentaion.notes.components.GridViewNotes
-import com.john_halaka.notes.presentaion.notes.components.ListViewNotes
-import com.john_halaka.notes.presentaion.notes.components.NoteItem
-import com.john_halaka.notes.presentaion.notes.components.OrderSection
+import com.john_halaka.notes.feature_note.presentaion.notes.components.GridViewNotes
+import com.john_halaka.notes.feature_note.presentaion.notes.components.ListViewNotes
+import com.john_halaka.notes.feature_note.presentaion.notes.components.NoteItem
+import com.john_halaka.notes.feature_note.presentaion.notes.components.OrderSection
 import com.john_halaka.notes.ui.Screen
 import com.john_halaka.notes.ui.theme.Typography
 import kotlinx.coroutines.CoroutineScope

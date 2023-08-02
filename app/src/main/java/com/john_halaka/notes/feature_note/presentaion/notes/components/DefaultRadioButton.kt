@@ -1,4 +1,4 @@
-package com.john_halaka.notes.presentaion.notes.components
+package com.john_halaka.notes.feature_note.presentaion.notes.components
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer

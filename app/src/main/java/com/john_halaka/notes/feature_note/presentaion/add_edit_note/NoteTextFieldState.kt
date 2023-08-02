@@ -1,4 +1,4 @@
-package com.john_halaka.notes.presentaion.add_edit_note
+package com.john_halaka.notes.feature_note.presentaion.add_edit_note
 
 data class NoteTextFieldState (
         val text: String ="",

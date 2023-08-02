@@ -1,4 +1,4 @@
-package com.john_halaka.notes.presentaion.notes
+package com.john_halaka.notes.feature_note.presentaion.notes
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf

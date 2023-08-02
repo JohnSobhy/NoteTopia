@@ -1,4 +1,4 @@
-package com.john_halaka.notes.presentaion.search_notes.components
+package com.john_halaka.notes.feature_note.presentaion.search_notes.components
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.clickable
@@ -36,9 +36,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.john_halaka.notes.feature_note.domain.model.Note
 
-import com.john_halaka.notes.presentaion.notes.NotesEvent
-import com.john_halaka.notes.presentaion.notes.NotesViewModel
-import com.john_halaka.notes.presentaion.notes.components.ListViewNotes
+import com.john_halaka.notes.feature_note.presentaion.notes.NotesEvent
+import com.john_halaka.notes.feature_note.presentaion.notes.NotesViewModel
+import com.john_halaka.notes.feature_note.presentaion.notes.components.ListViewNotes
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -48,7 +48,7 @@ fun NotesSearchScreen (
     viewModel: NotesViewModel = hiltViewModel(),
 
 
-) {
+    ) {
     val state = viewModel.state.value
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()

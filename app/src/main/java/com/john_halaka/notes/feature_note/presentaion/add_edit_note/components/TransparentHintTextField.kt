@@ -1,4 +1,4 @@
-package com.john_halaka.notes.presentaion.add_edit_note.components
+package com.john_halaka.notes.feature_note.presentaion.add_edit_note.components
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
