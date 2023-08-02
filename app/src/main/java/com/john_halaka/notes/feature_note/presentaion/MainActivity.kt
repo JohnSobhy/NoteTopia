@@ -33,9 +33,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             NotesTheme {
                 // A surface container using the 'background' color from the theme
-                Surface(
-                    color = MaterialTheme.colorScheme.background
-                ) {
+
                     val navController = rememberNavController()
                     NavHost(
                         navController = navController,
@@ -76,6 +74,5 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
-    }
 
 
