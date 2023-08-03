@@ -1,4 +1,4 @@
-package com.john_halaka.notes.feature_note.presentaion.notes.components
+package com.john_halaka.notes.ui.presentaion.notes.components
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -29,7 +29,7 @@ fun DefaultRadioButton (
            selected = selected,
            onClick = onSelect,
            colors = RadioButtonDefaults.colors(
-               selectedColor = MaterialTheme.colorScheme.primary,
+               selectedColor = MaterialTheme.colorScheme.secondary,
                unselectedColor = MaterialTheme.colorScheme.onBackground
            )
        )

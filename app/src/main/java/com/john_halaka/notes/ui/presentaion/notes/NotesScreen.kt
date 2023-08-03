@@ -1,4 +1,4 @@
-package com.john_halaka.notes.feature_note.presentaion.notes
+package com.john_halaka.notes.ui.presentaion.notes
 
 import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedVisibility
@@ -6,37 +6,32 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
-import androidx.compose.foundation.Image
+
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.focusable
+
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
+
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
+
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
+
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.sizeIn
+
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.foundation.lazy.items
+
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.List
+
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -45,10 +40,12 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.SnackbarResult
+
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.Typography
+import androidx.compose.material3.TopAppBarColors
+import androidx.compose.material3.TopAppBarDefaults
+
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -58,24 +55,24 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
+
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.Dp
+
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.john_halaka.notes.R
-import com.john_halaka.notes.feature_note.domain.model.Note
+
 import com.john_halaka.notes.feature_note.domain.util.ViewType
-import com.john_halaka.notes.feature_note.domain.util.notesSearch
-import com.john_halaka.notes.feature_note.presentaion.notes.components.GridViewNotes
-import com.john_halaka.notes.feature_note.presentaion.notes.components.ListViewNotes
-import com.john_halaka.notes.feature_note.presentaion.notes.components.NoteItem
-import com.john_halaka.notes.feature_note.presentaion.notes.components.OrderSection
+
+import com.john_halaka.notes.ui.presentaion.notes.components.GridViewNotes
+import com.john_halaka.notes.ui.presentaion.notes.components.ListViewNotes
+
+import com.john_halaka.notes.ui.presentaion.notes.components.OrderSection
 import com.john_halaka.notes.ui.Screen
+
 import com.john_halaka.notes.ui.theme.Typography
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -98,7 +95,7 @@ fun NotesScreen (
 
                     navController.navigate(Screen.AddEditNoteScreen.route)
                 },
-                Modifier.background(color = MaterialTheme.colorScheme.primary)
+                Modifier.background(color = MaterialTheme.colorScheme.secondary)
             ) {
                 Icon(imageVector = Icons.Default.Add, contentDescription = "Add note")
             }
@@ -111,10 +108,17 @@ fun NotesScreen (
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(8.dp)
+
         ) {
             CenterAlignedTopAppBar(
-                modifier = Modifier.padding(4.dp),
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.primaryContainer,
+                    actionIconContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                    titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                    scrolledContainerColor = MaterialTheme.colorScheme.primaryContainer ,
+                    navigationIconContentColor = MaterialTheme.colorScheme.onPrimaryContainer
+
+                ),
                 title = {
                     Text(text = "Notes", style = Typography.headlineLarge)
                 },

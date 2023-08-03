@@ -1,4 +1,4 @@
-package com.john_halaka.notes.feature_note.presentaion.add_edit_note
+package com.john_halaka.notes.ui.presentaion.add_edit_note
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
@@ -10,7 +10,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.john_halaka.notes.feature_note.domain.model.InvalidNoteException
 import com.john_halaka.notes.feature_note.domain.model.Note
 import com.john_halaka.notes.feature_note.domain.use_case.NoteUseCases
-import com.john_halaka.notes.feature_note.presentaion.notes.NotesEvent
+import com.john_halaka.notes.ui.presentaion.notes.NotesEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow

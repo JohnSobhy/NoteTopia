@@ -1,4 +1,4 @@
-package com.john_halaka.notes.feature_note.presentaion.add_edit_note.components
+package com.john_halaka.notes.ui.presentaion.add_edit_note.components
 
 import android.annotation.SuppressLint
 import android.content.pm.ChangedPackages
@@ -44,6 +44,7 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -61,10 +62,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.john_halaka.notes.R
 import com.john_halaka.notes.feature_note.domain.model.Note
-import com.john_halaka.notes.feature_note.presentaion.add_edit_note.AddEditNoteEvent
-import com.john_halaka.notes.feature_note.presentaion.add_edit_note.AddEditNoteViewModel
-import com.john_halaka.notes.feature_note.presentaion.notes.NotesEvent
-import com.john_halaka.notes.feature_note.presentaion.notes.NotesViewModel
+import com.john_halaka.notes.ui.presentaion.add_edit_note.AddEditNoteEvent
+import com.john_halaka.notes.ui.presentaion.add_edit_note.AddEditNoteViewModel
+import com.john_halaka.notes.ui.presentaion.notes.NotesEvent
+import com.john_halaka.notes.ui.presentaion.notes.NotesViewModel
 import com.john_halaka.notes.ui.Screen
 import com.john_halaka.notes.ui.theme.Typography
 import kotlinx.coroutines.flow.collectLatest
@@ -125,9 +126,15 @@ fun AddEditNoteScreen(
             FloatingActionButton(onClick = { 
                 viewModel.onEvent(AddEditNoteEvent.SaveNote)
             },
-                Modifier.background(color = MaterialTheme.colorScheme.primary)
+                containerColor = MaterialTheme.colorScheme.primaryContainer,
+                contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+
             ) {
-                Icon(painter = painterResource(R.drawable.baseline_save_24), contentDescription = "Save")
+                Icon(
+                    painter = painterResource(R.drawable.baseline_save_24),
+                    contentDescription = "Save",
+
+                )
 
             }
         } ,
@@ -138,11 +145,18 @@ fun AddEditNoteScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(noteBackgroundAnimatable.value)
-                .padding(16.dp)
+
         ) {
             CenterAlignedTopAppBar(
-                modifier = Modifier.padding(4.dp),
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.primaryContainer,
+                    actionIconContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                    titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                    scrolledContainerColor = MaterialTheme.colorScheme.primaryContainer ,
+                    navigationIconContentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                ),
+
+
                 title = {
 
                 },
@@ -175,7 +189,7 @@ fun AddEditNoteScreen(
             LazyRow(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(8.dp),
+                    .padding(16.dp),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 items (Note.noteColors){ color ->
@@ -190,19 +204,19 @@ fun AddEditNoteScreen(
                            .border(
                                width = 3.dp,
                                color = if (viewModel.noteColor.value == colorInt) {
-                                   Color.Black
+                                   MaterialTheme.colorScheme.secondary
                                } else Color.Transparent,
                                shape = CircleShape
                            )
                            .clickable {
-                               scope.launch {
-                                   noteBackgroundAnimatable.animateTo(
-                                       targetValue = Color(colorInt),
-                                       animationSpec = tween(
-                                           durationMillis = 500
-                                       )
-                                   )
-                               }
+//                               scope.launch {
+//                                   noteBackgroundAnimatable.animateTo(
+//                                       targetValue = Color(colorInt),
+//                                       animationSpec = tween(
+//                                           durationMillis = 500
+//                                       )
+//                                   )
+//                               }
                                viewModel.onEvent(AddEditNoteEvent.ChangeColor(colorInt))
                            }
                     )
@@ -224,7 +238,9 @@ fun AddEditNoteScreen(
                 },
                 isHintVisible = titleState.isHintVisible,
                 singleLine = true ,
-                textStyle = MaterialTheme.typography.titleLarge
+                textStyle =
+                    MaterialTheme.typography.titleLarge.copy(color = MaterialTheme.colorScheme.onPrimary) ,
+
             )
 
             Spacer(Modifier.height(16.dp))
@@ -240,7 +256,8 @@ fun AddEditNoteScreen(
                     viewModel.onEvent(AddEditNoteEvent.ChangeContentFocus (it))
                 },
                 isHintVisible = contentState.isHintVisible,
-                textStyle = MaterialTheme.typography.bodyLarge ,
+                textStyle = MaterialTheme.typography.bodyLarge.copy(color = MaterialTheme.colorScheme.onPrimary)  ,
+
                  modifier = Modifier.fillMaxHeight()
             )
         }

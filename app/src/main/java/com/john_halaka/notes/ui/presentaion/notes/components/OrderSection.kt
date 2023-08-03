@@ -1,4 +1,4 @@
-package com.john_halaka.notes.feature_note.presentaion.notes.components
+package com.john_halaka.notes.ui.presentaion.notes.components
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
