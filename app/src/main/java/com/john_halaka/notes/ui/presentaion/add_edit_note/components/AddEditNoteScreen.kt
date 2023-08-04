@@ -143,7 +143,6 @@ fun AddEditNoteScreen(
                 navigationIcon = {
                     IconButton(onClick = {
                         viewModel.onEvent(AddEditNoteEvent.BackButtonClick)
-                        viewModel.onEvent(AddEditNoteEvent.SaveNote)
 
                     })
                     {
@@ -189,14 +188,7 @@ fun AddEditNoteScreen(
                                shape = CircleShape
                            )
                            .clickable {
-//                               scope.launch {
-//                                   noteBackgroundAnimatable.animateTo(
-//                                       targetValue = Color(colorInt),
-//                                       animationSpec = tween(
-//                                           durationMillis = 500
-//                                       )
-//                                   )
-//                               }
+
                                viewModel.onEvent(AddEditNoteEvent.ChangeColor(colorInt))
                            }
                     )

@@ -30,6 +30,7 @@ import androidx.compose.material.icons.filled.Favorite
 
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
@@ -85,6 +86,14 @@ fun NotesScreen (
     var currentViewType by remember { mutableStateOf(ViewType.GRID) }
 
     Scaffold(
+        bottomBar = {
+            BottomAppBar() {
+                IconButton(onClick = { /*TODO*/ }) {
+
+
+                }
+            }
+        },
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {
