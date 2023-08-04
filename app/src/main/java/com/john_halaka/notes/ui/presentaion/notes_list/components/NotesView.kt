@@ -1,4 +1,4 @@
-package com.john_halaka.notes.ui.presentaion.notes.components
+package com.john_halaka.notes.ui.presentaion.notes_list.components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Spacer
@@ -18,12 +18,10 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.john_halaka.notes.feature_note.domain.model.Note
-import com.john_halaka.notes.ui.presentaion.notes.NotesEvent
-import com.john_halaka.notes.ui.presentaion.notes.NotesState
-import com.john_halaka.notes.ui.presentaion.notes.NotesViewModel
+import com.john_halaka.notes.ui.presentaion.notes_list.NotesEvent
+import com.john_halaka.notes.ui.presentaion.notes_list.NotesViewModel
 import com.john_halaka.notes.ui.Screen
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.launch
 
 @Composable

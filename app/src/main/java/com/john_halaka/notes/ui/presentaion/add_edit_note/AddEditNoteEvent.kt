@@ -1,8 +1,6 @@
 package com.john_halaka.notes.ui.presentaion.add_edit_note
 
 import androidx.compose.ui.focus.FocusState
-import com.john_halaka.notes.feature_note.domain.model.Note
-import com.john_halaka.notes.ui.presentaion.notes.NotesEvent
 
 sealed class AddEditNoteEvent{
 

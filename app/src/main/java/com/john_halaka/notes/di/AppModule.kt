@@ -2,6 +2,8 @@ package com.john_halaka.notes.di
 
 import android.app.Application
 import androidx.room.Room
+
+
 import com.john_halaka.notes.feature_note.data.data_source.NoteDatabase
 import com.john_halaka.notes.feature_note.data.repository.NoteRepositoryImpl
 import com.john_halaka.notes.feature_note.domain.repository.NoteRepository
@@ -10,6 +12,8 @@ import com.john_halaka.notes.feature_note.domain.use_case.DeleteNote
 import com.john_halaka.notes.feature_note.domain.use_case.GetNoteById
 import com.john_halaka.notes.feature_note.domain.use_case.GetNotes
 import com.john_halaka.notes.feature_note.domain.use_case.NoteUseCases
+import com.john_halaka.notes.feature_todo.data.repository.TodoRepositoryImpl
+import com.john_halaka.notes.feature_todo.domain.repository.TodoRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -47,4 +51,14 @@ object AppModule {
 
         )
     }
+
+
+
+    @Provides
+    @Singleton
+    fun provideTodoRepository (db: NoteDatabase) : TodoRepository {
+        return TodoRepositoryImpl(db.todoDao)
+    }
+
+
 }

@@ -1,25 +1,19 @@
-package com.john_halaka.notes.ui.presentaion
+package com.john_halaka.notes
 
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.Surface
-import androidx.compose.ui.Modifier
-import androidx.navigation.NavArgument
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.john_halaka.notes.R
-import com.john_halaka.notes.feature_note.domain.model.Note
+import com.john_halaka.mytodo.AddEditTodoScreen
+import com.john_halaka.mytodo.TodoListScreen
 import com.john_halaka.notes.ui.presentaion.add_edit_note.components.AddEditNoteScreen
-import com.john_halaka.notes.ui.presentaion.notes.NotesScreen
-import com.john_halaka.notes.ui.presentaion.notes.components.NoteItem
+import com.john_halaka.notes.ui.presentaion.notes_list.NotesScreen
 import com.john_halaka.notes.ui.presentaion.search_notes.components.NotesSearchScreen
 import com.john_halaka.notes.ui.Screen
 import com.john_halaka.notes.ui.theme.NotesTheme
@@ -66,6 +60,26 @@ class MainActivity : ComponentActivity() {
                             val color = it.arguments?.getInt("noteColor") ?: -1
 
                             AddEditNoteScreen(navController = navController, noteColor = color)
+                        }
+
+                        composable(route = Screen.TodoListScreen.route) {
+                            TodoListScreen(
+                                onNavigate = {
+                                    navController.navigate(it.route)
+                                }
+                            )
+                        }
+                        composable(
+                            route = Screen.AddEditTodoScreen.route + "?todoId={todoId}",
+                            arguments = listOf(
+                                navArgument(name = "todoId") {
+                                    type = NavType.IntType
+                                    defaultValue = -1
+                                }
+                            )
+                        ) {
+                            AddEditTodoScreen(onPopBackStack = { navController.popBackStack() })
+
                         }
                     }
 

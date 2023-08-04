@@ -36,9 +36,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.john_halaka.notes.feature_note.domain.model.Note
 
-import com.john_halaka.notes.ui.presentaion.notes.NotesEvent
-import com.john_halaka.notes.ui.presentaion.notes.NotesViewModel
-import com.john_halaka.notes.ui.presentaion.notes.components.ListViewNotes
+import com.john_halaka.notes.ui.presentaion.notes_list.NotesEvent
+import com.john_halaka.notes.ui.presentaion.notes_list.NotesViewModel
+import com.john_halaka.notes.ui.presentaion.notes_list.components.ListViewNotes
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
