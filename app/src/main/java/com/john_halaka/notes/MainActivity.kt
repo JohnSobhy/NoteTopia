@@ -66,7 +66,8 @@ class MainActivity : ComponentActivity() {
                             TodoListScreen(
                                 onNavigate = {
                                     navController.navigate(it.route)
-                                }
+                                },
+                                navController = navController
                             )
                         }
                         composable(

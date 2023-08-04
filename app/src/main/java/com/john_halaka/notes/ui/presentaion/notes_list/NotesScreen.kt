@@ -88,10 +88,26 @@ fun NotesScreen (
     Scaffold(
         bottomBar = {
             BottomAppBar() {
-                IconButton(onClick = { /*TODO*/ }) {
-
+                Spacer(Modifier.weight(1f))
+                IconButton(
+                    onClick = {},
+                    enabled = false
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.notes_sec)
+                        , contentDescription = "Notes Section" )
 
                 }
+                Spacer(Modifier.weight(1f))
+                IconButton(onClick = {
+                    navController.navigate(Screen.TodoListScreen.route)
+                }) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.todo_sec)
+                        , contentDescription = "Todo Section" )
+
+                }
+                Spacer(Modifier.weight(1f))
             }
         },
         floatingActionButton = {

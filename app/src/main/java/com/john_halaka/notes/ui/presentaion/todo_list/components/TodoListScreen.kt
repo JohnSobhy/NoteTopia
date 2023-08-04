@@ -2,6 +2,7 @@ package com.john_halaka.mytodo
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -10,9 +11,11 @@ import androidx.compose.foundation.lazy.items
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.BottomAppBar
 
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -22,15 +25,20 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import com.john_halaka.mytodo.ui.todo_list.TodoListEvent
 import com.john_halaka.mytodo.ui.todo_list.TodoListViewModel
+import com.john_halaka.notes.R
+import com.john_halaka.notes.ui.Screen
 
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter", "UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun TodoListScreen (
+    navController: NavController,
     onNavigate : (TodoListViewModel.UiEvent.Navigate) -> Unit,
     viewModel: TodoListViewModel = hiltViewModel()
 ){
@@ -57,6 +65,32 @@ fun TodoListScreen (
         }
     }
     Scaffold (
+        bottomBar = {
+            BottomAppBar() {
+                Spacer(Modifier.weight(1f))
+                IconButton(
+                    onClick = {
+                           navController.navigate(Screen.NotesScreen.route)
+                    }
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.notes_sec)
+                        , contentDescription = "Notes Section" )
+
+                }
+                Spacer(Modifier.weight(1f))
+                IconButton(
+                    onClick = {},
+                    enabled = false
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.todo_sec)
+                        , contentDescription = "Todo Section" )
+
+                }
+                Spacer(Modifier.weight(1f))
+            }
+        },
         snackbarHost = {
            SnackbarHost(scaffoldState)
         },
