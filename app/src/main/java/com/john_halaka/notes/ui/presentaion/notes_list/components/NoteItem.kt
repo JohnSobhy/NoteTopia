@@ -10,6 +10,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -24,12 +26,14 @@ import androidx.compose.ui.unit.dp
 import com.john_halaka.notes.feature_note.domain.model.Note
 
 @Composable
-fun NoteItem (
+fun NoteItem(
     note: Note,
     modifier: Modifier,
     cornerRadius: Dp = 10.dp,
-    onDeleteClick : () -> Unit
-){
+    onDeleteClick: () -> Unit,
+    onFavoriteClick: () -> Unit
+) {
+
     Box(
         modifier = modifier
             .fillMaxSize()
@@ -52,7 +56,7 @@ fun NoteItem (
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
-            
+
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
@@ -63,12 +67,27 @@ fun NoteItem (
                 overflow = TextOverflow.Ellipsis
             )
         }
-        
+
+
+        IconButton(
+            onClick = onFavoriteClick,
+            modifier = Modifier.align(Alignment.BottomStart),
+        ) {
+            Icon(
+                imageVector = if (note.isFavourite) Icons.Default.Favorite
+                else Icons.Default.FavoriteBorder,
+                contentDescription = "Favorite note"
+            )
+        }
+
         IconButton(
             onClick = onDeleteClick,
-            modifier = Modifier.align(Alignment.BottomEnd)
-        ) {
+            modifier = Modifier.align(Alignment.BottomEnd),
+
+
+            ) {
             Icon(imageVector = Icons.Default.Delete, contentDescription = "Delete note")
         }
     }
 }
+

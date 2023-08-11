@@ -1,5 +1,6 @@
 package com.john_halaka.notes.ui.presentaion.add_edit_note
 
+import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.toArgb
@@ -68,6 +69,7 @@ class AddEditNoteViewModel @Inject constructor(
     }
 
     fun onEvent(event: AddEditNoteEvent) {
+        Log.d("AddEditNoteViewModel", "onEvent: $event")
         when (event) {
             is AddEditNoteEvent.EnteredTitle -> {
                 _noteTitle.value = noteTitle.value.copy(

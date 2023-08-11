@@ -12,10 +12,13 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface NoteDao {
 
-    @Query ("SELECT * FROM note")
-    fun getNotes() : Flow<List<Note>>
+    @Query("SELECT * FROM note")
+    fun getNotes(): Flow<List<Note>>
 
-    @Query ("SELECT * FROM note WHERE id = :id")
+    @Query("SELECT * FROM note WHERE isFavourite = 1")
+    fun getFavouriteNotes(): Flow<List<Note>>
+
+    @Query("SELECT * FROM note WHERE id = :id")
     suspend fun getNoteById(id: Int): Note?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -23,4 +26,7 @@ interface NoteDao {
 
     @Delete
     suspend fun deleteNote(note: Note)
+
+    @Query("UPDATE note SET isFavourite = :isFavourite WHERE id = :noteId")
+    suspend fun updateIsFavourite(noteId: Int, isFavourite: Boolean)
 }

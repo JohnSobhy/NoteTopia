@@ -1,7 +1,6 @@
 package com.john_halaka.notes.ui.presentaion.add_edit_note.components
 
 import android.annotation.SuppressLint
-import androidx.compose.animation.Animatable
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -35,7 +34,6 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
@@ -66,15 +64,6 @@ fun AddEditNoteScreen(
     val noteId = viewModel.noteId
     val snackbarHostState = remember { SnackbarHostState ()}
 
-    val noteBackgroundAnimatable = remember {
-        Animatable(
-            Color(
-                if (noteColor != -1) noteColor
-                 else viewModel.noteColor.value
-            )
-        )
-    }
-    val scope = rememberCoroutineScope()
 
     LaunchedEffect(key1 = true) {
         viewModel.eventFlow.collectLatest { event ->

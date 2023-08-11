@@ -1,5 +1,6 @@
 package com.john_halaka.notes.feature_note.domain.use_case
 
+import android.util.Log
 import com.john_halaka.notes.feature_note.domain.model.Note
 import com.john_halaka.notes.feature_note.domain.repository.NoteRepository
 import com.john_halaka.notes.feature_note.domain.util.NoteOrder
@@ -10,12 +11,11 @@ import kotlinx.coroutines.flow.map
 class GetNotes (
     private val repository : NoteRepository
         ) {
-    // every useCase needs to have only one public function that executes that useCase
-    // it can have private functions
 
     operator fun invoke(
         noteOrder: NoteOrder = NoteOrder.Date(OrderType.Descending)
     ) : Flow<List<Note>> {
+        Log.d("getNotes", "GetNotes useCase is invoked")
         return repository.getNotes().map { notes ->
             when (noteOrder.orderType) {
                 is OrderType.Ascending -> {
@@ -31,6 +31,7 @@ class GetNotes (
                         is NoteOrder.Title -> notes.sortedByDescending { it.title.lowercase() }
                         is NoteOrder.Date -> notes.sortedByDescending { it.timestamp }
                         is NoteOrder.Color -> notes.sortedByDescending { it.color }
+
                     }
                 }
             }

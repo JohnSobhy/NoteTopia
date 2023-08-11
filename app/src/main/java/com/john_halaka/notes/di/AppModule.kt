@@ -9,9 +9,11 @@ import com.john_halaka.notes.feature_note.data.repository.NoteRepositoryImpl
 import com.john_halaka.notes.feature_note.domain.repository.NoteRepository
 import com.john_halaka.notes.feature_note.domain.use_case.AddNote
 import com.john_halaka.notes.feature_note.domain.use_case.DeleteNote
+import com.john_halaka.notes.feature_note.domain.use_case.GetFavouriteNotes
 import com.john_halaka.notes.feature_note.domain.use_case.GetNoteById
 import com.john_halaka.notes.feature_note.domain.use_case.GetNotes
 import com.john_halaka.notes.feature_note.domain.use_case.NoteUseCases
+import com.john_halaka.notes.feature_note.domain.use_case.UpdateNote
 import com.john_halaka.notes.feature_todo.data.repository.TodoRepositoryImpl
 import com.john_halaka.notes.feature_todo.domain.repository.TodoRepository
 import dagger.Module
@@ -47,7 +49,9 @@ object AppModule {
             getNotes = GetNotes(repository),
             deleteNotes = DeleteNote(repository),
             addNote = AddNote(repository),
-            getNoteById = GetNoteById(repository)
+            getNoteById = GetNoteById(repository),
+            getFavouriteNotes = GetFavouriteNotes(repository),
+            updateNote = UpdateNote(repository)
 
         )
     }

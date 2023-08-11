@@ -18,27 +18,27 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.john_halaka.notes.feature_note.domain.model.Note
+import com.john_halaka.notes.ui.Screen
 import com.john_halaka.notes.ui.presentaion.notes_list.NotesEvent
 import com.john_halaka.notes.ui.presentaion.notes_list.NotesViewModel
-import com.john_halaka.notes.ui.Screen
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @Composable
-fun GridViewNotes (
+fun GridViewNotes(
 
     navController: NavController,
     viewModel: NotesViewModel,
     scope: CoroutineScope,
     snackbarHostState: SnackbarHostState,
-    notesList: List<Note>
-){
-    val cellHeight : Dp = 150.dp
+    notesList: List<Note>,
+) {
+    val cellHeight: Dp = 150.dp
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
 
-        ){
-        items(notesList) {note ->
+        ) {
+        items(notesList) { note ->
 
             NoteItem(
                 note = note,
@@ -52,6 +52,7 @@ fun GridViewNotes (
                         )
                     },
                 onDeleteClick = {
+
                     viewModel.onEvent(NotesEvent.DeleteNote(note))
 
                     scope.launch {
@@ -63,12 +64,19 @@ fun GridViewNotes (
                             viewModel.onEvent(NotesEvent.RestoreNote)
                         }
                     }
+                },
+                onFavoriteClick = {
+                    viewModel.onEvent(
+                        NotesEvent.UpdateNote(
+                            note.copy(
+                                isFavourite = !note.isFavourite
+                            )
+                        )
+                    )
                 }
+
             )
         }
-
-
-
     }
 }
 @Composable
@@ -77,8 +85,9 @@ fun ListViewNotes(
     viewModel: NotesViewModel,
     scope: CoroutineScope,
     snackbarHostState: SnackbarHostState,
-    notesList: List<Note>
-) {
+    notesList: List<Note>,
+
+    ) {
     LazyColumn(modifier = Modifier.fillMaxSize()) {
         items(notesList) { note ->
             NoteItem(
@@ -103,6 +112,15 @@ fun ListViewNotes(
                             viewModel.onEvent(NotesEvent.RestoreNote)
                         }
                     }
+                },
+                onFavoriteClick = {
+                    viewModel.onEvent(
+                        NotesEvent.UpdateNote(
+                            note.copy(
+                                isFavourite = !note.isFavourite
+                            )
+                        )
+                    )
                 }
             )
 
