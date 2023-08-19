@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.Icon
@@ -71,7 +70,7 @@ fun NoteItem(
 
         IconButton(
             onClick = onFavoriteClick,
-            modifier = Modifier.align(Alignment.BottomStart),
+            modifier = Modifier.align(Alignment.BottomEnd),
         ) {
             Icon(
                 imageVector = if (note.isFavourite) Icons.Default.Favorite
@@ -80,14 +79,6 @@ fun NoteItem(
             )
         }
 
-        IconButton(
-            onClick = onDeleteClick,
-            modifier = Modifier.align(Alignment.BottomEnd),
-
-
-            ) {
-            Icon(imageVector = Icons.Default.Delete, contentDescription = "Delete note")
-        }
     }
 }
 

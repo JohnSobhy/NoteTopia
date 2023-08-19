@@ -8,28 +8,37 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 
 private val LightColorPalette = lightColorScheme(
-    primary = BabyBlue,
+    primary = OptionPink,
     onPrimary = Color.Black,
-    background = LightGrayBackground,
+    background = BabyPowder,
     onBackground = Color.DarkGray,
-    surface = LightBlue,
-    onSurface = DarkGray,
-    primaryContainer = Turquoise,
+    surface = MainGreen,
+    primaryContainer = MainGreen,
     onPrimaryContainer = Color.Black,
-    secondary = DarkTurquoise,
-    onSecondary = Color.Black
+    secondary = OptionPink,
+    onSecondary = Color.Black,
+
+    onSecondaryContainer = Color.Black,
+    onSurface = DarkGray,
+    secondaryContainer = SecondaryGreen,
+    onSurfaceVariant = DarkGray
 )
 private val DarkColorPalette = darkColorScheme(
-    primary = BabyBlue,
+    primary = OptionPink,
     onPrimary = Color.White,
-    background = DarkGray,
+    background = BackBlack,
     onBackground = LightGrayBackground,
-    surface = LightBlue,
-    onSurface = DarkGray,
-    primaryContainer = Turquoise,
+    surface = MainGreen,
+    primaryContainer = MainGreen,
     onPrimaryContainer = Color.Black,
-    secondary = DarkTurquoise,
-    onSecondary = Color.Black
+    secondary = OptionPink,
+    onSecondary = Color.Black,
+
+
+    onSecondaryContainer = Color.Black,
+    onSurface = DarkGray,
+    secondaryContainer = SecondaryGreen,
+    onSurfaceVariant = DarkGray
 )
 
 @Composable

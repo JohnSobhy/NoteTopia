@@ -132,6 +132,7 @@ class AddEditNoteViewModel @Inject constructor(
                         ?.let { note ->
                             noteUseCases.deleteNotes(note)
                             recentlyDeletedNote = note
+
                             _eventFlow.emit(UiEvent.DeleteNote)
                         }
 
@@ -141,25 +142,7 @@ class AddEditNoteViewModel @Inject constructor(
             AddEditNoteEvent.BackButtonClick -> {
                 viewModelScope.launch {
                     if (noteTitle.value.text.isNotBlank() && noteContent.value.text.isNotBlank()) {
-//                        try {
-//                            noteUseCases.addNote(
-//                                Note(
-//                                    title = noteTitle.value.text,
-//                                    content = noteContent.value.text,
-//                                    timestamp = System.currentTimeMillis(),
-//                                    color = noteColor.value,
-//                                    id = currentNoteId
-//                                )
-//                            )
-//                            _eventFlow.emit(UiEvent.SaveNote)
-//                        } catch (e: InvalidNoteException) {
-//                            _eventFlow.emit(
-//                                UiEvent.ShowSnackbar(
-//                                    message = e.message ?: "Couldn't save note"
-//                                )
-//                            )
 //
-//                        }
                         onEvent(AddEditNoteEvent.SaveNote)
 
                     } else if (noteTitle.value.text.isBlank()&& noteContent.value.text.isBlank()) {

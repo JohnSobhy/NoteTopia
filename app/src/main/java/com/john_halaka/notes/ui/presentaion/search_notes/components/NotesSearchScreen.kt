@@ -1,6 +1,7 @@
 package com.john_halaka.notes.ui.presentaion.search_notes.components
 
 import android.annotation.SuppressLint
+import android.content.Context
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 
@@ -46,7 +47,7 @@ import com.john_halaka.notes.ui.presentaion.notes_list.components.ListViewNotes
 fun NotesSearchScreen (
     navController: NavController,
     viewModel: NotesViewModel = hiltViewModel(),
-
+    context: Context
 
     ) {
     val state = viewModel.state.value
@@ -90,10 +91,10 @@ fun NotesSearchScreen (
                                 .padding(start = 16.dp)
                                 .clickable(
                                     true,
-                                onClick = {
-                                    viewModel.onEvent(NotesEvent.SearchNotes(searchText))
-                                    notesList = state.searchResult
-                                }
+                                    onClick = {
+                                        viewModel.onEvent(NotesEvent.SearchNotes(searchText))
+                                        notesList = state.searchResult
+                                    }
                                 )
                         )
                     }
@@ -106,7 +107,8 @@ fun NotesSearchScreen (
                 viewModel = viewModel,
                 scope = scope,
                 snackbarHostState = snackbarHostState,
-                notesList = notesList
+                notesList = notesList,
+                context = context
             )
 
 

@@ -1,5 +1,7 @@
 package com.john_halaka.notes.ui.presentaion.notes_list.components
 
+import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -32,6 +34,7 @@ fun GridViewNotes(
     scope: CoroutineScope,
     snackbarHostState: SnackbarHostState,
     notesList: List<Note>,
+    context: Context
 ) {
     val cellHeight: Dp = 150.dp
     LazyVerticalGrid(
@@ -66,6 +69,11 @@ fun GridViewNotes(
                     }
                 },
                 onFavoriteClick = {
+                    if (note.isFavourite)
+                        mToast(context, "Removed from Favourites")
+                    else
+                        mToast(context, "Added to Favorites")
+
                     viewModel.onEvent(
                         NotesEvent.UpdateNote(
                             note.copy(
@@ -86,6 +94,7 @@ fun ListViewNotes(
     scope: CoroutineScope,
     snackbarHostState: SnackbarHostState,
     notesList: List<Note>,
+    context: Context
 
     ) {
     LazyColumn(modifier = Modifier.fillMaxSize()) {
@@ -114,6 +123,11 @@ fun ListViewNotes(
                     }
                 },
                 onFavoriteClick = {
+                    if (note.isFavourite)
+                        mToast(context, "Removed from Favourites")
+                    else
+                        mToast(context, "Added to Favorites")
+
                     viewModel.onEvent(
                         NotesEvent.UpdateNote(
                             note.copy(
@@ -121,6 +135,7 @@ fun ListViewNotes(
                             )
                         )
                     )
+
                 }
             )
 
@@ -129,4 +144,8 @@ fun ListViewNotes(
         }
 
     }
+}
+
+private fun mToast(context: Context, msg: String) {
+    Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
 }

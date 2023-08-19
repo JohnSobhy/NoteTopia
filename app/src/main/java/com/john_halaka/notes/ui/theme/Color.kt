@@ -30,3 +30,14 @@ val LightGrayBackground = Color(0xfff4f4f3)
 val BabyBlue = Color(0xffd4eaf7)
 
 val DarkTurquoise = Color(0xff00668c)
+
+val BabyPowder = Color(0xffF7F7EF)
+val MainBlue = Color(0xff277AFF)
+val BackBlack = Color(0xff191923)
+val OptionPink = Color(0xffE86260)
+val MainGreen = Color(0xff729B79)
+val SecondaryGreen = Color(0xff5E7D63)
+val SandyBrown = Color(0xffEE964B)
+
+val VistaBlue = Color(0xff7699D4)
+

@@ -1,6 +1,8 @@
 package com.john_halaka.notes.ui.presentaion.add_edit_note.components
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -56,6 +58,7 @@ import kotlinx.coroutines.flow.collectLatest
 fun AddEditNoteScreen(
     navController: NavController,
     noteColor: Int,
+    context: Context,
     viewModel: AddEditNoteViewModel = hiltViewModel()
 ) {
 
@@ -92,13 +95,15 @@ fun AddEditNoteScreen(
 
     Scaffold(
         floatingActionButton = {
-            FloatingActionButton(onClick = { 
-                viewModel.onEvent(AddEditNoteEvent.SaveNote)
-            },
+            FloatingActionButton(
+                onClick = {
+                    viewModel.onEvent(AddEditNoteEvent.SaveNote)
+                    mToast(context, "Notes Saved")
+                },
                 containerColor = MaterialTheme.colorScheme.primaryContainer,
                 contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
 
-            ) {
+                ) {
                 Icon(
                     painter = painterResource(R.drawable.baseline_save_24),
                     contentDescription = "Save",
@@ -131,8 +136,11 @@ fun AddEditNoteScreen(
                 },
                 navigationIcon = {
                     IconButton(onClick = {
-                        viewModel.onEvent(AddEditNoteEvent.BackButtonClick)
 
+                        viewModel.onEvent(AddEditNoteEvent.BackButtonClick)
+                        if (noteId != -1) {
+                            mToast(context, "Note Saved")
+                        }
                     })
                     {
                         Icon(Icons.Filled.ArrowBack, contentDescription = "back")
@@ -144,6 +152,7 @@ fun AddEditNoteScreen(
                     IconButton(
                         onClick = {
                             viewModel.onEvent(AddEditNoteEvent.DeleteNote(noteId))
+                            mToast(context, "Note is moved to the trash")
                         }
                     ) {
                         Icon(
@@ -214,13 +223,18 @@ fun AddEditNoteScreen(
 
                 },
                 onFocusChange = {
-                    viewModel.onEvent(AddEditNoteEvent.ChangeContentFocus (it))
+                    viewModel.onEvent(AddEditNoteEvent.ChangeContentFocus(it))
                 },
                 isHintVisible = contentState.isHintVisible,
-                textStyle = MaterialTheme.typography.bodyLarge.copy(color = MaterialTheme.colorScheme.onPrimary)  ,
+                textStyle = MaterialTheme.typography.bodyLarge.copy(color = MaterialTheme.colorScheme.onPrimary),
 
-                 modifier = Modifier.fillMaxHeight()
+                modifier = Modifier.fillMaxHeight()
             )
         }
     }
+}
+
+
+private fun mToast(context: Context, msg: String) {
+    Toast.makeText(context, msg, Toast.LENGTH_LONG).show()
 }
