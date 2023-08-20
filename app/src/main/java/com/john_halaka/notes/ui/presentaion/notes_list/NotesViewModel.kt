@@ -88,6 +88,11 @@ class NotesViewModel @Inject constructor(
             }
 
 
+            is NotesEvent.MoveNoteToTrash -> {
+                viewModelScope.launch {
+                    noteUseCases.moveNoteToTrash(event.note.id!!, event.note.isDeleted)
+                }
+            }
         }
     }
 

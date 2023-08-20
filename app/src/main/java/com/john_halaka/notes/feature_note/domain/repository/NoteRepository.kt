@@ -17,4 +17,6 @@ interface NoteRepository {
 
     suspend fun updateNote(noteId: Int, isFavourite: Boolean)
 
+    suspend fun moveNoteToTrash(noteId: Int, isDeleted: Boolean)
+
 }

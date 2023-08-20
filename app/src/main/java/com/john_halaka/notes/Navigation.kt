@@ -37,7 +37,9 @@ fun Navigation() {
         navController = navController,
         startDestination = Screen.NotesScreen.route
     ) {
-        composable(route = Screen.NotesScreen.route) {
+        composable(
+            route = Screen.NotesScreen.route
+        ) {
             NotesScreen(navController = navController, context = LocalContext.current)
         }
 
@@ -145,7 +147,7 @@ fun BottomNavigationBar(
     )
 
     NavigationBar {
-        itemList.forEachIndexed { index, navigationItem ->
+        itemList.forEach { navigationItem ->
             NavigationBarItem(
                 selected = currentRoute == navigationItem.route,
                 onClick = {

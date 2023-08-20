@@ -14,6 +14,6 @@ sealed class NotesEvent {
 
     object ToggleOrderSection : NotesEvent()
 
-
+    data class MoveNoteToTrash(val note: Note) : NotesEvent()
     data class SearchNotes(val searchPhrase: String) : NotesEvent()
 }

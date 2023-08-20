@@ -12,11 +12,14 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface NoteDao {
 
-    @Query("SELECT * FROM note")
+    @Query("SELECT * FROM note WHERE isDeleted = 0")
     fun getNotes(): Flow<List<Note>>
 
     @Query("SELECT * FROM note WHERE isFavourite = 1")
     fun getFavouriteNotes(): Flow<List<Note>>
+
+    @Query("SELECT * FROM note WHERE isDeleted = 1")
+    fun getDeletedNotes(): Flow<List<Note>>
 
     @Query("SELECT * FROM note WHERE id = :id")
     suspend fun getNoteById(id: Int): Note?
@@ -29,4 +32,7 @@ interface NoteDao {
 
     @Query("UPDATE note SET isFavourite = :isFavourite WHERE id = :noteId")
     suspend fun updateIsFavourite(noteId: Int, isFavourite: Boolean)
+
+    @Query("UPDATE note SET isDeleted = :isDeleted WHERE id = :noteId")
+    suspend fun updateIsDeleted(noteId: Int, isDeleted: Boolean)
 }

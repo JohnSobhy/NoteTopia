@@ -31,7 +31,12 @@ class NoteRepositoryImpl (
         return dao.getFavouriteNotes()
     }
 
+
     override suspend fun updateNote(noteId: Int, isFavourite: Boolean) {
         return dao.updateIsFavourite(noteId, isFavourite)
+    }
+
+    override suspend fun moveNoteToTrash(noteId: Int, isDeleted: Boolean) {
+        return dao.updateIsDeleted(noteId, isDeleted)
     }
 }

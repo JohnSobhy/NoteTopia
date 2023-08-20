@@ -29,7 +29,7 @@ class AddEditNoteViewModel @Inject constructor(
     )
     val noteTitle: State<NoteTextFieldState> = _noteTitle
 
-    val _noteContent = mutableStateOf(
+    private val _noteContent = mutableStateOf(
         NoteTextFieldState(
             hint = "Enter the content of your note"
         )
@@ -46,11 +46,22 @@ class AddEditNoteViewModel @Inject constructor(
     val noteId: Int = currentNoteId ?: -1
     private var recentlyDeletedNote: Note? = null
 
+    private val _note = mutableStateOf(
+        Note(
+            title = noteTitle.value.text,
+            content = noteContent.value.text,
+            color = noteColor.value,
+            timestamp = System.currentTimeMillis()
+        )
+    )
+    val note: State<Note> = _note
+
     init {
         savedStateHandle.get<Int>("noteId")?.let { noteId ->
             if (noteId != -1) {
                 viewModelScope.launch {
                     noteUseCases.getNoteById(noteId)?.also { note ->
+                        _note.value = note
                         currentNoteId = note.id
                         _noteTitle.value = noteTitle.value.copy(
                             text = note.title,
@@ -139,13 +150,18 @@ class AddEditNoteViewModel @Inject constructor(
                 }
             }
 
-            AddEditNoteEvent.BackButtonClick -> {
+            is AddEditNoteEvent.BackButtonClick -> {
                 viewModelScope.launch {
-                    if (noteTitle.value.text.isNotBlank() && noteContent.value.text.isNotBlank()) {
-//
+                    if (
+                        noteTitle.value.text.isNotBlank() &&
+                        noteContent.value.text.isNotBlank()
+                    ) {
                         onEvent(AddEditNoteEvent.SaveNote)
 
-                    } else if (noteTitle.value.text.isBlank()&& noteContent.value.text.isBlank()) {
+                    } else if (
+                        noteTitle.value.text.isBlank() &&
+                        noteContent.value.text.isBlank()
+                    ) {
 
                         _eventFlow.emit(UiEvent.NavigateBack)
 
@@ -160,7 +176,23 @@ class AddEditNoteViewModel @Inject constructor(
 
                 }
             }
+
+            is AddEditNoteEvent.MoveNoteToTrash -> {
+                Log.d("AddEditNoteViewModel", "trashButtonClicked")
+                viewModelScope.launch {
+                    if (
+                        noteTitle.value.text.isBlank() ||
+                        noteContent.value.text.isBlank()
+                    ) {
+                        _eventFlow.emit(UiEvent.NavigateBack)
+                    } else
+                        Log.d("AddEditNoteViewModel", "MoveToTrash called")
+                    noteUseCases.moveNoteToTrash(event.note.id!!, event.note.isDeleted)
+                    _eventFlow.emit(UiEvent.DeleteNote)
+                }
+            }
         }
+
     }
 
     sealed class UiEvent {

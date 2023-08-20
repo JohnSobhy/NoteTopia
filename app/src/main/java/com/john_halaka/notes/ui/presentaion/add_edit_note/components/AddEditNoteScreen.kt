@@ -2,6 +2,7 @@ package com.john_halaka.notes.ui.presentaion.add_edit_note.components
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -64,9 +65,10 @@ fun AddEditNoteScreen(
 
     val titleState = viewModel.noteTitle.value
     val contentState = viewModel.noteContent.value
-    val noteId = viewModel.noteId
-    val snackbarHostState = remember { SnackbarHostState ()}
 
+    val snackbarHostState = remember { SnackbarHostState() }
+    val currentNote = viewModel.note
+    val noteId = currentNote.value.id
 
     LaunchedEffect(key1 = true) {
         viewModel.eventFlow.collectLatest { event ->
@@ -74,6 +76,7 @@ fun AddEditNoteScreen(
                 is AddEditNoteViewModel.UiEvent.SaveNote -> {
                     navController.navigateUp()
                 }
+
                 is AddEditNoteViewModel.UiEvent.ShowSnackbar -> {
                     snackbarHostState.showSnackbar(
                         message = event.message
@@ -97,8 +100,10 @@ fun AddEditNoteScreen(
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {
+                    Log.d("addEditScreen", "saveButton is clicked noteId = $noteId")
                     viewModel.onEvent(AddEditNoteEvent.SaveNote)
-                    mToast(context, "Notes Saved")
+                    if (titleState.text.isNotBlank() && contentState.text.isNotBlank())
+                        mToast(context, "Notes Saved")
                 },
                 containerColor = MaterialTheme.colorScheme.primaryContainer,
                 contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
@@ -136,9 +141,9 @@ fun AddEditNoteScreen(
                 },
                 navigationIcon = {
                     IconButton(onClick = {
-
+                        Log.d("addEditScreen", "backButton is clicked noteId = $noteId")
                         viewModel.onEvent(AddEditNoteEvent.BackButtonClick)
-                        if (noteId != -1) {
+                        if (noteId != null) {
                             mToast(context, "Note Saved")
                         }
                     })
@@ -151,9 +156,31 @@ fun AddEditNoteScreen(
 
                     IconButton(
                         onClick = {
-                            viewModel.onEvent(AddEditNoteEvent.DeleteNote(noteId))
-                            mToast(context, "Note is moved to the trash")
+                            if (
+                                noteId == null ||
+                                titleState.text.isBlank() ||
+                                contentState.text.isBlank()
+                            ) {
+                                Log.d("addEditScreen", "currentNote is Null noteId= $noteId")
+                                navController.navigateUp()
+
+                            } else {
+                                Log.d("addEditScreen", "currentNote is Not Null noteId= $noteId")
+                                viewModel.onEvent(
+                                    AddEditNoteEvent.MoveNoteToTrash(
+                                        currentNote.value.copy(
+                                            isDeleted = !currentNote.value.isDeleted
+                                        )
+                                    )
+                                )
+
+                                mToast(context, "Note is moved to the trash")
+
+                            }
+
+
                         }
+
                     ) {
                         Icon(
                             Icons.Default.Delete,
@@ -236,5 +263,5 @@ fun AddEditNoteScreen(
 
 
 private fun mToast(context: Context, msg: String) {
-    Toast.makeText(context, msg, Toast.LENGTH_LONG).show()
+    Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
 }

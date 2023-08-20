@@ -12,6 +12,7 @@ import com.john_halaka.notes.feature_note.domain.use_case.DeleteNote
 import com.john_halaka.notes.feature_note.domain.use_case.GetFavouriteNotes
 import com.john_halaka.notes.feature_note.domain.use_case.GetNoteById
 import com.john_halaka.notes.feature_note.domain.use_case.GetNotes
+import com.john_halaka.notes.feature_note.domain.use_case.MoveNoteToTrash
 import com.john_halaka.notes.feature_note.domain.use_case.NoteUseCases
 import com.john_halaka.notes.feature_note.domain.use_case.UpdateNote
 import com.john_halaka.notes.feature_todo.data.repository.TodoRepositoryImpl
@@ -51,7 +52,8 @@ object AppModule {
             addNote = AddNote(repository),
             getNoteById = GetNoteById(repository),
             getFavouriteNotes = GetFavouriteNotes(repository),
-            updateNote = UpdateNote(repository)
+            updateNote = UpdateNote(repository),
+            moveNoteToTrash = MoveNoteToTrash(repository)
 
         )
     }

@@ -16,7 +16,8 @@ data class Note(
     val content: String,
     val timestamp: Long,
     val color: Int,
-    val isFavourite: Boolean = false
+    val isFavourite: Boolean = false,
+    val isDeleted: Boolean = false
 ){
     companion object {
         val noteColors = listOf(SandyBrown, VistaBlue, MellonRed, LightGreen, Gray)
