@@ -31,6 +31,10 @@ class NoteRepositoryImpl (
         return dao.getFavouriteNotes()
     }
 
+    override fun getDeletedNotes(): Flow<List<Note>> {
+        return dao.getDeletedNotes()
+    }
+
 
     override suspend fun updateNote(noteId: Int, isFavourite: Boolean) {
         return dao.updateIsFavourite(noteId, isFavourite)

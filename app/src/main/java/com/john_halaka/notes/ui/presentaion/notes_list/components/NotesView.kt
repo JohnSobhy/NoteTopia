@@ -13,7 +13,6 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.SnackbarResult
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
@@ -24,7 +23,6 @@ import com.john_halaka.notes.ui.Screen
 import com.john_halaka.notes.ui.presentaion.notes_list.NotesEvent
 import com.john_halaka.notes.ui.presentaion.notes_list.NotesViewModel
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 
 @Composable
 fun GridViewNotes(
@@ -54,20 +52,7 @@ fun GridViewNotes(
                                     "?noteId=${note.id}&noteColor=${note.color}"
                         )
                     },
-                onDeleteClick = {
 
-                    viewModel.onEvent(NotesEvent.DeleteNote(note))
-
-                    scope.launch {
-                        val result = snackbarHostState.showSnackbar(
-                            message = "Note deleted",
-                            actionLabel = "Undo"
-                        )
-                        if (result == SnackbarResult.ActionPerformed) {
-                            viewModel.onEvent(NotesEvent.RestoreNote)
-                        }
-                    }
-                },
                 onFavoriteClick = {
                     if (note.isFavourite)
                         mToast(context, "Removed from Favourites")
@@ -109,19 +94,6 @@ fun ListViewNotes(
                                     "?noteId=${note.id}&noteColor=${note.color}"
                         )
                     },
-                onDeleteClick = {
-                    viewModel.onEvent(NotesEvent.DeleteNote(note))
-
-                    scope.launch {
-                        val result = snackbarHostState.showSnackbar(
-                            message = "Note deleted",
-                            actionLabel = "Undo"
-                        )
-                        if (result == SnackbarResult.ActionPerformed) {
-                            viewModel.onEvent(NotesEvent.RestoreNote)
-                        }
-                    }
-                },
                 onFavoriteClick = {
                     if (note.isFavourite)
                         mToast(context, "Removed from Favourites")

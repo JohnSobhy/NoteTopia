@@ -29,7 +29,6 @@ fun NoteItem(
     note: Note,
     modifier: Modifier,
     cornerRadius: Dp = 10.dp,
-    onDeleteClick: () -> Unit,
     onFavoriteClick: () -> Unit
 ) {
 

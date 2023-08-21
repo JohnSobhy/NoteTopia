@@ -13,6 +13,7 @@ import com.john_halaka.notes.feature_note.domain.util.notesSearch
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -30,15 +31,21 @@ class NotesViewModel @Inject constructor(
 
     private var getNotesJob: Job? = null
     private val initialNoteOrder: NoteOrder = NoteOrder.Date(OrderType.Descending)
-
+    private var currentNoteOrder = initialNoteOrder
     init {
         viewModelScope.launch {
-            delay(500) // Wait before calling getNotes
+            delay(1000) // Wait before calling getNotes
             Log.d("NotesViewModel", "Before calling getNotes")
             getNotes(initialNoteOrder)
         }
-        Log.d("NotesViewModel", "After calling getNotes")
-        getFavouriteNotes(initialNoteOrder)
+        viewModelScope.launch {
+            delay(500)
+            Log.d("NotesViewModel", "After calling getNotes")
+            getFavouriteNotes(initialNoteOrder)
+        }
+
+        Log.d("NotesViewModel", "After calling getFavorites and before getDeleted")
+        getDeletedNotes(initialNoteOrder)
     }
 
     fun onEvent(event: NotesEvent) {
@@ -51,6 +58,7 @@ class NotesViewModel @Inject constructor(
                     return
                 }
                 getNotes(event.noteOrder)
+                currentNoteOrder = event.noteOrder
 
             }
 
@@ -58,6 +66,7 @@ class NotesViewModel @Inject constructor(
                 viewModelScope.launch {
                     noteUseCases.deleteNotes(event.note)
                     recentlyDeletedNote = event.note
+                    getDeletedNotes(currentNoteOrder)
                 }
             }
 
@@ -65,6 +74,7 @@ class NotesViewModel @Inject constructor(
                 viewModelScope.launch {
                     noteUseCases.addNote(recentlyDeletedNote ?: return@launch)
                     recentlyDeletedNote = null
+                    getDeletedNotes(currentNoteOrder)
                 }
             }
 
@@ -84,6 +94,9 @@ class NotesViewModel @Inject constructor(
             is NotesEvent.UpdateNote -> {
                 viewModelScope.launch {
                     noteUseCases.updateNote(event.note.id!!, event.note.isFavourite)
+                    getFavouriteNotes(currentNoteOrder)
+                    delay(500)
+                    getNotes(currentNoteOrder)
                 }
             }
 
@@ -91,6 +104,7 @@ class NotesViewModel @Inject constructor(
             is NotesEvent.MoveNoteToTrash -> {
                 viewModelScope.launch {
                     noteUseCases.moveNoteToTrash(event.note.id!!, event.note.isDeleted)
+                    getDeletedNotes(currentNoteOrder)
                 }
             }
         }
@@ -122,6 +136,19 @@ class NotesViewModel @Inject constructor(
                 Log.d("NotesViewModel", "getFavNotes: $notes")
                 _state.value = state.value.copy(
                     favouriteNotes = notes,
+                    noteOrder = noteOrder
+                )
+            }
+            .launchIn(viewModelScope)
+    }
+
+    private fun getDeletedNotes(noteOrder: NoteOrder) {
+        getNotesJob?.cancel()
+        getNotesJob = noteUseCases.getDeletedNotes(noteOrder)
+            .onEach { notes ->
+                Log.d("NotesViewModel", "getDeletedNotes: $notes")
+                _state.value = state.value.copy(
+                    deletedNotes = MutableStateFlow(notes),
                     noteOrder = noteOrder
                 )
             }

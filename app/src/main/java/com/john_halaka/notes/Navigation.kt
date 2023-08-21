@@ -25,6 +25,7 @@ import com.john_halaka.mytodo.AddEditTodoScreen
 import com.john_halaka.mytodo.TodoListScreen
 import com.john_halaka.notes.ui.Screen
 import com.john_halaka.notes.ui.presentaion.add_edit_note.components.AddEditNoteScreen
+import com.john_halaka.notes.ui.presentaion.deleted_notes.DeletedNotesScreen
 import com.john_halaka.notes.ui.presentaion.fav_notes.FavNotesScreen
 import com.john_halaka.notes.ui.presentaion.notes_list.NotesScreen
 import com.john_halaka.notes.ui.presentaion.search_notes.components.NotesSearchScreen
@@ -45,6 +46,9 @@ fun Navigation() {
 
         composable(route = Screen.FavNotesScreen.route) {
             FavNotesScreen(navController = navController, context = LocalContext.current)
+        }
+        composable(route = Screen.DeletedNotesScreen.route) {
+            DeletedNotesScreen(navController = navController, context = LocalContext.current)
         }
 
         composable(route = Screen.NotesSearchScreen.route) {

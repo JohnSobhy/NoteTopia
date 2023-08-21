@@ -15,6 +15,8 @@ interface NoteRepository {
 
     fun getFavouriteNotes(): Flow<List<Note>>
 
+    fun getDeletedNotes(): Flow<List<Note>>
+
     suspend fun updateNote(noteId: Int, isFavourite: Boolean)
 
     suspend fun moveNoteToTrash(noteId: Int, isDeleted: Boolean)

@@ -19,9 +19,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -72,6 +72,9 @@ fun NotesScreen(
 
 
     Scaffold(
+        topBar = {
+
+        },
         bottomBar = {
             BottomNavigationBar(navController = navController)
         },
@@ -123,7 +126,6 @@ fun NotesScreen(
                     }
                 }
             )
-
             BoxWithConstraints {
                 val boxWidth = maxWidth * 0.7f
                 val iconWidth = (maxWidth - boxWidth) / 3
@@ -136,10 +138,10 @@ fun NotesScreen(
                     IconButton(
                         modifier = Modifier.width(iconWidth),
                         onClick = {
-                            navController.navigate(Screen.NotesSearchScreen.route)
+                            navController.navigate(Screen.DeletedNotesScreen.route)
                         }
                     ) {
-                        Icon(Icons.Default.Search, contentDescription = "favorite notes")
+                        Icon(Icons.Default.Delete, contentDescription = "Trash can")
                     }
 
                     IconButton(
