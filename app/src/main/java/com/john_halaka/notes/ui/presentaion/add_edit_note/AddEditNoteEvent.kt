@@ -14,7 +14,7 @@ sealed class AddEditNoteEvent{
     object SaveNote : AddEditNoteEvent()
 
     data class DeleteNote(val noteId: Int) : AddEditNoteEvent()
-
+    data class UpdateNote(val note: Note) : AddEditNoteEvent()
     data class MoveNoteToTrash(val note: Note) : AddEditNoteEvent()
 
     object BackButtonClick : AddEditNoteEvent()

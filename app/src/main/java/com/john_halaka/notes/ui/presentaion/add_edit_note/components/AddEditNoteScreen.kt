@@ -23,7 +23,8 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.outlined.Favorite
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -65,8 +66,8 @@ fun AddEditNoteScreen(
     val contentState = viewModel.noteContent.value
 
     val snackbarHostState = remember { SnackbarHostState() }
-    val currentNote = viewModel.note
-    val noteId = currentNote.value.id
+    val currentNote = viewModel.note.value
+    val noteId = currentNote.id
 
     LaunchedEffect(key1 = true) {
         viewModel.eventFlow.collectLatest { event ->
@@ -128,8 +129,8 @@ fun AddEditNoteScreen(
                                 Log.d("addEditScreen", "currentNote is Not Null noteId= $noteId")
                                 viewModel.onEvent(
                                     AddEditNoteEvent.MoveNoteToTrash(
-                                        currentNote.value.copy(
-                                            isDeleted = !currentNote.value.isDeleted,
+                                        currentNote.copy(
+                                            isDeleted = !currentNote.isDeleted,
                                             isFavourite = false
                                         )
                                     )
@@ -146,10 +147,29 @@ fun AddEditNoteScreen(
 
                     }
                     IconButton(
-                        onClick = { /*TODO*/ }
+                        onClick = {
+                            if (currentNote.isFavourite)
+                                com.john_halaka.notes.ui.presentaion.notes_list.components.mToast(
+                                    context,
+                                    "Removed from Favourites"
+                                )
+                            else
+                                com.john_halaka.notes.ui.presentaion.notes_list.components.mToast(
+                                    context,
+                                    "Added to Favorites"
+                                )
+                            viewModel.onEvent(
+                                AddEditNoteEvent.UpdateNote(
+                                    currentNote.copy(
+                                        isFavourite = !currentNote.isFavourite
+                                    )
+                                )
+                            )
+                        }
                     ) {
                         Icon(
-                            imageVector = Icons.Outlined.Favorite,
+                            imageVector = if (viewModel.noteIsFavorite.value) Icons.Default.Favorite
+                            else Icons.Default.FavoriteBorder,
                             contentDescription = "is favorite"
                         )
                     }

@@ -62,6 +62,7 @@ class AddEditNoteViewModel @Inject constructor(
     init {
         savedStateHandle.get<Int>("noteId")?.let { noteId ->
             if (noteId != -1) {
+                Log.d("AddEditNoteViewModel", "getNoteById is call $noteId")
                 viewModelScope.launch {
                     noteUseCases.getNoteById(noteId)?.also { note ->
                         _note.value = note
@@ -80,6 +81,7 @@ class AddEditNoteViewModel @Inject constructor(
                     }
                 }
             }
+            Log.d("AddEditNoteViewModel", "getNoteById is Not call $noteId")
         }
     }
 
@@ -116,9 +118,10 @@ class AddEditNoteViewModel @Inject constructor(
                 _noteColor.value = event.color
             }
 
-            AddEditNoteEvent.SaveNote -> {
+            is AddEditNoteEvent.SaveNote -> {
                 viewModelScope.launch {
                     try {
+                        Log.d("AddEditNoteViewModel", "saveButton call id=$noteId")
                         noteUseCases.addNote(
                             Note(
                                 title = noteTitle.value.text,
@@ -142,17 +145,17 @@ class AddEditNoteViewModel @Inject constructor(
             }
 
             is AddEditNoteEvent.DeleteNote -> {
-                viewModelScope.launch {
-
-                    currentNoteId?.let { noteUseCases.getNoteById(it) }
-                        ?.let { note ->
-                            noteUseCases.deleteNotes(note)
-                            recentlyDeletedNote = note
-
-                            _eventFlow.emit(UiEvent.DeleteNote)
-                        }
-
-                }
+//                viewModelScope.launch {
+//
+//                    currentNoteId?.let { noteUseCases.getNoteById(it) }
+//                        ?.let { note ->
+//                            noteUseCases.deleteNotes(note)
+//                            recentlyDeletedNote = note
+//
+//                            _eventFlow.emit(UiEvent.DeleteNote)
+//                        }
+//
+//                }
             }
 
             is AddEditNoteEvent.BackButtonClick -> {
@@ -192,9 +195,19 @@ class AddEditNoteViewModel @Inject constructor(
                         _eventFlow.emit(UiEvent.NavigateBack)
                     } else
                         Log.d("AddEditNoteViewModel", "MoveToTrash called")
-                    noteUseCases.moveNoteToTrash(event.note.id!!, event.note.isDeleted)
-                    noteUseCases.updateNote(event.note.id, event.note.isFavourite)
+                    event.note.id?.let { noteId ->
+                        noteUseCases.moveNoteToTrash(noteId, event.note.isDeleted)
+                        noteUseCases.updateNote(noteId, event.note.isFavourite)
+                    }
+
                     _eventFlow.emit(UiEvent.DeleteNote)
+                }
+            }
+
+            is AddEditNoteEvent.UpdateNote -> {
+                _noteIsFavorite.value = event.note.isFavourite
+                viewModelScope.launch {
+                    event.note.id?.let { noteUseCases.updateNote(it, event.note.isFavourite) }
                 }
             }
         }

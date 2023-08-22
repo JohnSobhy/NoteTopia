@@ -118,6 +118,6 @@ fun ListViewNotes(
     }
 }
 
-private fun mToast(context: Context, msg: String) {
+fun mToast(context: Context, msg: String) {
     Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
 }
