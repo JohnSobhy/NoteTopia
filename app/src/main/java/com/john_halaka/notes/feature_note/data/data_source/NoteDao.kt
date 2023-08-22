@@ -15,7 +15,7 @@ interface NoteDao {
     @Query("SELECT * FROM note WHERE isDeleted = 0")
     fun getNotes(): Flow<List<Note>>
 
-    @Query("SELECT * FROM note WHERE isFavourite = 1")
+    @Query("SELECT * FROM note WHERE isFavourite = 1 and isDeleted = 0")
     fun getFavouriteNotes(): Flow<List<Note>>
 
     @Query("SELECT * FROM note WHERE isDeleted = 1")

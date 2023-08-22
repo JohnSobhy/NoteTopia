@@ -39,6 +39,9 @@ class AddEditNoteViewModel @Inject constructor(
     private val _noteColor = mutableStateOf(Note.noteColors.random().toArgb())
     val noteColor: State<Int> = _noteColor
 
+    private val _noteIsFavorite = mutableStateOf(false)
+    val noteIsFavorite: State<Boolean> = _noteIsFavorite
+
     private val _eventFlow = MutableSharedFlow<UiEvent>()
     val eventFlow = _eventFlow.asSharedFlow()
 
@@ -72,6 +75,7 @@ class AddEditNoteViewModel @Inject constructor(
                             isHintVisible = false
                         )
                         _noteColor.value = note.color
+                        _noteIsFavorite.value = note.isFavourite
 
                     }
                 }
@@ -121,7 +125,8 @@ class AddEditNoteViewModel @Inject constructor(
                                 content = noteContent.value.text,
                                 timestamp = System.currentTimeMillis(),
                                 color = noteColor.value,
-                                id = currentNoteId
+                                id = currentNoteId,
+                                isFavourite = noteIsFavorite.value
                             )
                         )
                         _eventFlow.emit(UiEvent.SaveNote)
@@ -188,13 +193,13 @@ class AddEditNoteViewModel @Inject constructor(
                     } else
                         Log.d("AddEditNoteViewModel", "MoveToTrash called")
                     noteUseCases.moveNoteToTrash(event.note.id!!, event.note.isDeleted)
+                    noteUseCases.updateNote(event.note.id, event.note.isFavourite)
                     _eventFlow.emit(UiEvent.DeleteNote)
                 }
             }
         }
 
     }
-
     sealed class UiEvent {
         data class ShowSnackbar(val message: String) : UiEvent()
         object SaveNote : UiEvent()

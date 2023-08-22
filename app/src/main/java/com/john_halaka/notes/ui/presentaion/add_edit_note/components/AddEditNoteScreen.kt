@@ -1,6 +1,5 @@
 package com.john_halaka.notes.ui.presentaion.add_edit_note.components
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.util.Log
 import android.widget.Toast
@@ -24,7 +23,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -33,7 +32,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -54,7 +53,6 @@ import kotlinx.coroutines.flow.collectLatest
 
 
 @OptIn(ExperimentalMaterial3Api::class)
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun AddEditNoteScreen(
     navController: NavController,
@@ -97,48 +95,10 @@ fun AddEditNoteScreen(
 
 
     Scaffold(
-        floatingActionButton = {
-            FloatingActionButton(
-                onClick = {
-                    Log.d("addEditScreen", "saveButton is clicked noteId = $noteId")
-                    viewModel.onEvent(AddEditNoteEvent.SaveNote)
-                    if (titleState.text.isNotBlank() && contentState.text.isNotBlank())
-                        mToast(context, "Notes Saved")
-                },
-                containerColor = MaterialTheme.colorScheme.primaryContainer,
-                contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+        topBar = {
+            TopAppBar(
+                title = { /*TODO*/ },
 
-                ) {
-                Icon(
-                    painter = painterResource(R.drawable.baseline_save_24),
-                    contentDescription = "Save",
-
-                )
-
-            }
-        } ,
-        snackbarHost = {
-            SnackbarHost(snackbarHostState)
-        }
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-
-        ) {
-            CenterAlignedTopAppBar(
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primaryContainer,
-                    actionIconContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                    titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                    scrolledContainerColor = MaterialTheme.colorScheme.primaryContainer ,
-                    navigationIconContentColor = MaterialTheme.colorScheme.onPrimaryContainer
-                ),
-
-
-                title = {
-
-                },
                 navigationIcon = {
                     IconButton(onClick = {
                         Log.d("addEditScreen", "backButton is clicked noteId = $noteId")
@@ -169,18 +129,15 @@ fun AddEditNoteScreen(
                                 viewModel.onEvent(
                                     AddEditNoteEvent.MoveNoteToTrash(
                                         currentNote.value.copy(
-                                            isDeleted = !currentNote.value.isDeleted
+                                            isDeleted = !currentNote.value.isDeleted,
+                                            isFavourite = false
                                         )
                                     )
                                 )
 
                                 mToast(context, "Note is moved to the trash")
-
                             }
-
-
                         }
-
                     ) {
                         Icon(
                             Icons.Default.Delete,
@@ -188,34 +145,72 @@ fun AddEditNoteScreen(
                         )
 
                     }
+                    IconButton(
+                        onClick = { /*TODO*/ }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Outlined.Favorite,
+                            contentDescription = "is favorite"
+                        )
+                    }
                 }
             )
+        },
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = {
+                    Log.d("addEditScreen", "saveButton is clicked noteId = $noteId")
+                    viewModel.onEvent(AddEditNoteEvent.SaveNote)
+                    if (titleState.text.isNotBlank() && contentState.text.isNotBlank())
+                        mToast(context, "Notes Saved")
+                },
+                containerColor = MaterialTheme.colorScheme.primaryContainer,
+                contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+
+                ) {
+                Icon(
+                    painter = painterResource(R.drawable.baseline_save_24),
+                    contentDescription = "Save",
+
+                    )
+
+            }
+        },
+        snackbarHost = {
+            SnackbarHost(snackbarHostState)
+        }
+    ) { values ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(values)
+        ) {
             LazyRow(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(16.dp),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                items (Note.noteColors){ color ->
+                items(Note.noteColors) { color ->
                     val colorInt = color.toArgb()
 
-                   Box(
-                       modifier = Modifier
-                           .size(50.dp)
-                           .shadow(15.dp, CircleShape)
-                           .clip(CircleShape)
-                           .background(color)
-                           .border(
-                               width = 3.dp,
-                               color = if (viewModel.noteColor.value == colorInt) {
-                                   MaterialTheme.colorScheme.secondary
-                               } else Color.Transparent,
-                               shape = CircleShape
-                           )
-                           .clickable {
+                    Box(
+                        modifier = Modifier
+                            .size(50.dp)
+                            .shadow(15.dp, CircleShape)
+                            .clip(CircleShape)
+                            .background(color)
+                            .border(
+                                width = 3.dp,
+                                color = if (viewModel.noteColor.value == colorInt) {
+                                    MaterialTheme.colorScheme.secondary
+                                } else Color.Transparent,
+                                shape = CircleShape
+                            )
+                            .clickable {
 
-                               viewModel.onEvent(AddEditNoteEvent.ChangeColor(colorInt))
-                           }
+                                viewModel.onEvent(AddEditNoteEvent.ChangeColor(colorInt))
+                            }
                     )
                     Spacer(Modifier.width(4.dp))
                 }
@@ -228,7 +223,7 @@ fun AddEditNoteScreen(
                 text = titleState.text,
                 hint = titleState.hint,
                 onValueChange = {
-                             viewModel.onEvent(AddEditNoteEvent.EnteredTitle (it))
+                    viewModel.onEvent(AddEditNoteEvent.EnteredTitle (it))
                 },
                 onFocusChange = {
                     viewModel.onEvent(AddEditNoteEvent.ChangeTitleFocus (it))
@@ -236,9 +231,9 @@ fun AddEditNoteScreen(
                 isHintVisible = titleState.isHintVisible,
                 singleLine = true ,
                 textStyle =
-                    MaterialTheme.typography.titleLarge.copy(color = MaterialTheme.colorScheme.onPrimary) ,
+                MaterialTheme.typography.titleLarge.copy(color = MaterialTheme.colorScheme.onPrimary) ,
 
-            )
+                )
 
             Spacer(Modifier.height(16.dp))
 

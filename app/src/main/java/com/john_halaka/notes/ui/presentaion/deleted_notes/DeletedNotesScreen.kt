@@ -1,12 +1,12 @@
 package com.john_halaka.notes.ui.presentaion.deleted_notes
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
@@ -33,7 +33,6 @@ import com.john_halaka.notes.ui.presentaion.notes_list.NotesViewModel
 import kotlinx.coroutines.launch
 
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DeletedNotesScreen(
@@ -47,15 +46,10 @@ fun DeletedNotesScreen(
     val notesList = state.deletedNotes
 
     Scaffold(
-
         snackbarHost = {
             SnackbarHost(snackbarHostState)
         },
         topBar = {
-
-        }
-    ) {
-        Column(modifier = Modifier.fillMaxSize()) {
             CenterAlignedTopAppBar(
                 title = { Text(text = "Recently deleted notes") },
                 navigationIcon = {
@@ -82,9 +76,17 @@ fun DeletedNotesScreen(
                 }
             )
 
+        }
+    ) { values ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(values)
+        ) {
+
             LazyColumn(modifier = Modifier.fillMaxSize()) {
 
-                items(notesList.value) { note ->
+                items(notesList) { note ->
                     DeletedNoteItem(
                         note = note,
                         onRemoveClick = {

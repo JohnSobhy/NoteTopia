@@ -1,6 +1,5 @@
 package com.john_halaka.notes.ui.presentaion.notes_list
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
@@ -56,7 +55,6 @@ import com.john_halaka.notes.ui.theme.Typography
 
 
 @OptIn(ExperimentalMaterial3Api::class)
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun NotesScreen(
     navController: NavController,
@@ -66,29 +64,12 @@ fun NotesScreen(
     val state = viewModel.state.value
     Log.d("NotesScreen", "state: $state")
     val snackbarHostState = remember { SnackbarHostState() }
-
     val scope = rememberCoroutineScope()
     var currentViewType by remember { mutableStateOf(ViewType.GRID) }
 
 
     Scaffold(
         topBar = {
-
-        },
-        bottomBar = {
-            BottomNavigationBar(navController = navController)
-        },
-
-        snackbarHost = {
-            SnackbarHost(snackbarHostState)
-        }
-
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-
-        ) {
             CenterAlignedTopAppBar(
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primaryContainer,
@@ -126,6 +107,23 @@ fun NotesScreen(
                     }
                 }
             )
+        },
+        bottomBar = {
+            BottomNavigationBar(navController = navController)
+        },
+
+        snackbarHost = {
+            SnackbarHost(snackbarHostState)
+        }
+
+    ) { values ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(values)
+
+        ) {
+
             BoxWithConstraints {
                 val boxWidth = maxWidth * 0.7f
                 val iconWidth = (maxWidth - boxWidth) / 3
@@ -208,7 +206,7 @@ fun NotesScreen(
                         notesList = state.notes,
                         context = context
 
-                        )
+                    )
 
                     ViewType.LIST -> ListViewNotes(
                         navController = navController,
@@ -217,14 +215,14 @@ fun NotesScreen(
                         snackbarHostState = snackbarHostState,
                         notesList = state.notes,
                         context = context
-                        )
+                    )
                 }
             }
 
         }
 
 
-        }
+    }
     }
 
 

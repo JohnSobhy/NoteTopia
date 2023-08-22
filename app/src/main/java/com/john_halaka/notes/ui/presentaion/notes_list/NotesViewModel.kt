@@ -13,7 +13,6 @@ import com.john_halaka.notes.feature_note.domain.util.notesSearch
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -34,18 +33,20 @@ class NotesViewModel @Inject constructor(
     private var currentNoteOrder = initialNoteOrder
     init {
         viewModelScope.launch {
+            Log.d("NotesViewModel", "After calling getNotes")
+            getFavouriteNotes(initialNoteOrder)
+        }
+        viewModelScope.launch {
+            delay(500)
+            Log.d("NotesViewModel", "After calling getFavorites and before getDeleted")
+            getDeletedNotes(initialNoteOrder)
+        }
+        viewModelScope.launch {
             delay(1000) // Wait before calling getNotes
             Log.d("NotesViewModel", "Before calling getNotes")
             getNotes(initialNoteOrder)
         }
-        viewModelScope.launch {
-            delay(500)
-            Log.d("NotesViewModel", "After calling getNotes")
-            getFavouriteNotes(initialNoteOrder)
-        }
 
-        Log.d("NotesViewModel", "After calling getFavorites and before getDeleted")
-        getDeletedNotes(initialNoteOrder)
     }
 
     fun onEvent(event: NotesEvent) {
@@ -63,6 +64,7 @@ class NotesViewModel @Inject constructor(
             }
 
             is NotesEvent.DeleteNote -> {
+                // used when removing a note permanently from the trash
                 viewModelScope.launch {
                     noteUseCases.deleteNotes(event.note)
                     recentlyDeletedNote = event.note
@@ -71,6 +73,7 @@ class NotesViewModel @Inject constructor(
             }
 
             is NotesEvent.RestoreNote -> {
+                // used when the undo button is clicked after removing a note permanently from the trash
                 viewModelScope.launch {
                     noteUseCases.addNote(recentlyDeletedNote ?: return@launch)
                     recentlyDeletedNote = null
@@ -102,6 +105,7 @@ class NotesViewModel @Inject constructor(
 
 
             is NotesEvent.MoveNoteToTrash -> {
+                //used when restoring a note back from the trash
                 viewModelScope.launch {
                     noteUseCases.moveNoteToTrash(event.note.id!!, event.note.isDeleted)
                     getDeletedNotes(currentNoteOrder)
@@ -148,7 +152,7 @@ class NotesViewModel @Inject constructor(
             .onEach { notes ->
                 Log.d("NotesViewModel", "getDeletedNotes: $notes")
                 _state.value = state.value.copy(
-                    deletedNotes = MutableStateFlow(notes),
+                    deletedNotes = notes,
                     noteOrder = noteOrder
                 )
             }
