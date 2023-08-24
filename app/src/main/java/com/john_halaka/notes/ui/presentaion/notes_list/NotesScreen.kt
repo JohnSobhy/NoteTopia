@@ -8,7 +8,7 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -16,10 +16,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.CircularProgressIndicator
@@ -27,14 +24,13 @@ import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -50,11 +46,12 @@ import com.john_halaka.notes.BottomNavigationBar
 import com.john_halaka.notes.NavigationDrawer
 import com.john_halaka.notes.R
 import com.john_halaka.notes.feature_note.domain.util.ViewType
-import com.john_halaka.notes.ui.Screen
 import com.john_halaka.notes.ui.presentaion.notes_list.components.GridViewNotes
 import com.john_halaka.notes.ui.presentaion.notes_list.components.ListViewNotes
 import com.john_halaka.notes.ui.presentaion.notes_list.components.OrderSection
+import com.john_halaka.notes.ui.theme.BabyBlue
 import com.john_halaka.notes.ui.theme.Typography
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 
@@ -81,14 +78,6 @@ fun NotesScreen(
             Scaffold(
                 topBar = {
                     CenterAlignedTopAppBar(
-                        colors = TopAppBarDefaults.topAppBarColors(
-                            containerColor = MaterialTheme.colorScheme.primaryContainer,
-                            actionIconContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                            titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                            scrolledContainerColor = MaterialTheme.colorScheme.primaryContainer,
-                            navigationIconContentColor = MaterialTheme.colorScheme.onPrimaryContainer
-
-                        ),
                         title = {
                             Text(text = "Notes", style = Typography.headlineLarge)
                         },
@@ -104,18 +93,15 @@ fun NotesScreen(
 
                         },
                         actions = {
-
                             IconButton(
                                 onClick = {
                                     viewModel.onEvent(NotesEvent.ToggleOrderSection)
                                 },
                             ) {
-
                                 Icon(
                                     painter = painterResource(id = R.drawable.baseline_sort_24),
                                     contentDescription = "Sort notes"
                                 )
-
                             }
                         }
                     )
@@ -133,36 +119,12 @@ fun NotesScreen(
                         .padding(values)
 
                 ) {
-
-                    BoxWithConstraints {
-                        val boxWidth = maxWidth * 0.7f
-                        val iconWidth = (maxWidth - boxWidth) / 3
                         Row(
                             modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween,
+                            horizontalArrangement = Arrangement.End,
                             verticalAlignment = Alignment.CenterVertically
                         ) {
-
                             IconButton(
-                                modifier = Modifier.width(iconWidth),
-                                onClick = {
-                                    navController.navigate(Screen.DeletedNotesScreen.route)
-                                }
-                            ) {
-                                Icon(Icons.Default.Delete, contentDescription = "Trash can")
-                            }
-
-                            IconButton(
-                                modifier = Modifier.width(iconWidth),
-                                onClick = {
-                                    navController.navigate(Screen.FavNotesScreen.route)
-                                }
-                            ) {
-                                Icon(Icons.Default.Favorite, contentDescription = "favorite notes")
-                            }
-
-                            IconButton(
-                                modifier = Modifier.width(iconWidth),
                                 onClick = { currentViewType = ViewType.LIST }
                             ) {
                                 Icon(
@@ -172,7 +134,6 @@ fun NotesScreen(
                             }
 
                             IconButton(
-                                modifier = Modifier.width(iconWidth),
                                 onClick = { currentViewType = ViewType.GRID }
                             ) {
                                 Icon(
@@ -182,7 +143,6 @@ fun NotesScreen(
                             }
 
                         }
-                    }
 
                     AnimatedVisibility(
                         visible = state.isOrderSectionVisible,
@@ -205,7 +165,21 @@ fun NotesScreen(
 
 
                     if (state.notes.isEmpty()) {
-                        CircularProgressIndicator()
+                        var showProgress by remember { mutableStateOf(true) }
+
+                        LaunchedEffect(Unit) {
+                            delay(1000)
+                            showProgress = false
+                        }
+                        Box(
+                            contentAlignment = Alignment.Center,
+                            modifier = Modifier.fillMaxSize()
+                        ) {
+                            if (showProgress) {
+                                CircularProgressIndicator(color = BabyBlue)
+                            } else
+                                Text(text = "Add your first Note")
+                        }
                     } else {
                         when (currentViewType) {
                             ViewType.GRID -> GridViewNotes(
@@ -217,7 +191,6 @@ fun NotesScreen(
                                 context = context
 
                             )
-
                             ViewType.LIST -> ListViewNotes(
                                 navController = navController,
                                 viewModel = viewModel,
