@@ -21,7 +21,10 @@ private val LightColorPalette = lightColorScheme(
     onSecondaryContainer = Color.Black,
     onSurface = DarkGray,
     secondaryContainer = SecondaryGreen,
-    onSurfaceVariant = DarkGray
+    onSurfaceVariant = DarkGray,
+    onTertiary = Gray
+
+
 )
 private val DarkColorPalette = darkColorScheme(
     primary = OptionPink,
@@ -38,7 +41,8 @@ private val DarkColorPalette = darkColorScheme(
     onSecondaryContainer = Color.Black,
     onSurface = DarkGray,
     secondaryContainer = SecondaryGreen,
-    onSurfaceVariant = DarkGray
+    onSurfaceVariant = DarkGray,
+    onTertiary = Gray
 )
 
 @Composable

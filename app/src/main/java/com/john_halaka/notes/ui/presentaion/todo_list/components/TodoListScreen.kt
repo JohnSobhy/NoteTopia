@@ -99,9 +99,11 @@ fun TodoListScreen (
                     SnackbarHost(scaffoldState)
                 },
 
-                ) {
+                ) { values ->
                 LazyColumn(
-                    modifier = Modifier.fillMaxSize()
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(values)
                 ) {
                     items(todos.value) { todo ->
                         TodoItem(

@@ -2,29 +2,23 @@ package com.john_halaka.notes.ui.presentaion.search_notes.components
 
 import android.annotation.SuppressLint
 import android.content.Context
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-
 import androidx.compose.foundation.layout.padding
-
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-
 import androidx.compose.material.icons.filled.Search
-
 import androidx.compose.material3.Icon
-
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHostState
-
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -37,10 +31,10 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.john_halaka.notes.feature_note.domain.model.Note
-
 import com.john_halaka.notes.ui.presentaion.notes_list.NotesEvent
 import com.john_halaka.notes.ui.presentaion.notes_list.NotesViewModel
 import com.john_halaka.notes.ui.presentaion.notes_list.components.ListViewNotes
+import com.john_halaka.notes.ui.theme.Typography
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -57,17 +51,15 @@ fun NotesSearchScreen (
     var notesList by remember { mutableStateOf<List<Note>>(state.notes) }
     var searchText by remember { mutableStateOf("") }
 
-
-    Scaffold(
-        snackbarHost = {
-            SnackbarHost(snackbarHostState)
-        }
-    ) {
         Column(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .fillMaxSize()
+                .background(color = MaterialTheme.colorScheme.background)
         ) {
             Row(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center
             ) {
@@ -78,11 +70,20 @@ fun NotesSearchScreen (
                         notesList = state.searchResult
                         searchText = searchPhrase
                     },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(end = 4.dp),
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = TextFieldDefaults.colors(
+                        focusedTextColor = MaterialTheme.colorScheme.onPrimary,
+                        unfocusedTextColor = MaterialTheme.colorScheme.onPrimary
+                    ),
+                    textStyle = Typography.titleLarge,
                     singleLine = true,
-                    placeholder = { Text("Find in your notes") },
+                    placeholder = {
+                        Text(
+                            "Find in your notes",
+                            style = Typography.titleLarge,
+                            color = MaterialTheme.colorScheme.onTertiary
+                        )
+                    },
                     leadingIcon = {
                         Icon(
                             imageVector = Icons.Default.ArrowBack,
@@ -129,4 +130,3 @@ fun NotesSearchScreen (
 
         }
     }
-}
