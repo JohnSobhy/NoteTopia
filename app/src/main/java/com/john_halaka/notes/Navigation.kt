@@ -1,20 +1,36 @@
 package com.john_halaka.notes
 
+import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.outlined.Add
+import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.Favorite
+import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Search
+import androidx.compose.material3.DrawerState
 import androidx.compose.material3.Icon
+import androidx.compose.material3.ModalDrawerSheet
+import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationDrawerItem
+import androidx.compose.material3.NavigationDrawerItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -29,6 +45,8 @@ import com.john_halaka.notes.ui.presentaion.deleted_notes.DeletedNotesScreen
 import com.john_halaka.notes.ui.presentaion.fav_notes.FavNotesScreen
 import com.john_halaka.notes.ui.presentaion.notes_list.NotesScreen
 import com.john_halaka.notes.ui.presentaion.search_notes.components.NotesSearchScreen
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 
 @Composable
@@ -99,7 +117,6 @@ fun Navigation() {
             )
         ) {
             AddEditTodoScreen(onPopBackStack = { navController.popBackStack() })
-
         }
     }
 }
@@ -107,7 +124,6 @@ fun Navigation() {
 @Composable
 fun BottomNavigationBar(
     navController: NavController,
-
     ) {
 
     val currentRoute = navController.currentDestination?.route
@@ -171,31 +187,67 @@ fun BottomNavigationBar(
             )
         }
 
-
-//        NavigationBarItem(
-//            modifier = Modifier
-//                .padding(bottom = 16.dp)
-//                .shadow(elevation = 4.dp),
-//            selected = false,
-//            onClick = {
-//                navController.navigate(Screen.AddEditNoteScreen.route)
-//            },
-//            icon = {
-//                Icon(
-//                    imageVector = Icons.Rounded.Add,
-//                    contentDescription = "Add Note",
-//                    modifier = Modifier
-//                        .fillMaxSize()
-//                        .padding(top = 12.dp)
-//                )
-//            },
-//
-//
-//            )
-//
-
-
     }
+}
+
+@Composable
+fun NavigationDrawer(
+    navController: NavController,
+    drawerState: DrawerState,
+    content: @Composable () -> Unit,
+    scope: CoroutineScope
+) {
+    val currentRoute = navController.currentDestination?.route
+    val itemList: List<NavigationItem> = listOf(
+        NavigationItem(
+            title = "Home",
+            selectedIcon = Icons.Filled.Home,
+            unselectedIcon = Icons.Outlined.Home,
+            route = Screen.NotesScreen.route
+        ),
+        NavigationItem(
+            title = "Recently Deleted",
+            selectedIcon = Icons.Filled.Delete,
+            unselectedIcon = Icons.Outlined.Delete,
+            route = Screen.DeletedNotesScreen.route
+        )
+    )
+    ModalNavigationDrawer(
+        drawerContent = {
+            ModalDrawerSheet {
+                Spacer(modifier = Modifier.height(16.dp))
+                itemList.forEach { navigationItem ->
+                    NavigationDrawerItem(
+                        label = { Text(text = navigationItem.title) },
+                        selected = currentRoute == navigationItem.route,
+                        onClick = {
+                            navController.navigate(navigationItem.route)
+                            scope.launch {
+                                drawerState.close()
+                            }
+                        },
+                        icon = {
+                            Icon(
+                                imageVector = if (currentRoute == navigationItem.route) {
+                                    navigationItem.selectedIcon
+                                } else
+                                    navigationItem.unselectedIcon,
+                                contentDescription = navigationItem.title
+                            )
+                        },
+                        //   badge = {},
+                        modifier = Modifier
+                            .padding(NavigationDrawerItemDefaults.ItemPadding)
+                            .width(intrinsicSize = IntrinsicSize.Min)
+
+                    )
+                }
+
+            }
+        },
+        drawerState = drawerState,
+        content = content
+    )
 }
 
 data class NavigationItem(

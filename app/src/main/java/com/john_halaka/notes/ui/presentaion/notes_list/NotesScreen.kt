@@ -23,6 +23,7 @@ import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -32,6 +33,7 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -45,6 +47,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.john_halaka.notes.BottomNavigationBar
+import com.john_halaka.notes.NavigationDrawer
 import com.john_halaka.notes.R
 import com.john_halaka.notes.feature_note.domain.util.ViewType
 import com.john_halaka.notes.ui.Screen
@@ -52,6 +55,7 @@ import com.john_halaka.notes.ui.presentaion.notes_list.components.GridViewNotes
 import com.john_halaka.notes.ui.presentaion.notes_list.components.ListViewNotes
 import com.john_halaka.notes.ui.presentaion.notes_list.components.OrderSection
 import com.john_halaka.notes.ui.theme.Typography
+import kotlinx.coroutines.launch
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -67,163 +71,176 @@ fun NotesScreen(
     val scope = rememberCoroutineScope()
     var currentViewType by remember { mutableStateOf(ViewType.GRID) }
 
+    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
 
-    Scaffold(
-        topBar = {
-            CenterAlignedTopAppBar(
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primaryContainer,
-                    actionIconContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                    titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
-                    scrolledContainerColor = MaterialTheme.colorScheme.primaryContainer ,
-                    navigationIconContentColor = MaterialTheme.colorScheme.onPrimaryContainer
+    NavigationDrawer(
+        navController = navController,
+        drawerState = drawerState,
+        scope = scope,
+        content = {
+            Scaffold(
+                topBar = {
+                    CenterAlignedTopAppBar(
+                        colors = TopAppBarDefaults.topAppBarColors(
+                            containerColor = MaterialTheme.colorScheme.primaryContainer,
+                            actionIconContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                            titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                            scrolledContainerColor = MaterialTheme.colorScheme.primaryContainer,
+                            navigationIconContentColor = MaterialTheme.colorScheme.onPrimaryContainer
 
-                ),
-                title = {
-                    Text(text = "Notes", style = Typography.headlineLarge)
-                },
-                navigationIcon = {
-                    IconButton(onClick = {
-
-                    })
-                    {
-                        Icon(Icons.Filled.Menu, contentDescription = "menu")
-                    }
-
-                },
-                actions = {
-
-                    IconButton(
-                        onClick = {
-                            viewModel.onEvent(NotesEvent.ToggleOrderSection)
+                        ),
+                        title = {
+                            Text(text = "Notes", style = Typography.headlineLarge)
                         },
-                    ) {
+                        navigationIcon = {
+                            IconButton(onClick = {
+                                scope.launch {
+                                    drawerState.open()
+                                }
+                            })
+                            {
+                                Icon(Icons.Filled.Menu, contentDescription = "menu")
+                            }
 
-                        Icon(
-                            painter = painterResource(id = R.drawable.baseline_sort_24),
-                            contentDescription = "Sort notes"
-                        )
+                        },
+                        actions = {
 
-                    }
+                            IconButton(
+                                onClick = {
+                                    viewModel.onEvent(NotesEvent.ToggleOrderSection)
+                                },
+                            ) {
+
+                                Icon(
+                                    painter = painterResource(id = R.drawable.baseline_sort_24),
+                                    contentDescription = "Sort notes"
+                                )
+
+                            }
+                        }
+                    )
+                },
+                bottomBar = {
+                    BottomNavigationBar(navController = navController)
+                },
+                snackbarHost = {
+                    SnackbarHost(snackbarHostState)
                 }
-            )
-        },
-        bottomBar = {
-            BottomNavigationBar(navController = navController)
-        },
+            ) { values ->
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(values)
 
-        snackbarHost = {
-            SnackbarHost(snackbarHostState)
-        }
-
-    ) { values ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(values)
-
-        ) {
-
-            BoxWithConstraints {
-                val boxWidth = maxWidth * 0.7f
-                val iconWidth = (maxWidth - boxWidth) / 3
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
                 ) {
 
-                    IconButton(
-                        modifier = Modifier.width(iconWidth),
-                        onClick = {
-                            navController.navigate(Screen.DeletedNotesScreen.route)
+                    BoxWithConstraints {
+                        val boxWidth = maxWidth * 0.7f
+                        val iconWidth = (maxWidth - boxWidth) / 3
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+
+                            IconButton(
+                                modifier = Modifier.width(iconWidth),
+                                onClick = {
+                                    navController.navigate(Screen.DeletedNotesScreen.route)
+                                }
+                            ) {
+                                Icon(Icons.Default.Delete, contentDescription = "Trash can")
+                            }
+
+                            IconButton(
+                                modifier = Modifier.width(iconWidth),
+                                onClick = {
+                                    navController.navigate(Screen.FavNotesScreen.route)
+                                }
+                            ) {
+                                Icon(Icons.Default.Favorite, contentDescription = "favorite notes")
+                            }
+
+                            IconButton(
+                                modifier = Modifier.width(iconWidth),
+                                onClick = { currentViewType = ViewType.LIST }
+                            ) {
+                                Icon(
+                                    painter = painterResource(id = R.drawable.baseline_list_24),
+                                    contentDescription = "List View"
+                                )
+                            }
+
+                            IconButton(
+                                modifier = Modifier.width(iconWidth),
+                                onClick = { currentViewType = ViewType.GRID }
+                            ) {
+                                Icon(
+                                    painter = painterResource(id = R.drawable.baseline_grid_view_24),
+                                    contentDescription = "Grid View"
+                                )
+                            }
+
                         }
-                    ) {
-                        Icon(Icons.Default.Delete, contentDescription = "Trash can")
                     }
 
-                    IconButton(
-                        modifier = Modifier.width(iconWidth),
-                        onClick = {
-                            navController.navigate(Screen.FavNotesScreen.route)
-                        }
+                    AnimatedVisibility(
+                        visible = state.isOrderSectionVisible,
+                        enter = fadeIn() + slideInVertically(),
+                        exit = fadeOut() + slideOutVertically()
                     ) {
-                        Icon(Icons.Default.Favorite, contentDescription = "favorite notes")
-                    }
+                        OrderSection(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 8.dp),
+                            noteOrder = state.noteOrder,
+                            onOrderChange = {
+                                viewModel.onEvent(NotesEvent.Order(it))
 
-                    IconButton(
-                        modifier = Modifier.width(iconWidth),
-                        onClick = { currentViewType = ViewType.LIST }
-                    ) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.baseline_list_24),
-                            contentDescription = "List View"
+                            }
                         )
                     }
 
-                    IconButton(
-                        modifier = Modifier.width(iconWidth),
-                        onClick = { currentViewType = ViewType.GRID }
-                    ) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.baseline_grid_view_24),
-                            contentDescription = "Grid View"
-                        )
+                    Spacer(modifier = Modifier.height(16.dp))
+
+
+                    if (state.notes.isEmpty()) {
+                        CircularProgressIndicator()
+                    } else {
+                        when (currentViewType) {
+                            ViewType.GRID -> GridViewNotes(
+                                navController = navController,
+                                viewModel = viewModel,
+                                scope = scope,
+                                snackbarHostState = snackbarHostState,
+                                notesList = state.notes,
+                                context = context
+
+                            )
+
+                            ViewType.LIST -> ListViewNotes(
+                                navController = navController,
+                                viewModel = viewModel,
+                                scope = scope,
+                                snackbarHostState = snackbarHostState,
+                                notesList = state.notes,
+                                context = context
+                            )
+                        }
                     }
 
                 }
+
+
             }
-
-            AnimatedVisibility(
-                visible = state.isOrderSectionVisible,
-                enter = fadeIn() + slideInVertically(),
-                exit = fadeOut() + slideOutVertically()
-            ) {
-                OrderSection(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 8.dp),
-                    noteOrder = state.noteOrder,
-                    onOrderChange = {
-                        viewModel.onEvent(NotesEvent.Order(it))
-
-                    }
-                )
-            }
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-
-            if (state.notes.isEmpty()) {
-                CircularProgressIndicator()
-            } else {
-                when (currentViewType) {
-                    ViewType.GRID -> GridViewNotes(
-                        navController = navController,
-                        viewModel = viewModel,
-                        scope = scope,
-                        snackbarHostState = snackbarHostState,
-                        notesList = state.notes,
-                        context = context
-
-                    )
-
-                    ViewType.LIST -> ListViewNotes(
-                        navController = navController,
-                        viewModel = viewModel,
-                        scope = scope,
-                        snackbarHostState = snackbarHostState,
-                        notesList = state.notes,
-                        context = context
-                    )
-                }
-            }
-
         }
+    )
+
+}
 
 
-    }
-    }
+
+
 
 
 

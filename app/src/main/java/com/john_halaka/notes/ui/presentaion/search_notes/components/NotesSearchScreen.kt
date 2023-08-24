@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 
 import androidx.compose.material.icons.filled.Search
 
@@ -82,6 +83,20 @@ fun NotesSearchScreen (
                         .padding(end = 4.dp),
                     singleLine = true,
                     placeholder = { Text("Find in your notes") },
+                    leadingIcon = {
+                        Icon(
+                            imageVector = Icons.Default.ArrowBack,
+                            contentDescription = "Back",
+                            modifier = Modifier
+                                .clickable(
+                                    true,
+                                    onClick = {
+                                        navController.navigateUp()
+                                    }
+                                )
+
+                        )
+                    },
                     trailingIcon = {
                         Icon(
                             imageVector = Icons.Default.Search,
