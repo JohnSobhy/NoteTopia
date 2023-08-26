@@ -95,6 +95,7 @@ class NotesViewModel @Inject constructor(
             }
 
             is NotesEvent.UpdateNote -> {
+                Log.d("HomeScreen", "OnFavourite clicked isFavorite= ${event.note.isFavourite}")
                 viewModelScope.launch {
                     noteUseCases.updateNote(event.note.id!!, event.note.isFavourite)
                     getFavouriteNotes(currentNoteOrder)

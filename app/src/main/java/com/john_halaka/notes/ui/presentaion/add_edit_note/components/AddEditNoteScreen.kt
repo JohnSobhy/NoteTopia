@@ -64,10 +64,10 @@ fun AddEditNoteScreen(
 
     val titleState = viewModel.noteTitle.value
     val contentState = viewModel.noteContent.value
-
     val snackbarHostState = remember { SnackbarHostState() }
     val currentNote = viewModel.note.value
     val noteId = currentNote.id
+    var isFavorite: Boolean = currentNote.isFavourite
 
     LaunchedEffect(key1 = true) {
         viewModel.eventFlow.collectLatest { event ->
@@ -148,23 +148,8 @@ fun AddEditNoteScreen(
                     }
                     IconButton(
                         onClick = {
-                            if (currentNote.isFavourite)
-                                com.john_halaka.notes.ui.presentaion.notes_list.components.mToast(
-                                    context,
-                                    "Removed from Favourites"
-                                )
-                            else
-                                com.john_halaka.notes.ui.presentaion.notes_list.components.mToast(
-                                    context,
-                                    "Added to Favorites"
-                                )
-                            viewModel.onEvent(
-                                AddEditNoteEvent.UpdateNote(
-                                    currentNote.copy(
-                                        isFavourite = !currentNote.isFavourite
-                                    )
-                                )
-                            )
+                            isFavorite = !isFavorite
+                            viewModel.onEvent(AddEditNoteEvent.ChangeIsFavorite(isFavorite))
                         }
                     ) {
                         Icon(
@@ -228,7 +213,6 @@ fun AddEditNoteScreen(
                                 shape = CircleShape
                             )
                             .clickable {
-
                                 viewModel.onEvent(AddEditNoteEvent.ChangeColor(colorInt))
                             }
                     )

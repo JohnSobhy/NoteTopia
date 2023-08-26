@@ -47,7 +47,6 @@ class AddEditNoteViewModel @Inject constructor(
 
     private var currentNoteId: Int? = null
     val noteId: Int = currentNoteId ?: -1
-    private var recentlyDeletedNote: Note? = null
 
     private val _note = mutableStateOf(
         Note(
@@ -57,7 +56,7 @@ class AddEditNoteViewModel @Inject constructor(
             timestamp = System.currentTimeMillis()
         )
     )
-    val note: State<Note> = _note
+    var note: State<Note> = _note
 
     init {
         savedStateHandle.get<Int>("noteId")?.let { noteId ->
@@ -118,6 +117,10 @@ class AddEditNoteViewModel @Inject constructor(
                 _noteColor.value = event.color
             }
 
+            is AddEditNoteEvent.ChangeIsFavorite -> {
+                _noteIsFavorite.value = event.isFavorite
+            }
+
             is AddEditNoteEvent.SaveNote -> {
                 viewModelScope.launch {
                     try {
@@ -144,19 +147,6 @@ class AddEditNoteViewModel @Inject constructor(
                 }
             }
 
-            is AddEditNoteEvent.DeleteNote -> {
-//                viewModelScope.launch {
-//
-//                    currentNoteId?.let { noteUseCases.getNoteById(it) }
-//                        ?.let { note ->
-//                            noteUseCases.deleteNotes(note)
-//                            recentlyDeletedNote = note
-//
-//                            _eventFlow.emit(UiEvent.DeleteNote)
-//                        }
-//
-//                }
-            }
 
             is AddEditNoteEvent.BackButtonClick -> {
                 viewModelScope.launch {
@@ -204,12 +194,28 @@ class AddEditNoteViewModel @Inject constructor(
                 }
             }
 
-            is AddEditNoteEvent.UpdateNote -> {
-                _noteIsFavorite.value = event.note.isFavourite
-                viewModelScope.launch {
-                    event.note.id?.let { noteUseCases.updateNote(it, event.note.isFavourite) }
-                }
-            }
+//            is AddEditNoteEvent.UpdateNote -> {
+//                Log.d("EditScreen", "OnFavourite clicked isFavorite= ${event.note.isFavourite}")
+//                viewModelScope.launch {
+//                    event.note.id?.let { noteUseCases.updateNote(it, event.note.isFavourite) }
+//                    _noteIsFavorite.value = event.note.isFavourite
+//                    Log.d("EditScreen", "noteIsFavorite = $_noteIsFavorite")
+//                }
+//            }
+
+//            is AddEditNoteEvent.DeleteNote -> {
+//                viewModelScope.launch {
+//
+//                    currentNoteId?.let { noteUseCases.getNoteById(it) }
+//                        ?.let { note ->
+//                            noteUseCases.deleteNotes(note)
+//                            recentlyDeletedNote = note
+//
+//                            _eventFlow.emit(UiEvent.DeleteNote)
+//                        }
+//
+//                }
+//          }
         }
 
     }
