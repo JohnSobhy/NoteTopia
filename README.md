@@ -31,10 +31,18 @@ To run the project, you need to have Android Studio Arctic Fox or higher with th
 
 
 ## Screenshots
+| ![EmptyHomeScreen](https://github.com/JohnSobhy/Notes/assets/94745774/15591859-8d86-42dc-b78a-438e2e522314) | ![fullHomeScreen](https://github.com/JohnSobhy/Notes/assets/94745774/c6964940-df06-4455-bccc-6eccb97b6685) | ![ListVewHome](https://github.com/JohnSobhy/Notes/assets/94745774/10d8b4a3-08bb-4ab9-89cd-4638663d5543) |
+|:---:|:---:|:---:|
+| Empty Home Screen | Notes in Grid View | Notes in List View |
 
-<div style="display: flex; justify-content: space-between;">
-<img src="https://github.com/JohnSobhy/Notes/assets/94745774/21ea9dec-7c7b-4e4f-a9e2-81099486e91f" alt="Screenshot 1" width="30%"/>
-<img src="https://github.com/JohnSobhy/Notes/assets/94745774/ff137115-d39e-4ff3-b1e1-8612a8812082" alt="Screenshot 2" width="30%"/>
-<img src="https://github.com/JohnSobhy/Notes/assets/94745774/f9daae75-05b0-4615-b7c2-0238e47eccf5" alt="Screenshot 3" width="30%"/>
-</div>
+| ![TodoScreen](https://github.com/JohnSobhy/Notes/assets/94745774/9514f585-ad06-4a62-a680-202ac4ac7b38) | ![addEditNoteScreen](https://github.com/JohnSobhy/Notes/assets/94745774/a7aef867-2d10-4ad4-89cd-a03387b5df20) | ![SearchNotesScreen](https://github.com/JohnSobhy/Notes/assets/94745774/7fcf3adb-dfd7-4cd9-a7ac-9ba6707fbfd3) |
+|:---:|:---:|:---:|
+| Todo List Screen | Add Edit Note Screen | Search Screen |
+
+
+| ![FavoritesScreen](https://github.com/JohnSobhy/Notes/assets/94745774/7f424192-b430-451b-80fb-0f62d021cba7) | ![TrashCanScreen](https://github.com/JohnSobhy/Notes/assets/94745774/f4146fb0-8aa3-489c-94ff-4cc5e9790d6b) | ![SortingSection](https://github.com/JohnSobhy/Notes/assets/94745774/53d574b7-e1c8-42ed-b7e5-cf9d90de3e73) |
+|:---:|:---:|:---:|
+| Favorite Notes Screen | Trash Can Screen | Sorting Notes |
+
+
 
