@@ -58,7 +58,11 @@ class NotesViewModel @Inject constructor(
                 ) {
                     return
                 }
-                getNotes(event.noteOrder)
+                viewModelScope.launch {
+                    getFavouriteNotes(event.noteOrder)
+                    delay(500)
+                    getNotes(event.noteOrder)
+                }
                 currentNoteOrder = event.noteOrder
 
             }
