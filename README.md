@@ -1,12 +1,15 @@
 # Notes - A simple and elegant note-taking app for Android
 
-Notes is an Android app that lets you create and manage notes with ease. You can add and delete notes, change the background color of a note, and sort notes by date, name or color, ascending or descending. Notes is written in Kotlin and uses modern Android technologies and best practices, such as:
+"Notes" is an Android app that lets you create and manage notes with ease. You can add, modify, and delete notes, Categorize notes with colors, and sort notes by date, name, or color, ascending or descending. 
+There is also a Todo section for the users to have a to-do list for their daily tasks.
+"Notes" is written in Kotlin and follows the MVVM design pattern.
+it uses modern Android technologies and best practices, such as:
 
+- Jetpack Compose for declarative UI
 - Room database for local data storage
 - Dagger Hilt for dependency injection
+- Kotlin Flows and Coroutines for asynchronous operations
 - Clean architecture for separation of concerns
-- Coroutines for asynchronous operations
-- Jetpack Compose for declarative UI
 - Navigation component for navigation between screens
 - Material Design for a consistent and beautiful UI
 
