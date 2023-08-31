@@ -12,17 +12,20 @@ it uses modern Android technologies and best practices, such as:
 - Clean architecture for separation of concerns
 - Navigation component for navigation between screens
 - Material Design for a consistent and beautiful UI
+- Retrofit for server calls
+- Quote API from api-ninjas.com
 
 ## Features
 
-- Add, edit and delete notes
+- Add, edit, and delete notes
 - Categorize notes with colors
 - Mark notes as favorites
 - Search notes by title or content
-- Sort notes by date, title or color
-- Add, edit and delete todo items
+- Sort notes by date, title, or color
+- Add, edit, and delete todo items
 - Mark todo items as done or undone
 - Change app theme according to system defaults
+- Receive a daily quote by a famous person with a click of a button
 
 
 ## How to run the project
