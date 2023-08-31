@@ -2,6 +2,8 @@ package com.john_halaka.notes.di
 
 import android.app.Application
 import androidx.room.Room
+import com.john_halaka.notes.feature_daily_quote.data.repository.QuoteRepositoryImpl
+import com.john_halaka.notes.feature_daily_quote.domain.repository.QuoteRepository
 
 
 import com.john_halaka.notes.feature_note.data.data_source.NoteDatabase
@@ -61,12 +63,17 @@ object AppModule {
     }
 
 
-
     @Provides
     @Singleton
-    fun provideTodoRepository (db: NoteDatabase) : TodoRepository {
+    fun provideTodoRepository(db: NoteDatabase): TodoRepository {
         return TodoRepositoryImpl(db.todoDao)
     }
 
+
+    @Provides
+    @Singleton
+    fun provideQuoteRepository(): QuoteRepository {
+        return QuoteRepositoryImpl()
+    }
 
 }

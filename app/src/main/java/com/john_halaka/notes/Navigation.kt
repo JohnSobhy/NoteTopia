@@ -41,6 +41,7 @@ import com.john_halaka.mytodo.AddEditTodoScreen
 import com.john_halaka.mytodo.TodoListScreen
 import com.john_halaka.notes.ui.Screen
 import com.john_halaka.notes.ui.presentaion.add_edit_note.components.AddEditNoteScreen
+import com.john_halaka.notes.ui.presentaion.daily_quote.DailyQuote
 import com.john_halaka.notes.ui.presentaion.deleted_notes.DeletedNotesScreen
 import com.john_halaka.notes.ui.presentaion.fav_notes.FavNotesScreen
 import com.john_halaka.notes.ui.presentaion.notes_list.NotesScreen
@@ -117,6 +118,12 @@ fun Navigation() {
             )
         ) {
             AddEditTodoScreen(onPopBackStack = { navController.popBackStack() })
+        }
+
+        composable(
+            route = Screen.DailyQuoteScreen.route
+        ) {
+            DailyQuote(navController)
         }
     }
 }

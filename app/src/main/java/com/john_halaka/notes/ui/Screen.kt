@@ -12,5 +12,6 @@ sealed class Screen (val route : String) {
 
     object TodoListScreen : Screen("todo_list")
 
+    object DailyQuoteScreen : Screen("daily_quote")
     object AddEditTodoScreen : Screen("add_edit_todo")
 }

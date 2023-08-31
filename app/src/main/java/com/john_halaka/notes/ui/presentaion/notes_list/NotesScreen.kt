@@ -17,6 +17,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.CircularProgressIndicator
@@ -46,6 +48,7 @@ import com.john_halaka.notes.BottomNavigationBar
 import com.john_halaka.notes.NavigationDrawer
 import com.john_halaka.notes.R
 import com.john_halaka.notes.feature_note.domain.util.ViewType
+import com.john_halaka.notes.ui.Screen
 import com.john_halaka.notes.ui.presentaion.notes_list.components.GridViewNotes
 import com.john_halaka.notes.ui.presentaion.notes_list.components.ListViewNotes
 import com.john_halaka.notes.ui.presentaion.notes_list.components.OrderSection
@@ -128,7 +131,7 @@ fun NotesScreen(
                                 onClick = { currentViewType = ViewType.LIST }
                             ) {
                                 Icon(
-                                    painter = painterResource(id = R.drawable.baseline_list_24),
+                                    imageVector = Icons.Default.List,
                                     contentDescription = "List View"
                                 )
                             }
@@ -139,6 +142,14 @@ fun NotesScreen(
                                 Icon(
                                     painter = painterResource(id = R.drawable.baseline_grid_view_24),
                                     contentDescription = "Grid View"
+                                )
+                            }
+                            IconButton(
+                                onClick = { navController.navigate(Screen.DailyQuoteScreen.route) }
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.AccountCircle,
+                                    contentDescription = "Daily Quote"
                                 )
                             }
 
