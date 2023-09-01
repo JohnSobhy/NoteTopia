@@ -13,4 +13,5 @@
 .externalNativeBuild
 .cxx
 local.properties
+# my sensitive data
 ApiConst.kt
