@@ -1,5 +1,6 @@
 package com.john_halaka.notes.feature_daily_quote.domain
 
+import com.john_halaka.notes.feature_daily_quote.domain.util.ApiConst
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -15,7 +16,7 @@ object RetrofitInstance {
                 OkHttpClient.Builder()
                     .addInterceptor { chain ->
                         val request = chain.request().newBuilder()
-                            .addHeader("X-Api-Key", "9YuGN5OF9He9kjTQcSebKA==18xqjkGeUBaabkFX")
+                            .addHeader("X-Api-Key", ApiConst.API_KEY)
                             .build()
                         chain.proceed(request)
                     }
