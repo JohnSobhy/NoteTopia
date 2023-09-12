@@ -29,21 +29,24 @@ class NotesViewModel @Inject constructor(
     private var recentlyDeletedNote: Note? = null
 
     private var getNotesJob: Job? = null
+    private var getFavoritesJob: Job? = null
+    private var getDeletedNotesJob : Job? = null
     private val initialNoteOrder: NoteOrder = NoteOrder.Date(OrderType.Descending)
     private var currentNoteOrder = initialNoteOrder
     init {
         viewModelScope.launch {
-            Log.d("NotesViewModel", "After calling getNotes")
+            delay(300)
+            Log.d("NotesViewModel", "calling getFavorites")
             getFavouriteNotes(initialNoteOrder)
         }
         viewModelScope.launch {
             delay(500)
-            Log.d("NotesViewModel", "After calling getFavorites and before getDeleted")
+            Log.d("NotesViewModel", "calling getDeleted")
             getDeletedNotes(initialNoteOrder)
         }
         viewModelScope.launch {
             delay(1000) // Wait before calling getNotes
-            Log.d("NotesViewModel", "Before calling getNotes")
+            Log.d("NotesViewModel", "calling getNotes")
             getNotes(initialNoteOrder)
         }
 
@@ -121,8 +124,8 @@ class NotesViewModel @Inject constructor(
 
 
     private fun getNotes(noteOrder: NoteOrder) {
-        Log.d("NotesViewModel", "getNotes called")
         getNotesJob?.cancel()
+        Log.d("NotesViewModel", "getNotes called")
         try {
             getNotesJob = noteUseCases.getNotes(noteOrder)
                 .onEach { notes ->
@@ -139,28 +142,39 @@ class NotesViewModel @Inject constructor(
     }
 
     private fun getFavouriteNotes(noteOrder: NoteOrder) {
-        getNotesJob?.cancel()
-        getNotesJob = noteUseCases.getFavouriteNotes(noteOrder)
-            .onEach { notes ->
-                Log.d("NotesViewModel", "getFavNotes: $notes")
-                _state.value = state.value.copy(
-                    favouriteNotes = notes,
-                    noteOrder = noteOrder
-                )
-            }
-            .launchIn(viewModelScope)
+        getFavoritesJob?.cancel()
+        Log.d("NotesViewModel", "getFavorites called")
+        try {
+            getFavoritesJob = noteUseCases.getFavouriteNotes(noteOrder)
+                .onEach { notes ->
+                    Log.d("NotesViewModel", "getFavNotes: $notes")
+                    _state.value = state.value.copy(
+                        favouriteNotes = notes,
+                        noteOrder = noteOrder
+                    )
+                }
+                .launchIn(viewModelScope)
+        } catch (e: Exception) {
+            Log.e("NotesViewModel", "Error getting favNotes: ${e.message}")
+        }
+
     }
 
     private fun getDeletedNotes(noteOrder: NoteOrder) {
-        getNotesJob?.cancel()
-        getNotesJob = noteUseCases.getDeletedNotes(noteOrder)
-            .onEach { notes ->
-                Log.d("NotesViewModel", "getDeletedNotes: $notes")
-                _state.value = state.value.copy(
-                    deletedNotes = notes,
-                    noteOrder = noteOrder
-                )
-            }
-            .launchIn(viewModelScope)
+        getDeletedNotesJob?.cancel()
+        try {
+
+            getDeletedNotesJob = noteUseCases.getDeletedNotes(noteOrder)
+                .onEach { notes ->
+                    Log.d("NotesViewModel", "getDeletedNotes: $notes")
+                    _state.value = state.value.copy(
+                        deletedNotes = notes,
+                        noteOrder = noteOrder
+                    )
+                }
+                .launchIn(viewModelScope)
+        } catch (e: Exception) {
+            Log.e("NotesViewModel", "Error getting favNotes: ${e.message}")
+        }
     }
 }
