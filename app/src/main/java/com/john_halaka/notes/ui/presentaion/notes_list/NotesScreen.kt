@@ -31,6 +31,7 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
+import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -58,7 +59,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3WindowSizeClassApi::class)
 @Composable
 fun NotesScreen(
     navController: NavController,
@@ -70,8 +71,8 @@ fun NotesScreen(
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
     var currentViewType by remember { mutableStateOf(ViewType.GRID) }
-
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+
 
     NavigationDrawer(
         navController = navController,
@@ -122,38 +123,38 @@ fun NotesScreen(
                         .padding(values)
 
                 ) {
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.End,
-                            verticalAlignment = Alignment.CenterVertically
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.End,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        IconButton(
+                            onClick = { currentViewType = ViewType.LIST }
                         ) {
-                            IconButton(
-                                onClick = { currentViewType = ViewType.LIST }
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Default.List,
-                                    contentDescription = "List View"
-                                )
-                            }
-
-                            IconButton(
-                                onClick = { currentViewType = ViewType.GRID }
-                            ) {
-                                Icon(
-                                    painter = painterResource(id = R.drawable.baseline_grid_view_24),
-                                    contentDescription = "Grid View"
-                                )
-                            }
-                            IconButton(
-                                onClick = { navController.navigate(Screen.DailyQuoteScreen.route) }
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Default.AccountCircle,
-                                    contentDescription = "Daily Quote"
-                                )
-                            }
-
+                            Icon(
+                                imageVector = Icons.Default.List,
+                                contentDescription = "List View"
+                            )
                         }
+
+                        IconButton(
+                            onClick = { currentViewType = ViewType.GRID }
+                        ) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.baseline_grid_view_24),
+                                contentDescription = "Grid View"
+                            )
+                        }
+                        IconButton(
+                            onClick = { navController.navigate(Screen.DailyQuoteScreen.route) }
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.AccountCircle,
+                                contentDescription = "Daily Quote"
+                            )
+                        }
+
+                    }
 
                     AnimatedVisibility(
                         visible = state.isOrderSectionVisible,
@@ -202,6 +203,7 @@ fun NotesScreen(
                                 context = context
 
                             )
+
                             ViewType.LIST -> ListViewNotes(
                                 navController = navController,
                                 viewModel = viewModel,

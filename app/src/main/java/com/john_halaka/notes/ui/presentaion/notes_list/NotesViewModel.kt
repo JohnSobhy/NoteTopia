@@ -12,7 +12,6 @@ import com.john_halaka.notes.feature_note.domain.util.OrderType
 import com.john_halaka.notes.feature_note.domain.util.notesSearch
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -35,17 +34,17 @@ class NotesViewModel @Inject constructor(
     private var currentNoteOrder = initialNoteOrder
     init {
         viewModelScope.launch {
-            delay(300)
+            //delay(300)
             Log.d("NotesViewModel", "calling getFavorites")
             getFavouriteNotes(initialNoteOrder)
         }
         viewModelScope.launch {
-            delay(500)
+            //delay(500)
             Log.d("NotesViewModel", "calling getDeleted")
             getDeletedNotes(initialNoteOrder)
         }
         viewModelScope.launch {
-            delay(1000) // Wait before calling getNotes
+            //delay(1000) // Wait before calling getNotes
             Log.d("NotesViewModel", "calling getNotes")
             getNotes(initialNoteOrder)
         }
@@ -63,7 +62,7 @@ class NotesViewModel @Inject constructor(
                 }
                 viewModelScope.launch {
                     getFavouriteNotes(event.noteOrder)
-                    delay(500)
+                    // delay(500)
                     getNotes(event.noteOrder)
                 }
                 currentNoteOrder = event.noteOrder
@@ -106,7 +105,7 @@ class NotesViewModel @Inject constructor(
                 viewModelScope.launch {
                     noteUseCases.updateNote(event.note.id!!, event.note.isFavourite)
                     getFavouriteNotes(currentNoteOrder)
-                    delay(500)
+                    // delay(500)
                     getNotes(currentNoteOrder)
                 }
             }

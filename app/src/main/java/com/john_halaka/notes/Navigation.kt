@@ -25,6 +25,9 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.NavigationDrawerItemDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
+import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -46,6 +49,7 @@ import com.john_halaka.notes.ui.presentaion.deleted_notes.DeletedNotesScreen
 import com.john_halaka.notes.ui.presentaion.fav_notes.FavNotesScreen
 import com.john_halaka.notes.ui.presentaion.notes_list.NotesScreen
 import com.john_halaka.notes.ui.presentaion.search_notes.components.NotesSearchScreen
+import com.john_halaka.notes.ui.presentaion.util.findActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -53,6 +57,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun Navigation() {
     val navController = rememberNavController()
+
     NavHost(
         navController = navController,
         startDestination = Screen.NotesScreen.route
@@ -128,11 +133,14 @@ fun Navigation() {
     }
 }
 
+@OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @Composable
 fun BottomNavigationBar(
     navController: NavController,
-    ) {
+) {
 
+    val currentActivity = LocalContext.current.findActivity()
+    val windowSize = calculateWindowSizeClass(activity = currentActivity)
     val currentRoute = navController.currentDestination?.route
     val itemList: List<NavigationItem> = listOf(
         NavigationItem(
@@ -172,31 +180,92 @@ fun BottomNavigationBar(
             route = Screen.FavNotesScreen.route
         )
     )
-
-    NavigationBar {
-        itemList.forEach { navigationItem ->
-            NavigationBarItem(
-                selected = currentRoute == navigationItem.route,
-                onClick = {
-                    navController.navigate(navigationItem.route)
-                },
-                icon = {
-                    Icon(
-                        imageVector = if (currentRoute == navigationItem.route) {
-                            navigationItem.selectedIcon
-                        } else navigationItem.unselectedIcon,
-                        contentDescription = navigationItem.title
+    when (windowSize.widthSizeClass) {
+        WindowWidthSizeClass.Compact -> {
+            NavigationBar {
+                itemList.forEach { navigationItem ->
+                    NavigationBarItem(
+                        selected = currentRoute == navigationItem.route,
+                        onClick = {
+                            navController.navigate(navigationItem.route)
+                        },
+                        icon = {
+                            Icon(
+                                imageVector = if (currentRoute == navigationItem.route) {
+                                    navigationItem.selectedIcon
+                                } else navigationItem.unselectedIcon,
+                                contentDescription = navigationItem.title
+                            )
+                        },
+                        label = {
+                            Text(text = navigationItem.title)
+                        }
                     )
-                },
-                label = {
-                    Text(text = navigationItem.title)
                 }
-            )
+
+            }
         }
 
+        WindowWidthSizeClass.Medium -> {
+            //   TODO("configure the layout for the landscape view using NavigationRail() and remember to add its content as the content of the screen")
+            NavigationBar {
+                itemList.forEach { navigationItem ->
+                    NavigationBarItem(
+                        selected = currentRoute == navigationItem.route,
+                        onClick = {
+                            navController.navigate(navigationItem.route)
+                        },
+                        icon = {
+                            Icon(
+                                imageVector = if (currentRoute == navigationItem.route) {
+                                    navigationItem.selectedIcon
+                                } else navigationItem.unselectedIcon,
+                                contentDescription = navigationItem.title
+                            )
+                        },
+                        label = {
+                            Text(text = navigationItem.title)
+                        }
+                    )
+                }
+
+            }
+
+        }
+
+        else -> {
+            //   TODO("configure the layout for tablets using PermanentNavigationDrawer and remember to add its content as the content of the screen")
+
+            NavigationBar {
+                itemList.forEach { navigationItem ->
+                    NavigationBarItem(
+                        selected = currentRoute == navigationItem.route,
+                        onClick = {
+                            navController.navigate(navigationItem.route)
+                        },
+                        icon = {
+                            Icon(
+                                imageVector = if (currentRoute == navigationItem.route) {
+                                    navigationItem.selectedIcon
+                                } else navigationItem.unselectedIcon,
+                                contentDescription = navigationItem.title
+                            )
+                        },
+                        label = {
+                            Text(text = navigationItem.title)
+                        }
+                    )
+                }
+
+            }
+        }
     }
+
 }
 
+// I think it's best to limit this NavigationDrawer to the compact screen size only,
+// and figure out an alternative for it in medium and expanded sizes
+// where other NavigationDrawers are used
 @Composable
 fun NavigationDrawer(
     navController: NavController,
