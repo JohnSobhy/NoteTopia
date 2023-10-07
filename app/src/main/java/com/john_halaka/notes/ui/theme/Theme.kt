@@ -1,60 +1,87 @@
 package com.john_halaka.notes.ui.theme
 
+import android.app.Activity
+import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
+import androidx.compose.material3.dynamicDarkColorScheme
+import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.Color
+import androidx.compose.runtime.SideEffect
+import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalView
+import androidx.core.view.WindowCompat
 
-private val LightColorPalette = lightColorScheme(
-    primary = OptionPink,
-    onPrimary = Color.Black,
-    background = BabyPowder,
-    onBackground = Color.DarkGray,
-    surface = MainGreen,
-    primaryContainer = MainGreen,
-    onPrimaryContainer = Color.Black,
+private val LightColorScheme = lightColorScheme(
+    primary = White,
+    onPrimary = Black,
+    background = White,
+    onBackground = DarkerGray,
+    surface = White,
+    primaryContainer = BrandGreen,
+    onPrimaryContainer = Black,
     secondary = OptionPink,
-    onSecondary = Color.Black,
+    onSecondary = Black,
 
-    onSecondaryContainer = Color.Black,
-    onSurface = DarkGray,
-    secondaryContainer = SecondaryGreen,
-    onSurfaceVariant = DarkGray,
-    onTertiary = Gray
+    onSecondaryContainer = Black,
+    onSurface = Black,
+    secondaryContainer = BrandGreen,
+    onSurfaceVariant = BarItemGray,
+    onTertiary = DividerShadowLight
 
 
 )
-private val DarkColorPalette = darkColorScheme(
-    primary = OptionPink,
-    onPrimary = Color.White,
-    background = BackBlack,
-    onBackground = LightGrayBackground,
-    surface = MainGreen,
-    primaryContainer = MainGreen,
-    onPrimaryContainer = Color.Black,
+private val DarkColorScheme = darkColorScheme(
+    primary = Black,
+    onPrimary = White,
+    background = Black,
+    onBackground = White,
+    surface = Black, // colors the top and bottom bars
+    primaryContainer = BrandGreen,
+    onPrimaryContainer = Black,
     secondary = OptionPink,
-    onSecondary = Color.Black,
-
-
-    onSecondaryContainer = Color.Black,
-    onSurface = DarkGray,
-    secondaryContainer = SecondaryGreen,
-    onSurfaceVariant = DarkGray,
-    onTertiary = Gray
+    onSecondary = Black,
+    onSecondaryContainer = Black,
+    onSurface = White,
+    secondaryContainer = BrandGreen,
+    onSurfaceVariant = BarItemGray,
+    onTertiary = DividerShadowDark
 )
 
 @Composable
-fun NotesTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable() () -> Unit) {
-    val colors = if (darkTheme) {
-        DarkColorPalette
-    } else {
-        LightColorPalette
-    }
+fun NotesTheme(
+    darkTheme: Boolean = isSystemInDarkTheme(),
+    dynamicColor: Boolean = false,
+    content: @Composable() () -> Unit
+) {
+//    val colors = if (darkTheme) {
+//        DarkColorPalette
+//    } else {
+//        LightColorPalette
+//    }
+    val colorScheme = when {
+        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
+            val context = LocalContext.current
+            if (darkTheme) dynamicDarkColorScheme(context)
+            else dynamicLightColorScheme(context)
+        }
 
+        darkTheme -> DarkColorScheme
+        else -> LightColorScheme
+    }
+    val view = LocalView.current
+    if (!view.isInEditMode) {
+        SideEffect {
+            val window = (view.context as Activity).window
+            window.statusBarColor = colorScheme.surface.toArgb() // change color status bar here
+            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = !darkTheme
+        }
+    }
     MaterialTheme(
-        colorScheme = colors,
+        colorScheme = colorScheme,
         typography = Typography,
         shapes = Shapes,
         content = content

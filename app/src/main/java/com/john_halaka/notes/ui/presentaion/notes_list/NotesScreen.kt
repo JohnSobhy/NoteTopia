@@ -7,6 +7,7 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,22 +17,28 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.rememberDrawerState
-import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -59,7 +66,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3WindowSizeClassApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NotesScreen(
     navController: NavController,
@@ -72,6 +79,9 @@ fun NotesScreen(
     val scope = rememberCoroutineScope()
     var currentViewType by remember { mutableStateOf(ViewType.GRID) }
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+    var expanded by remember { mutableStateOf(false) }
+    var searchText by remember { mutableStateOf("") }
+    var notesList = state.notes
 
 
     NavigationDrawer(
@@ -82,6 +92,7 @@ fun NotesScreen(
             Scaffold(
                 topBar = {
                     CenterAlignedTopAppBar(
+
                         title = {
                             Text(text = "Notes", style = Typography.headlineLarge)
                         },
@@ -107,6 +118,27 @@ fun NotesScreen(
                                     contentDescription = "Sort notes"
                                 )
                             }
+//                             IconButton(onClick = { expanded = true }) {
+//                                   Icon(
+//                                       painter = painterResource(id = R.drawable.baseline_sort_24),
+//                                         contentDescription = "Sort notes"
+//                                   )
+//                            }
+//                            DropdownMenu(
+//                                expanded = expanded,
+//                                onDismissRequest = { expanded = false }
+//                            ) {
+//                                DropdownMenuItem(onClick = {
+//                                /* Handle menu item click */
+//                                }) {
+//                                    Text(text = "Menu Item 1")
+//                                }
+//                            }
+//                                DropdownMenuItem(onClick = {
+//                                /* Handle menu item click */
+//                                }) {
+//                                    Text(text = "Menu Item 2")
+//                                }
                         }
                     )
                 },
@@ -115,6 +147,16 @@ fun NotesScreen(
                 },
                 snackbarHost = {
                     SnackbarHost(snackbarHostState)
+                },
+                floatingActionButton = {
+                    FloatingActionButton(
+                        shape = CircleShape,
+                        onClick = {
+                            navController.navigate(Screen.AddEditNoteScreen.route)
+                        }
+                    ) {
+                        Icon(imageVector = Icons.Default.Add, contentDescription = "Add a note")
+                    }
                 }
             ) { values ->
                 Column(
@@ -123,6 +165,7 @@ fun NotesScreen(
                         .padding(values)
 
                 ) {
+
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.End,
@@ -154,6 +197,56 @@ fun NotesScreen(
                             )
                         }
 
+                    }
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        TextField(
+                            value = searchText,
+                            onValueChange = { searchPhrase ->
+                                viewModel.onEvent(NotesEvent.SearchNotes(searchPhrase))
+                                notesList = state.searchResult
+                                searchText = searchPhrase
+                            },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(48.dp),
+                            colors = TextFieldDefaults.colors(
+                                focusedTextColor = MaterialTheme.colorScheme.onPrimary,
+                                unfocusedTextColor = MaterialTheme.colorScheme.onPrimary
+                            ),
+                            textStyle = Typography.titleSmall,
+                            // textStyle = LocalTextStyle.current.copy(fontSize = 14.sp),
+                            singleLine = true,
+                            placeholder = {
+                                Text(
+                                    "Find in your notes",
+                                    style = Typography.titleSmall,
+                                    color = MaterialTheme.colorScheme.onTertiary
+                                )
+                            },
+
+                            leadingIcon = {
+                                Icon(
+                                    imageVector = Icons.Default.Search,
+                                    contentDescription = "Search Icon",
+                                    modifier = Modifier
+                                        .align(Alignment.CenterVertically)
+                                        .padding(start = 8.dp)
+                                        .clickable(
+                                            true,
+                                            onClick = {
+                                                viewModel.onEvent(NotesEvent.SearchNotes(searchText))
+                                                notesList = state.searchResult
+                                            }
+                                        )
+                                )
+                            }
+                        )
                     }
 
                     AnimatedVisibility(
@@ -199,7 +292,7 @@ fun NotesScreen(
                                 viewModel = viewModel,
                                 scope = scope,
                                 snackbarHostState = snackbarHostState,
-                                notesList = state.notes,
+                                notesList = notesList,
                                 context = context
 
                             )
@@ -209,7 +302,7 @@ fun NotesScreen(
                                 viewModel = viewModel,
                                 scope = scope,
                                 snackbarHostState = snackbarHostState,
-                                notesList = state.notes,
+                                notesList = notesList,
                                 context = context
                             )
                         }

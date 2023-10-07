@@ -163,16 +163,17 @@ fun AddEditNoteScreen(
         },
         floatingActionButton = {
             FloatingActionButton(
+                shape = CircleShape,
                 onClick = {
                     Log.d("addEditScreen", "saveButton is clicked noteId = $noteId")
                     viewModel.onEvent(AddEditNoteEvent.SaveNote)
                     if (titleState.text.isNotBlank() && contentState.text.isNotBlank())
                         mToast(context, "Notes Saved")
                 },
-                containerColor = MaterialTheme.colorScheme.primaryContainer,
-                contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+//                containerColor = MaterialTheme.colorScheme.primaryContainer,
+//                contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
 
-                ) {
+            ) {
                 Icon(
                     painter = painterResource(R.drawable.baseline_save_24),
                     contentDescription = "Save",

@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -34,9 +35,10 @@ fun GridViewNotes(
     notesList: List<Note>,
     context: Context
 ) {
-    val cellHeight: Dp = 150.dp
+    val cellHeight: Dp = 120.dp
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
+        modifier = Modifier.padding(8.dp)
 
         ) {
         items(notesList) { note ->
@@ -82,7 +84,11 @@ fun ListViewNotes(
     context: Context
 
     ) {
-    LazyColumn(modifier = Modifier.fillMaxSize()) {
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(start = 8.dp, end = 8.dp)
+    ) {
         items(notesList) { note ->
             NoteItem(
                 note = note,
@@ -111,7 +117,7 @@ fun ListViewNotes(
                 }
             )
 
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(4.dp))
 
         }
 

@@ -1,23 +1,22 @@
 package com.john_halaka.notes
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material.icons.outlined.Home
-import androidx.compose.material.icons.outlined.Search
+import androidx.compose.material3.Divider
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.NavigationBar
@@ -29,6 +28,7 @@ import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSiz
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
@@ -56,8 +56,16 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun Navigation() {
+    // val systemUiController = rememberSystemUiController()
     val navController = rememberNavController()
-
+//    val surfaceColor = MaterialTheme.colorScheme.surface
+//
+//
+//    LaunchedEffect(Unit) {
+//        systemUiController.setStatusBarColor(
+//            color = surfaceColor
+//        )
+//    }
     NavHost(
         navController = navController,
         startDestination = Screen.NotesScreen.route
@@ -143,36 +151,37 @@ fun BottomNavigationBar(
     val windowSize = calculateWindowSizeClass(activity = currentActivity)
     val currentRoute = navController.currentDestination?.route
     val itemList: List<NavigationItem> = listOf(
-        NavigationItem(
-            title = "Search",
-            selectedIcon = Icons.Filled.Search,
-            unselectedIcon = Icons.Outlined.Search,
-            route = Screen.NotesSearchScreen.route
-        ),
-        NavigationItem(
-            title = "Notes",
-            selectedIcon = ImageVector.vectorResource(R.drawable.notes_svg),
-            unselectedIcon = ImageVector.vectorResource(R.drawable.notes_svg),
-            route = Screen.NotesScreen.route
-        ),
-        NavigationItem(
-            title = "Add",
-            selectedIcon = Icons.Filled.Add,
-            unselectedIcon = Icons.Outlined.Add,
-            route = if (currentRoute == Screen.TodoListScreen.route) {
-                Screen.AddEditTodoScreen.route
-            } else {
-                Screen.AddEditNoteScreen.route
-            }.toString()
 
-
-        ),
         NavigationItem(
             title = "Todo List",
             selectedIcon = ImageVector.vectorResource(R.drawable.check_lists),
             unselectedIcon = ImageVector.vectorResource(R.drawable.check_lists),
             route = Screen.TodoListScreen.route
         ),
+//        NavigationItem(
+//            title = "Search",
+//            selectedIcon = Icons.Filled.Search,
+//            unselectedIcon = Icons.Outlined.Search,
+//            route = Screen.NotesSearchScreen.route
+//        ),
+        NavigationItem(
+            title = "Notes",
+            selectedIcon = ImageVector.vectorResource(R.drawable.notes_svg),
+            unselectedIcon = ImageVector.vectorResource(R.drawable.notes_svg),
+            route = Screen.NotesScreen.route
+        ),
+//        NavigationItem(
+//            title = "Add",
+//            selectedIcon = Icons.Filled.Add,
+//            unselectedIcon = Icons.Outlined.Add,
+//            route = if (currentRoute == Screen.TodoListScreen.route) {
+//                Screen.AddEditTodoScreen.route
+//            } else {
+//                Screen.AddEditNoteScreen.route
+//            }.toString()
+//
+//
+//        ),
         NavigationItem(
             title = "Favorites",
             selectedIcon = Icons.Filled.Favorite,
@@ -182,29 +191,42 @@ fun BottomNavigationBar(
     )
     when (windowSize.widthSizeClass) {
         WindowWidthSizeClass.Compact -> {
-            NavigationBar {
-                itemList.forEach { navigationItem ->
-                    NavigationBarItem(
-                        selected = currentRoute == navigationItem.route,
-                        onClick = {
-                            navController.navigate(navigationItem.route)
-                        },
-                        icon = {
-                            Icon(
-                                imageVector = if (currentRoute == navigationItem.route) {
-                                    navigationItem.selectedIcon
-                                } else navigationItem.unselectedIcon,
-                                contentDescription = navigationItem.title
-                            )
-                        },
-                        label = {
-                            Text(text = navigationItem.title)
-                        }
-                    )
+            Box(
+                // modifier = Modifier.shadow(8.dp, shape= RectangleShape)
+            ) {
+                NavigationBar(
+
+                ) {
+                    itemList.forEach { navigationItem ->
+                        NavigationBarItem(
+                            selected = currentRoute == navigationItem.route,
+                            onClick = {
+                                navController.navigate(navigationItem.route)
+                            },
+                            icon = {
+                                Icon(
+                                    imageVector = if (currentRoute == navigationItem.route) {
+                                        navigationItem.selectedIcon
+                                    } else navigationItem.unselectedIcon,
+                                    contentDescription = navigationItem.title
+                                )
+                            },
+                            label = {
+                                Text(text = navigationItem.title)
+                            }
+                        )
+                    }
+
                 }
 
+                Divider(
+                    thickness = 1.dp,
+                    color = MaterialTheme.colorScheme.onTertiary,
+                    modifier = Modifier.align(Alignment.TopCenter)
+                )
             }
         }
+
 
         WindowWidthSizeClass.Medium -> {
             //   TODO("configure the layout for the landscape view using NavigationRail() and remember to add its content as the content of the screen")

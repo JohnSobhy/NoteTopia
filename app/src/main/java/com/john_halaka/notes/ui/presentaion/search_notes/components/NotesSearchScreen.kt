@@ -30,7 +30,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.john_halaka.notes.feature_note.domain.model.Note
 import com.john_halaka.notes.ui.presentaion.notes_list.NotesEvent
 import com.john_halaka.notes.ui.presentaion.notes_list.NotesViewModel
 import com.john_halaka.notes.ui.presentaion.notes_list.components.ListViewNotes
@@ -48,7 +47,7 @@ fun NotesSearchScreen (
     val state = viewModel.state.value
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
-    var notesList by remember { mutableStateOf<List<Note>>(state.notes) }
+    var notesList by remember { mutableStateOf(state.notes) }
     var searchText by remember { mutableStateOf("") }
 
         Column(

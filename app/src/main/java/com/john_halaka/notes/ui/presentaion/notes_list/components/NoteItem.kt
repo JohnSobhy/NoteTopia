@@ -18,11 +18,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.john_halaka.notes.feature_note.domain.model.Note
+import com.john_halaka.notes.ui.theme.LightGray
 
 @Composable
 fun NoteItem(
@@ -37,7 +37,7 @@ fun NoteItem(
             .fillMaxSize()
             .padding(8.dp)
             .background(
-                color = Color(note.color),
+                color = LightGray,
                 shape = RoundedCornerShape(cornerRadius)
             )
     ) {
@@ -50,7 +50,7 @@ fun NoteItem(
             Text(
                 text = note.title,
                 style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.onSurface,
+                color = MaterialTheme.colorScheme.onPrimaryContainer,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
@@ -60,7 +60,7 @@ fun NoteItem(
             Text(
                 text = note.content,
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurface,
+                color = MaterialTheme.colorScheme.onPrimaryContainer,
                 maxLines = 5,
                 overflow = TextOverflow.Ellipsis
             )
@@ -74,7 +74,8 @@ fun NoteItem(
             Icon(
                 imageVector = if (note.isFavourite) Icons.Default.Favorite
                 else Icons.Default.FavoriteBorder,
-                contentDescription = "Favorite note"
+                contentDescription = "Favorite note",
+                tint = MaterialTheme.colorScheme.onPrimaryContainer
             )
         }
 
