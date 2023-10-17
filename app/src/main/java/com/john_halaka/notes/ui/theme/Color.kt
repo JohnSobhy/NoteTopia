@@ -46,3 +46,5 @@ val SandyBrown = Color(0xffEE964B)
 
 val VistaBlue = Color(0xff7699D4)
 
+val IconBackground = Color(0x80D9D9D9)
+val IconColorGray = Color(0x99999999)

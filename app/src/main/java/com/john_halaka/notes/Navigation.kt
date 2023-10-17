@@ -8,10 +8,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.outlined.Delete
-import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material3.Divider
 import androidx.compose.material3.DrawerState
@@ -21,6 +19,7 @@ import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.NavigationDrawerItemDefaults
 import androidx.compose.material3.Text
@@ -50,6 +49,8 @@ import com.john_halaka.notes.ui.presentaion.fav_notes.FavNotesScreen
 import com.john_halaka.notes.ui.presentaion.notes_list.NotesScreen
 import com.john_halaka.notes.ui.presentaion.search_notes.components.NotesSearchScreen
 import com.john_halaka.notes.ui.presentaion.util.findActivity
+import com.john_halaka.notes.ui.theme.BrandGreen
+import com.john_halaka.notes.ui.theme.IconColorGray
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -154,8 +155,8 @@ fun BottomNavigationBar(
 
         NavigationItem(
             title = "Todo List",
-            selectedIcon = ImageVector.vectorResource(R.drawable.check_lists),
-            unselectedIcon = ImageVector.vectorResource(R.drawable.check_lists),
+            selectedIcon = ImageVector.vectorResource(R.drawable.unselected_todo),
+            unselectedIcon = ImageVector.vectorResource(R.drawable.unselected_todo),
             route = Screen.TodoListScreen.route
         ),
 //        NavigationItem(
@@ -166,8 +167,8 @@ fun BottomNavigationBar(
 //        ),
         NavigationItem(
             title = "Notes",
-            selectedIcon = ImageVector.vectorResource(R.drawable.notes_svg),
-            unselectedIcon = ImageVector.vectorResource(R.drawable.notes_svg),
+            selectedIcon = ImageVector.vectorResource(R.drawable.unselected_note),
+            unselectedIcon = ImageVector.vectorResource(R.drawable.unselected_note),
             route = Screen.NotesScreen.route
         ),
 //        NavigationItem(
@@ -184,8 +185,8 @@ fun BottomNavigationBar(
 //        ),
         NavigationItem(
             title = "Favorites",
-            selectedIcon = Icons.Filled.Favorite,
-            unselectedIcon = Icons.Outlined.Favorite,
+            selectedIcon = ImageVector.vectorResource(R.drawable.unselected_fav),
+            unselectedIcon = ImageVector.vectorResource(R.drawable.unselected_fav),
             route = Screen.FavNotesScreen.route
         )
     )
@@ -213,7 +214,14 @@ fun BottomNavigationBar(
                             },
                             label = {
                                 Text(text = navigationItem.title)
-                            }
+                            },
+                            colors = NavigationBarItemDefaults.colors(
+                                selectedIconColor = BrandGreen,
+                                selectedTextColor = BrandGreen,
+                                unselectedIconColor = IconColorGray,
+                                unselectedTextColor = IconColorGray,
+                                indicatorColor = MaterialTheme.colorScheme.background
+                            )
                         )
                     }
 
