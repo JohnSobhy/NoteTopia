@@ -2,13 +2,12 @@ package com.john_halaka.notes.ui.presentaion.deleted_notes
 
 import android.content.Context
 import android.widget.Toast
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
@@ -33,6 +32,7 @@ import com.john_halaka.notes.ui.presentaion.notes_list.NotesViewModel
 import kotlinx.coroutines.launch
 
 
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DeletedNotesScreen(
@@ -44,6 +44,11 @@ fun DeletedNotesScreen(
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
     val notesList = state.deletedNotes
+    val dropDownItems = listOf(
+        DropDownItem("Restore"),
+        DropDownItem("Delete Permanently")
+    )
+    val cellHeight = 120.dp
 
     Scaffold(
         snackbarHost = {
@@ -76,20 +81,33 @@ fun DeletedNotesScreen(
                 }
             )
 
-        }
-    ) { values ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(values)
+        },
+
+        ) { values ->
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(2),
+            modifier = Modifier.padding(values)
+
         ) {
+            items(notesList) { note ->
 
-            LazyColumn(modifier = Modifier.fillMaxSize()) {
-
-                items(notesList) { note ->
-                    DeletedNoteItem(
-                        note = note,
-                        onRemoveClick = {
+                DeletedNoteItem(
+                    note = note,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(cellHeight),
+                    dropDownItems = dropDownItems,
+                    onItemClick = { item ->
+                        if (item == DropDownItem("Restore")) {
+                            viewModel.onEvent(
+                                NotesEvent.MoveNoteToTrash(
+                                    note.copy(
+                                        isDeleted = !note.isDeleted
+                                    )
+                                )
+                            )
+                            mToast(context, "Note Restored")
+                        } else {
                             viewModel.onEvent(NotesEvent.DeleteNote(note))
                             scope.launch {
                                 val result = snackbarHostState.showSnackbar(
@@ -100,27 +118,16 @@ fun DeletedNotesScreen(
                                     viewModel.onEvent(NotesEvent.RestoreNote)
                                 }
                             }
+                        }
 
-                        },
-                        onRestoreClick = {
-                            viewModel.onEvent(
-                                NotesEvent.MoveNoteToTrash(
-                                    note.copy(
-                                        isDeleted = !note.isDeleted
-                                    )
-                                )
-                            )
-                            mToast(context, "Note Restored")
-                        },
-
-                        )
-                    Spacer(modifier = Modifier.height(8.dp))
+                    }
+                )
                 }
 
             }
         }
     }
-}
+
 
 private fun mToast(context: Context, msg: String) {
     Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()

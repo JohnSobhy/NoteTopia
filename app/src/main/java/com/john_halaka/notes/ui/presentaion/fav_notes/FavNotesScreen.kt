@@ -59,7 +59,7 @@ fun FavNotesScreen(
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
     val notesList = state.favouriteNotes
-//    var notesList by remember { mutableStateOf(state.notes) }
+   // val enableCheckBox = remember { mutableStateOf(false) }
 
     Scaffold(
         topBar = {
@@ -145,7 +145,9 @@ fun FavNotesScreen(
                     scope = scope,
                     snackbarHostState = snackbarHostState,
                     notesList = notesList,
-                    context = context
+                    context = context,
+                    showFavoriteIcon = true,
+                    //   showCheckBox = enableCheckBox.value
                 )
             }
         }

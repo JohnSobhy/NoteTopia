@@ -11,6 +11,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Checkbox
+import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -26,6 +28,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.john_halaka.notes.R
 import com.john_halaka.notes.feature_note.domain.model.Note
+import com.john_halaka.notes.ui.theme.BrandGreen
 import com.john_halaka.notes.ui.theme.LightGray
 
 @Composable
@@ -33,7 +36,9 @@ fun NoteItem(
     note: Note,
     modifier: Modifier,
     cornerRadius: Dp = 10.dp,
-    onFavoriteClick: () -> Unit
+    onFavoriteClick: () -> Unit,
+    showFavoriteIcon: Boolean,
+    // showCheckBox: Boolean
 ) {
 
     Box(
@@ -90,21 +95,34 @@ fun NoteItem(
             }
 
         }
-        IconButton(
-            onClick = onFavoriteClick,
-            modifier = Modifier.align(Alignment.BottomEnd)
-        ) {
-            Icon(
-                imageVector = if (note.isFavourite)
-                    ImageVector.vectorResource(R.drawable.fav_note_selected)
-                else ImageVector.vectorResource(R.drawable.fav_note_unselected),
-                contentDescription = "Favorite note",
-                //  tint = MaterialTheme.colorScheme.onPrimaryContainer
-                tint = Color.Unspecified
-                // modifier = Modifier.shadow(shape = CircleShape, elevation = 8.dp, ambientColor = IconBackground)
-            )
+        Checkbox(
+            modifier = Modifier
+                .align(Alignment.CenterEnd)
+                .padding(end = 4.dp),
+            checked = false,
+            colors = CheckboxDefaults.colors(
+                checkmarkColor = BrandGreen,
+                disabledCheckedColor = Color.Transparent
+            ),
+            enabled = false,
+            onCheckedChange = null // We handle the state in the combinedClickable
+        )
+        if (showFavoriteIcon) {
+            IconButton(
+                onClick = onFavoriteClick,
+                modifier = Modifier
+                    .align(Alignment.BottomEnd)
+            ) {
+                Icon(
+                    imageVector = if (note.isFavourite)
+                        ImageVector.vectorResource(R.drawable.fav_note_selected)
+                    else ImageVector.vectorResource(R.drawable.fav_note_unselected),
+                    contentDescription = "Favorite note",
+                    //  tint = MaterialTheme.colorScheme.onPrimaryContainer
+                    tint = Color.Unspecified,
+                )
+            }
         }
-
     }
 }
 

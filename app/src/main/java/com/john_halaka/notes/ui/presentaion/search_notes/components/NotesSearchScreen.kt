@@ -123,7 +123,8 @@ fun NotesSearchScreen (
                 scope = scope,
                 snackbarHostState = snackbarHostState,
                 notesList = notesList,
-                context = context
+                context = context,
+                showFavoriteIcon = true
             )
 
 

@@ -33,7 +33,9 @@ fun GridViewNotes(
     scope: CoroutineScope,
     snackbarHostState: SnackbarHostState,
     notesList: List<Note>,
-    context: Context
+    context: Context,
+    showFavoriteIcon: Boolean,
+    //showCheckBox: Boolean
 ) {
     // to convert px to dp in different screens 
 
@@ -74,12 +76,15 @@ fun GridViewNotes(
                             )
                         )
                     )
-                }
+                },
+                showFavoriteIcon = showFavoriteIcon,
+                //showCheckBox = showCheckBox
 
             )
         }
     }
 }
+
 @Composable
 fun ListViewNotes(
     navController: NavController,
@@ -87,9 +92,10 @@ fun ListViewNotes(
     scope: CoroutineScope,
     snackbarHostState: SnackbarHostState,
     notesList: List<Note>,
-    context: Context
-
-    ) {
+    context: Context,
+    showFavoriteIcon: Boolean,
+    //showCheckBox: Boolean
+) {
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
@@ -120,7 +126,9 @@ fun ListViewNotes(
                         )
                     )
 
-                }
+                },
+                showFavoriteIcon = showFavoriteIcon,
+                // showCheckBox = showCheckBox
             )
 
             Spacer(modifier = Modifier.height(4.dp))

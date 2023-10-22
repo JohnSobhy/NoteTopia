@@ -1,5 +1,6 @@
 package com.john_halaka.notes.ui.theme
 
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 
 val Purple80 = Color(0xFFD0BCFF)
@@ -48,3 +49,11 @@ val VistaBlue = Color(0xff7699D4)
 
 val IconBackground = Color(0x80D9D9D9)
 val IconColorGray = Color(0x99999999)
+
+
+val GradientGreen = Brush.verticalGradient(
+    colors = listOf(
+        Color(0xFF37C405), // 37C405 with 100% alpha
+        Color(0x003B951C)  // 3B951C with 0% alpha
+    )
+)

@@ -7,11 +7,14 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
@@ -33,6 +36,7 @@ import com.john_halaka.mytodo.ui.todo_list.TodoListEvent
 import com.john_halaka.mytodo.ui.todo_list.TodoListViewModel
 import com.john_halaka.notes.BottomNavigationBar
 import com.john_halaka.notes.NavigationDrawer
+import com.john_halaka.notes.ui.Screen
 import kotlinx.coroutines.launch
 
 
@@ -98,8 +102,18 @@ fun TodoListScreen (
                 snackbarHost = {
                     SnackbarHost(scaffoldState)
                 },
+                floatingActionButton = {
+                    FloatingActionButton(
+                        shape = CircleShape,
+                        onClick = {
+                            navController.navigate(Screen.AddEditTodoScreen.route)
+                        }
+                    ) {
+                        Icon(imageVector = Icons.Default.Add, contentDescription = "Add a Todo")
+                    }
+                }
 
-                ) { values ->
+            ) { values ->
                 LazyColumn(
                     modifier = Modifier
                         .fillMaxSize()
