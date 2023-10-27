@@ -34,40 +34,11 @@ import com.john_halaka.notes.feature_todo.domain.model.Todo
     ) {
         Row(
             modifier = Modifier
-                .padding(16.dp)
+                .padding(8.dp)
                 .fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
 
         ) {
-            Column(
-                modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.Center,
-            ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(text = todo.title,
-                        fontSize= 20.sp,
-                        fontWeight = FontWeight.Bold,
-                    )
-                    Spacer(modifier = Modifier.width(8.dp))
-
-                    IconButton(onClick = {
-                        onEvent(TodoListEvent.OnDeleteTodoClick(todo))
-
-                    }) {
-                        Icon(
-                            imageVector = Icons.Default.Delete,
-                            contentDescription = "Delete todo"
-                        )
-                    }
-                }
-                    todo.description?.let {
-                        Spacer(modifier = Modifier.height(8.dp))
-                        Text(text = it)
-
-                    }
-            }
             Checkbox(
                 checked = todo.completed,
                 onCheckedChange = { isChecked ->
@@ -80,5 +51,38 @@ import com.john_halaka.notes.feature_todo.domain.model.Todo
                     checkmarkColor = MaterialTheme.colorScheme.onPrimary
                 )
             )
+            Spacer(modifier = Modifier.width(8.dp))
+            Column(
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.Center,
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = todo.title,
+                        fontSize = 20.sp,
+                        fontWeight = FontWeight.Bold,
+                    )
+
+
+                }
+                todo.description?.let {
+                    Spacer(modifier = Modifier.height(4.dp))
+                    Text(text = it)
+
+                }
+            }
+
+            IconButton(onClick = {
+                onEvent(TodoListEvent.OnDeleteTodoClick(todo))
+
+            }) {
+                Icon(
+                    imageVector = Icons.Default.Delete,
+                    contentDescription = "Delete todo"
+                )
+            }
+
         }
     }

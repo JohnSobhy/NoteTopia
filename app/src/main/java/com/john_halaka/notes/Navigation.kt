@@ -8,8 +8,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.outlined.Delete
+import androidx.compose.material.icons.outlined.Email
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material3.Divider
 import androidx.compose.material3.DrawerState
@@ -316,6 +318,12 @@ fun NavigationDrawer(
             selectedIcon = Icons.Filled.Delete,
             unselectedIcon = Icons.Outlined.Delete,
             route = Screen.DeletedNotesScreen.route
+        ),
+        NavigationItem(
+            title = "Daily Quote",
+            selectedIcon = Icons.Default.Email,
+            unselectedIcon = Icons.Outlined.Email,
+            route = Screen.DailyQuoteScreen.route
         )
     )
     ModalNavigationDrawer(

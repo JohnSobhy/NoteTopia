@@ -18,7 +18,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Menu
@@ -78,7 +77,7 @@ fun NotesScreen(
     val scope = rememberCoroutineScope()
     var currentViewType by remember { mutableStateOf(ViewType.GRID) }
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
-    var expanded by remember { mutableStateOf(false) }
+   // var expanded by remember { mutableStateOf(false) }
     var searchText by remember { mutableStateOf("") }
     var notesList = state.notes
 
@@ -117,27 +116,6 @@ fun NotesScreen(
                                     contentDescription = "Sort notes"
                                 )
                             }
-//                             IconButton(onClick = { expanded = true }) {
-//                                   Icon(
-//                                       painter = painterResource(id = R.drawable.baseline_sort_24),
-//                                         contentDescription = "Sort notes"
-//                                   )
-//                            }
-//                            DropdownMenu(
-//                                expanded = expanded,
-//                                onDismissRequest = { expanded = false }
-//                            ) {
-//                                DropdownMenuItem(onClick = {
-//                                /* Handle menu item click */
-//                                }) {
-//                                    Text(text = "Menu Item 1")
-//                                }
-//                            }
-//                                DropdownMenuItem(onClick = {
-//                                /* Handle menu item click */
-//                                }) {
-//                                    Text(text = "Menu Item 2")
-//                                }
                         }
                     )
                 },
@@ -185,14 +163,6 @@ fun NotesScreen(
                             Icon(
                                 painter = painterResource(id = R.drawable.baseline_grid_view_24),
                                 contentDescription = "Grid View"
-                            )
-                        }
-                        IconButton(
-                            onClick = { navController.navigate(Screen.DailyQuoteScreen.route) }
-                        ) {
-                            Icon(
-                                imageVector = Icons.Default.AccountCircle,
-                                contentDescription = "Daily Quote"
                             )
                         }
 

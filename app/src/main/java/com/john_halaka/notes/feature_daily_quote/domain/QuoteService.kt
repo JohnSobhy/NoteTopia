@@ -8,7 +8,7 @@ import retrofit2.http.Query
 interface QuoteService {
     @GET("/v1/quotes")
     suspend fun getQuotes(
-        @Query("category") category: String? = null,
+        @Query("category") category: String? = "courage",
         @Query("limit") limit: Int? = null
     ): Response<List<Quote>>
 }

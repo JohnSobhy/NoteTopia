@@ -2,9 +2,9 @@ package com.john_halaka.notes.feature_note.domain.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.john_halaka.notes.ui.theme.Gray
+import com.john_halaka.notes.ui.theme.DarkTurquoise
 import com.john_halaka.notes.ui.theme.LightGreen
-import com.john_halaka.notes.ui.theme.MellonRed
+import com.john_halaka.notes.ui.theme.Purple80
 import com.john_halaka.notes.ui.theme.SandyBrown
 import com.john_halaka.notes.ui.theme.VistaBlue
 
@@ -20,7 +20,7 @@ data class Note(
     val isDeleted: Boolean = false
 ){
     companion object {
-        val noteColors = listOf(SandyBrown, VistaBlue, MellonRed, LightGreen, Gray)
+        val noteColors = listOf(SandyBrown, VistaBlue, DarkTurquoise, LightGreen, Purple80)
         val noteCategory = listOf("Work", "Personal", "Family", "Shopping")
     }
 

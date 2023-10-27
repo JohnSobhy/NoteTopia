@@ -1,6 +1,5 @@
 package com.john_halaka.notes.ui.theme
 
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 
 val Purple80 = Color(0xFFD0BCFF)
@@ -35,9 +34,9 @@ val LightViolet = Color(0xFFF5DDFA)
 val LightGrayBackground = Color(0xfff4f4f3)
 val BabyBlue = Color(0xffd4eaf7)
 
-val DarkTurquoise = Color(0xff00668c)
+val DarkTurquoise = Color(0xFF044D68)
 
-val BabyPowder = Color(0xffF7F7EF)
+val BabyPowder = Color(0xFF026D63)
 val MainBlue = Color(0xff277AFF)
 val BackBlack = Color(0xff191923)
 val OptionPink = Color(0xffE86260)
@@ -51,9 +50,3 @@ val IconBackground = Color(0x80D9D9D9)
 val IconColorGray = Color(0x99999999)
 
 
-val GradientGreen = Brush.verticalGradient(
-    colors = listOf(
-        Color(0xFF37C405), // 37C405 with 100% alpha
-        Color(0x003B951C)  // 3B951C with 0% alpha
-    )
-)

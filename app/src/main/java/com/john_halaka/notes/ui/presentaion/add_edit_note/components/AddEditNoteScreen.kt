@@ -23,8 +23,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -42,7 +40,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
@@ -141,9 +141,10 @@ fun AddEditNoteScreen(
                         }
                     ) {
                         Icon(
-                            Icons.Default.Delete,
-                            contentDescription = "Delete note"
-                        )
+                            Icons.Filled.Delete,
+                            contentDescription = "Delete note",
+
+                            )
 
                     }
                     IconButton(
@@ -153,8 +154,10 @@ fun AddEditNoteScreen(
                         }
                     ) {
                         Icon(
-                            imageVector = if (viewModel.noteIsFavorite.value) Icons.Default.Favorite
-                            else Icons.Default.FavoriteBorder,
+                            imageVector = if (viewModel.noteIsFavorite.value)
+                                ImageVector.vectorResource(R.drawable.fav_note_selected)
+                            else ImageVector.vectorResource(R.drawable.fav_note_unselected),
+                            tint = Color.Unspecified,
                             contentDescription = "is favorite"
                         )
                     }
