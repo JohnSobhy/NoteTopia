@@ -16,7 +16,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.john_halaka.notes.feature_note.domain.model.Note
@@ -39,9 +38,9 @@ fun GridViewNotes(
 ) {
     // to convert px to dp in different screens 
 
-    val heightPxValue = 450
-    val density = LocalDensity.current.density
-    val cellHeightDpValue = (heightPxValue / density).dp
+//    val heightPxValue = 450
+//    val density = LocalDensity.current.density
+    val cellHeightDpValue = 120.dp
 
 
     LazyVerticalGrid(
@@ -106,6 +105,7 @@ fun ListViewNotes(
                 note = note,
                 modifier = Modifier
                     .fillMaxWidth()
+                    .height(120.dp)
                     .clickable {
                         navController.navigate(
                             Screen.AddEditNoteScreen.route +

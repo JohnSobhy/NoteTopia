@@ -48,7 +48,7 @@ import com.john_halaka.notes.feature_todo.domain.model.Todo
                 colors = CheckboxDefaults.colors(
                     checkedColor = MaterialTheme.colorScheme.secondary,
                     uncheckedColor = MaterialTheme.colorScheme.onPrimary,
-                    checkmarkColor = MaterialTheme.colorScheme.onPrimary
+                    checkmarkColor = MaterialTheme.colorScheme.primaryContainer
                 )
             )
             Spacer(modifier = Modifier.width(8.dp))

@@ -156,7 +156,7 @@ fun BottomNavigationBar(
     val itemList: List<NavigationItem> = listOf(
 
         NavigationItem(
-            title = "Todo List",
+            title = "To-do List",
             selectedIcon = ImageVector.vectorResource(R.drawable.unselected_todo),
             unselectedIcon = ImageVector.vectorResource(R.drawable.unselected_todo),
             route = Screen.TodoListScreen.route
@@ -314,7 +314,7 @@ fun NavigationDrawer(
             route = Screen.NotesScreen.route
         ),
         NavigationItem(
-            title = "Recently Deleted",
+            title = "Deleted",
             selectedIcon = Icons.Filled.Delete,
             unselectedIcon = Icons.Outlined.Delete,
             route = Screen.DeletedNotesScreen.route

@@ -83,7 +83,7 @@ fun TodoListScreen (
                 topBar = {
                     CenterAlignedTopAppBar(
                         title = {
-                            Text(text = "Todo List")
+                            Text(text = "To-do List")
                         },
                         navigationIcon = {
                             IconButton(onClick = {

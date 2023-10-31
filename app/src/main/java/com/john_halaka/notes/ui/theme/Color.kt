@@ -17,7 +17,7 @@ val RedOrange = Color(0xffffab91)
 val RedPink = Color(0xfff48fb1)
 
 val Violet = Color(0xffcf94da)
-val DarkGray = Color(0xFF444444)
+val DarkGray = Color(0xFF808084)
 val DividerShadowLight = Color(0x4c000000)
 val DividerShadowDark = Color(0x26ffffff)
 val LightGreen = Color(0xD2AEFF98)
