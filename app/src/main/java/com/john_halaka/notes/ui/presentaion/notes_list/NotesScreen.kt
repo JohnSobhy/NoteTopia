@@ -1,12 +1,14 @@
 package com.john_halaka.notes.ui.presentaion.notes_list
 
 import android.content.Context
+import android.graphics.Paint
 import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -17,6 +19,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.List
@@ -60,8 +63,10 @@ import com.john_halaka.notes.ui.presentaion.notes_list.components.ListViewNotes
 import com.john_halaka.notes.ui.presentaion.notes_list.components.OrderSection
 import com.john_halaka.notes.ui.theme.BabyBlue
 import com.john_halaka.notes.ui.theme.Typography
+
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import androidx.compose.material3.Typography as Typography
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -170,52 +175,59 @@ fun NotesScreen(
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(16.dp),
+                            .padding(start = 16.dp, end = 16.dp),
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.Center
                     ) {
-                        TextField(
-                            value = searchText,
-                            onValueChange = { searchPhrase ->
-                                viewModel.onEvent(NotesEvent.SearchNotes(searchPhrase))
-                                notesList = state.searchResult
-                                searchText = searchPhrase
-                            },
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(48.dp),
-                            colors = TextFieldDefaults.colors(
-                                focusedTextColor = MaterialTheme.colorScheme.onPrimary,
-                                unfocusedTextColor = MaterialTheme.colorScheme.onPrimary
-                            ),
-                            textStyle = Typography.titleSmall,
-                            // textStyle = LocalTextStyle.current.copy(fontSize = 14.sp),
-                            singleLine = true,
-                            placeholder = {
-                                Text(
-                                    "Find in your notes",
-                                    style = Typography.titleSmall,
-                                    color = MaterialTheme.colorScheme.onTertiary
-                                )
-                            },
+                            TextField(
+                                shape = RoundedCornerShape(8.dp),
+                                value = searchText,
+                                onValueChange = { searchPhrase ->
+                                    viewModel.onEvent(NotesEvent.SearchNotes(searchPhrase))
+                                    notesList = state.searchResult
+                                    searchText = searchPhrase
+                                },
+                                modifier = Modifier
+                                    .align(alignment = Alignment.Top)
+                                    .fillMaxWidth()
+                                    .height(48.dp)
+                                    ,
+                                colors = TextFieldDefaults.colors(
+                                    focusedTextColor = MaterialTheme.colorScheme.onPrimary,
+                                    unfocusedTextColor = MaterialTheme.colorScheme.onPrimary
+                                ),
+                                textStyle = Typography.bodySmall,
+                                // textStyle = LocalTextStyle.current.copy(fontSize = 14.sp),
+                                singleLine = true,
+                                placeholder = {
+                                    Text(
+                                        "Find in your notes",
+                                        style = Typography.bodySmall,
+                                        color = MaterialTheme.colorScheme.onTertiary
+                                    )
+                                },
 
-                            leadingIcon = {
-                                Icon(
-                                    imageVector = Icons.Default.Search,
-                                    contentDescription = "Search Icon",
-                                    modifier = Modifier
-                                        .align(Alignment.CenterVertically)
-                                        .padding(start = 8.dp)
-                                        .clickable(
-                                            true,
-                                            onClick = {
-                                                viewModel.onEvent(NotesEvent.SearchNotes(searchText))
-                                                notesList = state.searchResult
-                                            }
-                                        )
-                                )
-                            }
-                        )
+                                leadingIcon = {
+                                    Icon(
+                                        imageVector = Icons.Default.Search,
+                                        contentDescription = "Search Icon",
+                                        modifier = Modifier
+                                            .align(alignment = Alignment.Top)
+                                            .padding(start = 8.dp)
+                                            .clickable(
+                                                true,
+                                                onClick = {
+                                                    viewModel.onEvent(
+                                                        NotesEvent.SearchNotes(
+                                                            searchText
+                                                        )
+                                                    )
+                                                    notesList = state.searchResult
+                                                }
+                                            )
+                                    )
+                                }
+                            )
                     }
 
                     AnimatedVisibility(
@@ -285,7 +297,6 @@ fun NotesScreen(
             }
         }
     )
-
 }
 
 

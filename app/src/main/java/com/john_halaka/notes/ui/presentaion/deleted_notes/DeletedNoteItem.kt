@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -17,6 +18,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
@@ -28,6 +30,7 @@ import com.john_halaka.notes.ui.presentaion.notes_list.components.NoteItem
 
 data class DropDownItem(
     val text: String,
+    val icon: ImageVector
 
     )
 
@@ -106,6 +109,9 @@ fun DeletedNoteItem(
         ) {
             dropDownItems.forEach { item ->
                 DropdownMenuItem(
+                    leadingIcon = {
+                        Icon(imageVector = item.icon, contentDescription = item.text)
+                                  },
                     text = {
                         Text(text = item.text)
                     },

@@ -10,6 +10,8 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -44,8 +46,8 @@ fun DeletedNotesScreen(
     val scope = rememberCoroutineScope()
     val notesList = state.deletedNotes
     val dropDownItems = listOf(
-        DropDownItem("Restore"),
-        DropDownItem("Delete Permanently")
+        DropDownItem("Restore", icon = Icons.Default.Refresh),
+        DropDownItem("Delete Permanently", icon = Icons.Outlined.Delete)
     )
     val cellHeight = 120.dp
 
@@ -97,7 +99,7 @@ fun DeletedNotesScreen(
                         .height(cellHeight),
                     dropDownItems = dropDownItems,
                     onItemClick = { item ->
-                        if (item == DropDownItem("Restore")) {
+                        if (item.text == "Restore") {
                             viewModel.onEvent(
                                 NotesEvent.MoveNoteToTrash(
                                     note.copy(
