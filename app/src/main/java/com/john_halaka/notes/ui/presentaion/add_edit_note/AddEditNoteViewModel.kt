@@ -19,9 +19,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AddEditNoteViewModel @Inject constructor(
-    private val noteUseCases: NoteUseCases ,
+    private val noteUseCases: NoteUseCases,
     savedStateHandle: SavedStateHandle
-) : ViewModel () {
+) : ViewModel() {
     private val _noteTitle = mutableStateOf(
         NoteTextFieldState(
             hint = "Enter Title.."
@@ -219,6 +219,7 @@ class AddEditNoteViewModel @Inject constructor(
         }
 
     }
+
     sealed class UiEvent {
         data class ShowSnackbar(val message: String) : UiEvent()
         object SaveNote : UiEvent()

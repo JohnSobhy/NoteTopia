@@ -1,7 +1,6 @@
 package com.john_halaka.notes.ui.presentaion.deleted_notes
 
 import android.content.Context
-import android.widget.Toast
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -30,8 +29,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.john_halaka.notes.ui.presentaion.notes_list.NotesEvent
 import com.john_halaka.notes.ui.presentaion.notes_list.NotesViewModel
+import com.john_halaka.notes.ui.presentaion.notes_list.components.DropDownItem
+import com.john_halaka.notes.ui.presentaion.notes_list.components.NoteItem
+import com.john_halaka.notes.ui.presentaion.notes_list.components.mToast
 import kotlinx.coroutines.launch
-
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -68,17 +69,7 @@ fun DeletedNotesScreen(
 
                 },
                 actions = {
-//                    IconButton(
-//                        onClick = {
-//
-//                        }
-//                    ) {
-//                        Icon(
-//                            imageVector = Icons.Default.Delete,
-//                            contentDescription = "Empty trash can"
-//                        )
-//
-//                    }
+
                 }
             )
 
@@ -92,11 +83,14 @@ fun DeletedNotesScreen(
         ) {
             items(notesList) { note ->
 
-                DeletedNoteItem(
+                NoteItem(
                     note = note,
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(cellHeight),
+                    onFavoriteClick = { /*TODO*/ },
+                    onClick = { /*TODO*/ },
+                    showFavoriteIcon = false,
                     dropDownItems = dropDownItems,
                     onItemClick = { item ->
                         if (item.text == "Restore") {
@@ -120,16 +114,9 @@ fun DeletedNotesScreen(
                                 }
                             }
                         }
-
                     }
                 )
-                }
-
             }
         }
     }
-
-
-private fun mToast(context: Context, msg: String) {
-    Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
 }

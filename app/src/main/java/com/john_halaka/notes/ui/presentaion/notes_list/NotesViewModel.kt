@@ -29,9 +29,10 @@ class NotesViewModel @Inject constructor(
 
     private var getNotesJob: Job? = null
     private var getFavoritesJob: Job? = null
-    private var getDeletedNotesJob : Job? = null
+    private var getDeletedNotesJob: Job? = null
     private val initialNoteOrder: NoteOrder = NoteOrder.Date(OrderType.Descending)
     private var currentNoteOrder = initialNoteOrder
+
     init {
         viewModelScope.launch {
             //delay(300)

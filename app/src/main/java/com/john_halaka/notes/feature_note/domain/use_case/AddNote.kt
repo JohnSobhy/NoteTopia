@@ -4,12 +4,12 @@ import com.john_halaka.notes.feature_note.domain.model.InvalidNoteException
 import com.john_halaka.notes.feature_note.domain.model.Note
 import com.john_halaka.notes.feature_note.domain.repository.NoteRepository
 
-class AddNote (
-    private val repository:NoteRepository
-        ) {
+class AddNote(
+    private val repository: NoteRepository
+) {
 
-    @Throws (InvalidNoteException::class)
-    suspend operator fun invoke( note: Note) {
+    @Throws(InvalidNoteException::class)
+    suspend operator fun invoke(note: Note) {
         if (note.title.isBlank()) {
             throw InvalidNoteException("The title cannot be empty")
         }

@@ -73,14 +73,14 @@ fun NotesScreen(
     navController: NavController,
     viewModel: NotesViewModel = hiltViewModel(),
     context: Context
-    ) {
+) {
     val state = viewModel.state.value
     Log.d("NotesScreen", "state: $state")
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
     var currentViewType by remember { mutableStateOf(ViewType.GRID) }
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
-   // var expanded by remember { mutableStateOf(false) }
+    // var expanded by remember { mutableStateOf(false) }
     var searchText by remember { mutableStateOf("") }
     var notesList = state.notes
     val focusManager = LocalFocusManager.current
@@ -186,56 +186,7 @@ fun NotesScreen(
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.Center
                         ) {
-//                            TextField(
-//                                shape = RoundedCornerShape(8.dp),
-//                                value = searchText,
-//                                onValueChange = { searchPhrase ->
-//                                    viewModel.onEvent(NotesEvent.SearchNotes(searchPhrase))
-//                                    notesList = state.searchResult
-//                                    searchText = searchPhrase
-//                                },
-//                                modifier = Modifier
-//                                    .align(alignment = Alignment.Top)
-//                                    .fillMaxWidth()
-//                                    .height(48.dp)
-//                                    ,
-//                                colors = TextFieldDefaults.colors(
-//                                    focusedTextColor = MaterialTheme.colorScheme.onPrimary,
-//                                    unfocusedTextColor = MaterialTheme.colorScheme.onPrimary
-//                                ),
-//                                textStyle = Typography.bodySmall,
-//                                // textStyle = LocalTextStyle.current.copy(fontSize = 14.sp),
-//                                singleLine = true,
-//                                placeholder = {
-//                                    Text(
-//                                        "Find in your notes",
-//                                        style = Typography.bodySmall,
-//                                        color = MaterialTheme.colorScheme.onTertiary
-//                                    )
-//                                },
-//                              // keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-//
-//                                leadingIcon = {
-//                                    Icon(
-//                                        imageVector = Icons.Default.Search,
-//                                        contentDescription = "Search Icon",
-//                                        modifier = Modifier
-//                                            .align(alignment = Alignment.Top)
-//                                            .padding(start = 8.dp)
-//                                            .clickable(
-//                                                true,
-//                                                onClick = {
-//                                                    viewModel.onEvent(
-//                                                        NotesEvent.SearchNotes(
-//                                                            searchText
-//                                                        )
-//                                                    )
-//                                                    notesList = state.searchResult
-//                                                }
-//                                            )
-//                                    )
-//                                }
-//                            )
+
                             SearchTextField(
                                 value = searchText,
                                 onValueChange = { searchPhrase ->
@@ -328,8 +279,6 @@ fun NotesScreen(
                         }
 
                     }
-
-
                 }
             }
         }

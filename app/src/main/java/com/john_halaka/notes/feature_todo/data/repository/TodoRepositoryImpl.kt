@@ -5,11 +5,10 @@ import com.john_halaka.notes.feature_todo.data.data_source.TodoDao
 import com.john_halaka.notes.feature_todo.domain.model.Todo
 import com.john_halaka.notes.feature_todo.domain.repository.TodoRepository
 import kotlinx.coroutines.flow.Flow
-import javax.inject.Inject
 
-class TodoRepositoryImpl (
+class TodoRepositoryImpl(
     private val todoDao: TodoDao
-    ) : TodoRepository {
+) : TodoRepository {
     override fun getAllTodos(): Flow<List<Todo>> {
         return todoDao.getAllTodos()
     }

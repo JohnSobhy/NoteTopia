@@ -61,14 +61,7 @@ import kotlinx.coroutines.launch
 fun Navigation() {
     // val systemUiController = rememberSystemUiController()
     val navController = rememberNavController()
-//    val surfaceColor = MaterialTheme.colorScheme.surface
-//
-//
-//    LaunchedEffect(Unit) {
-//        systemUiController.setStatusBarColor(
-//            color = surfaceColor
-//        )
-//    }
+
     NavHost(
         navController = navController,
         startDestination = Screen.NotesScreen.route
@@ -161,30 +154,13 @@ fun BottomNavigationBar(
             unselectedIcon = ImageVector.vectorResource(R.drawable.unselected_todo),
             route = Screen.TodoListScreen.route
         ),
-//        NavigationItem(
-//            title = "Search",
-//            selectedIcon = Icons.Filled.Search,
-//            unselectedIcon = Icons.Outlined.Search,
-//            route = Screen.NotesSearchScreen.route
-//        ),
         NavigationItem(
             title = "Notes",
             selectedIcon = ImageVector.vectorResource(R.drawable.unselected_note),
             unselectedIcon = ImageVector.vectorResource(R.drawable.unselected_note),
             route = Screen.NotesScreen.route
         ),
-//        NavigationItem(
-//            title = "Add",
-//            selectedIcon = Icons.Filled.Add,
-//            unselectedIcon = Icons.Outlined.Add,
-//            route = if (currentRoute == Screen.TodoListScreen.route) {
-//                Screen.AddEditTodoScreen.route
-//            } else {
-//                Screen.AddEditNoteScreen.route
-//            }.toString()
-//
-//
-//        ),
+
         NavigationItem(
             title = "Favorites",
             selectedIcon = ImageVector.vectorResource(R.drawable.unselected_fav),
@@ -194,12 +170,8 @@ fun BottomNavigationBar(
     )
     when (windowSize.widthSizeClass) {
         WindowWidthSizeClass.Compact -> {
-            Box(
-                // modifier = Modifier.shadow(8.dp, shape= RectangleShape)
-            ) {
-                NavigationBar(
-
-                ) {
+            Box {
+                NavigationBar {
                     itemList.forEach { navigationItem ->
                         NavigationBarItem(
                             selected = currentRoute == navigationItem.route,

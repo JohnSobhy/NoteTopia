@@ -1,7 +1,6 @@
 package com.john_halaka.notes.ui.presentaion.notes_list.components
 
 import android.content.Context
-import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,6 +12,8 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -29,19 +30,20 @@ fun GridViewNotes(
 
     navController: NavController,
     viewModel: NotesViewModel,
-    scope: CoroutineScope,
-    snackbarHostState: SnackbarHostState,
     notesList: List<Note>,
     context: Context,
+    scope: CoroutineScope,
+    snackbarHostState: SnackbarHostState,
     showFavoriteIcon: Boolean,
-    //showCheckBox: Boolean
 ) {
     // to convert px to dp in different screens 
 
 //    val heightPxValue = 450
 //    val density = LocalDensity.current.density
     val cellHeightDpValue = 120.dp
-
+    val dropDownItems = listOf(
+        DropDownItem("Delete", icon = Icons.Outlined.Delete)
+    )
 
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
@@ -61,7 +63,6 @@ fun GridViewNotes(
                                     "?noteId=${note.id}&noteColor=${note.color}"
                         )
                     },
-
                 onFavoriteClick = {
                     if (note.isFavourite)
                         mToast(context, "Removed from Favourites")
@@ -77,8 +78,28 @@ fun GridViewNotes(
                     )
                 },
                 showFavoriteIcon = showFavoriteIcon,
-                //showCheckBox = showCheckBox
+                //showCheckBox = showCheckBox,
+                dropDownItems = dropDownItems,
+                onItemClick = { item ->
+                    if (item.text == "Delete") {
+                        viewModel.onEvent(
+                            NotesEvent.MoveNoteToTrash(
+                                note.copy(
+                                    isDeleted = !note.isDeleted
+                                )
+                            )
+                        )
+                        mToast(context, "Note Moved to trash")
+                    } else {
 
+                    }
+                },
+                onClick = {
+                    navController.navigate(
+                        Screen.AddEditNoteScreen.route +
+                                "?noteId=${note.id}&noteColor=${note.color}"
+                    )
+                }
             )
         }
     }
@@ -95,6 +116,9 @@ fun ListViewNotes(
     showFavoriteIcon: Boolean,
     //showCheckBox: Boolean
 ) {
+    val dropDownItems = listOf(
+        DropDownItem("Delete", icon = Icons.Outlined.Delete)
+    )
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
@@ -105,13 +129,7 @@ fun ListViewNotes(
                 note = note,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(120.dp)
-                    .clickable {
-                        navController.navigate(
-                            Screen.AddEditNoteScreen.route +
-                                    "?noteId=${note.id}&noteColor=${note.color}"
-                        )
-                    },
+                    .height(120.dp),
                 onFavoriteClick = {
                     if (note.isFavourite)
                         mToast(context, "Removed from Favourites")
@@ -129,6 +147,27 @@ fun ListViewNotes(
                 },
                 showFavoriteIcon = showFavoriteIcon,
                 // showCheckBox = showCheckBox
+                dropDownItems = dropDownItems,
+                onItemClick = { item ->
+                    if (item.text == "Delete") {
+                        viewModel.onEvent(
+                            NotesEvent.MoveNoteToTrash(
+                                note.copy(
+                                    isDeleted = !note.isDeleted
+                                )
+                            )
+                        )
+                        mToast(context, "Note Moved to trash")
+                    } else {
+
+                    }
+                },
+                onClick = {
+                    navController.navigate(
+                        Screen.AddEditNoteScreen.route +
+                                "?noteId=${note.id}&noteColor=${note.color}"
+                    )
+                }
             )
 
             Spacer(modifier = Modifier.height(4.dp))
@@ -136,8 +175,4 @@ fun ListViewNotes(
         }
 
     }
-}
-
-fun mToast(context: Context, msg: String) {
-    Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
 }

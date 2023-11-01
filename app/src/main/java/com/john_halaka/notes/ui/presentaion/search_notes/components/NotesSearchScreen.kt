@@ -38,95 +38,95 @@ import com.john_halaka.notes.ui.theme.Typography
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun NotesSearchScreen (
+fun NotesSearchScreen(
     navController: NavController,
     viewModel: NotesViewModel = hiltViewModel(),
     context: Context
 
-    ) {
+) {
     val state = viewModel.state.value
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
     var notesList by remember { mutableStateOf(state.notes) }
     var searchText by remember { mutableStateOf("") }
 
-        Column(
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = MaterialTheme.colorScheme.background)
+    ) {
+        Row(
             modifier = Modifier
-                .fillMaxSize()
-                .background(color = MaterialTheme.colorScheme.background)
+                .fillMaxWidth()
+                .padding(8.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center
         ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center
-            ) {
-                TextField(
-                    value = searchText,
-                    onValueChange = { searchPhrase ->
-                        viewModel.onEvent(NotesEvent.SearchNotes(searchPhrase))
-                        notesList = state.searchResult
-                        searchText = searchPhrase
-                    },
-                    modifier = Modifier.fillMaxWidth(),
-                    colors = TextFieldDefaults.colors(
-                        focusedTextColor = MaterialTheme.colorScheme.onPrimary,
-                        unfocusedTextColor = MaterialTheme.colorScheme.onPrimary
-                    ),
-                    textStyle = Typography.titleLarge,
-                    singleLine = true,
-                    placeholder = {
-                        Text(
-                            "Find in your notes",
-                            style = Typography.titleLarge,
-                            color = MaterialTheme.colorScheme.onTertiary
-                        )
-                    },
-                    leadingIcon = {
-                        Icon(
-                            imageVector = Icons.Default.ArrowBack,
-                            contentDescription = "Back",
-                            modifier = Modifier
-                                .clickable(
-                                    true,
-                                    onClick = {
-                                        navController.navigateUp()
-                                    }
-                                )
+            TextField(
+                value = searchText,
+                onValueChange = { searchPhrase ->
+                    viewModel.onEvent(NotesEvent.SearchNotes(searchPhrase))
+                    notesList = state.searchResult
+                    searchText = searchPhrase
+                },
+                modifier = Modifier.fillMaxWidth(),
+                colors = TextFieldDefaults.colors(
+                    focusedTextColor = MaterialTheme.colorScheme.onPrimary,
+                    unfocusedTextColor = MaterialTheme.colorScheme.onPrimary
+                ),
+                textStyle = Typography.titleLarge,
+                singleLine = true,
+                placeholder = {
+                    Text(
+                        "Find in your notes",
+                        style = Typography.titleLarge,
+                        color = MaterialTheme.colorScheme.onTertiary
+                    )
+                },
+                leadingIcon = {
+                    Icon(
+                        imageVector = Icons.Default.ArrowBack,
+                        contentDescription = "Back",
+                        modifier = Modifier
+                            .clickable(
+                                true,
+                                onClick = {
+                                    navController.navigateUp()
+                                }
+                            )
 
-                        )
-                    },
-                    trailingIcon = {
-                        Icon(
-                            imageVector = Icons.Default.Search,
-                            contentDescription = "Search Icon",
-                            modifier = Modifier
-                                .align(Alignment.CenterVertically)
-                                .padding(start = 16.dp)
-                                .clickable(
-                                    true,
-                                    onClick = {
-                                        viewModel.onEvent(NotesEvent.SearchNotes(searchText))
-                                        notesList = state.searchResult
-                                    }
-                                )
-                        )
-                    }
-                )
-            }
-
-            ListViewNotes(
-
-                navController = navController,
-                viewModel = viewModel,
-                scope = scope,
-                snackbarHostState = snackbarHostState,
-                notesList = notesList,
-                context = context,
-                showFavoriteIcon = true
+                    )
+                },
+                trailingIcon = {
+                    Icon(
+                        imageVector = Icons.Default.Search,
+                        contentDescription = "Search Icon",
+                        modifier = Modifier
+                            .align(Alignment.CenterVertically)
+                            .padding(start = 16.dp)
+                            .clickable(
+                                true,
+                                onClick = {
+                                    viewModel.onEvent(NotesEvent.SearchNotes(searchText))
+                                    notesList = state.searchResult
+                                }
+                            )
+                    )
+                }
             )
-
-
         }
+
+        ListViewNotes(
+
+            navController = navController,
+            viewModel = viewModel,
+            scope = scope,
+            snackbarHostState = snackbarHostState,
+            notesList = notesList,
+            context = context,
+            showFavoriteIcon = true
+        )
+
+
     }
+}

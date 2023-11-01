@@ -81,12 +81,13 @@ fun AddEditNoteScreen(
                         message = event.message
                     )
                 }
-                is AddEditNoteViewModel.UiEvent.DeleteNote ->{
+
+                is AddEditNoteViewModel.UiEvent.DeleteNote -> {
                     navController.navigateUp()
 
                 }
 
-               is AddEditNoteViewModel.UiEvent.NavigateBack -> {
+                is AddEditNoteViewModel.UiEvent.NavigateBack -> {
                     navController.navigateUp()
                 }
             }
@@ -231,15 +232,15 @@ fun AddEditNoteScreen(
                 text = titleState.text,
                 hint = titleState.hint,
                 onValueChange = {
-                    viewModel.onEvent(AddEditNoteEvent.EnteredTitle (it))
+                    viewModel.onEvent(AddEditNoteEvent.EnteredTitle(it))
                 },
                 onFocusChange = {
-                    viewModel.onEvent(AddEditNoteEvent.ChangeTitleFocus (it))
+                    viewModel.onEvent(AddEditNoteEvent.ChangeTitleFocus(it))
                 },
                 isHintVisible = titleState.isHintVisible,
-                singleLine = true ,
+                singleLine = true,
                 textStyle =
-                MaterialTheme.typography.titleLarge.copy(color = MaterialTheme.colorScheme.onPrimary) ,
+                MaterialTheme.typography.titleLarge.copy(color = MaterialTheme.colorScheme.onPrimary),
 
                 )
 
@@ -249,7 +250,7 @@ fun AddEditNoteScreen(
                 text = contentState.text,
                 hint = contentState.hint,
                 onValueChange = {
-                    viewModel.onEvent(AddEditNoteEvent.EnteredContent (it))
+                    viewModel.onEvent(AddEditNoteEvent.EnteredContent(it))
 
                 },
                 onFocusChange = {

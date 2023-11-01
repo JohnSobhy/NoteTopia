@@ -43,9 +43,9 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter", "UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun TodoListScreen (
+fun TodoListScreen(
     navController: NavController,
-    onNavigate : (TodoListViewModel.UiEvent.Navigate) -> Unit,
+    onNavigate: (TodoListViewModel.UiEvent.Navigate) -> Unit,
     viewModel: TodoListViewModel = hiltViewModel()
 ) {
     val todos = viewModel.todos.collectAsState(initial = emptyList())

@@ -27,62 +27,62 @@ import com.john_halaka.notes.feature_todo.domain.model.Todo
 
 
 @Composable
-    fun TodoItem(
+fun TodoItem(
     todo: Todo,
     onEvent: (TodoListEvent) -> Unit,
     modifier: Modifier
+) {
+    Row(
+        modifier = Modifier
+            .padding(8.dp)
+            .fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically
+
     ) {
-        Row(
-            modifier = Modifier
-                .padding(8.dp)
-                .fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
-
-        ) {
-            Checkbox(
-                checked = todo.completed,
-                onCheckedChange = { isChecked ->
-                    onEvent(TodoListEvent.OnCompletedChange(todo, isChecked))
-                },
-                modifier = Modifier,
-                colors = CheckboxDefaults.colors(
-                    checkedColor = MaterialTheme.colorScheme.secondary,
-                    uncheckedColor = MaterialTheme.colorScheme.onPrimary,
-                    checkmarkColor = MaterialTheme.colorScheme.primaryContainer
-                )
+        Checkbox(
+            checked = todo.completed,
+            onCheckedChange = { isChecked ->
+                onEvent(TodoListEvent.OnCompletedChange(todo, isChecked))
+            },
+            modifier = Modifier,
+            colors = CheckboxDefaults.colors(
+                checkedColor = MaterialTheme.colorScheme.secondary,
+                uncheckedColor = MaterialTheme.colorScheme.onPrimary,
+                checkmarkColor = MaterialTheme.colorScheme.primaryContainer
             )
-            Spacer(modifier = Modifier.width(8.dp))
-            Column(
-                modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.Center,
+        )
+        Spacer(modifier = Modifier.width(8.dp))
+        Column(
+            modifier = Modifier.weight(1f),
+            verticalArrangement = Arrangement.Center,
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(
-                        text = todo.title,
-                        fontSize = 20.sp,
-                        fontWeight = FontWeight.Bold,
-                    )
-
-
-                }
-                todo.description?.let {
-                    Spacer(modifier = Modifier.height(4.dp))
-                    Text(text = it)
-
-                }
-            }
-
-            IconButton(onClick = {
-                onEvent(TodoListEvent.OnDeleteTodoClick(todo))
-
-            }) {
-                Icon(
-                    imageVector = Icons.Default.Delete,
-                    contentDescription = "Delete todo"
+                Text(
+                    text = todo.title,
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold,
                 )
-            }
 
+
+            }
+            todo.description?.let {
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(text = it)
+
+            }
         }
+
+        IconButton(onClick = {
+            onEvent(TodoListEvent.OnDeleteTodoClick(todo))
+
+        }) {
+            Icon(
+                imageVector = Icons.Default.Delete,
+                contentDescription = "Delete todo"
+            )
+        }
+
     }
+}
