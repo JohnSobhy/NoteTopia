@@ -1,9 +1,11 @@
 package com.john_halaka.notes.di
 
 import android.app.Application
+import android.content.Context
 import androidx.room.Room
 import com.john_halaka.notes.feature_daily_quote.data.repository.QuoteRepositoryImpl
 import com.john_halaka.notes.feature_daily_quote.domain.repository.QuoteRepository
+import com.john_halaka.notes.feature_note.data.PreferencesManager
 
 
 import com.john_halaka.notes.feature_note.data.data_source.NoteDatabase
@@ -23,6 +25,7 @@ import com.john_halaka.notes.feature_todo.domain.repository.TodoRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
@@ -76,4 +79,9 @@ object AppModule {
         return QuoteRepositoryImpl()
     }
 
+    @Provides
+    @Singleton
+    fun providePreferencesManager(@ApplicationContext context: Context): PreferencesManager {
+        return PreferencesManager(context)
+    }
 }

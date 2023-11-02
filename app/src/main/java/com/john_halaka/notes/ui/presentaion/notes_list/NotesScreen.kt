@@ -55,6 +55,7 @@ import androidx.navigation.NavController
 import com.john_halaka.notes.BottomNavigationBar
 import com.john_halaka.notes.NavigationDrawer
 import com.john_halaka.notes.R
+import com.john_halaka.notes.feature_note.data.PreferencesManager
 import com.john_halaka.notes.feature_note.domain.util.ViewType
 import com.john_halaka.notes.ui.Screen
 import com.john_halaka.notes.ui.presentaion.notes_list.components.GridViewNotes
@@ -75,16 +76,32 @@ fun NotesScreen(
     context: Context
 ) {
     val state = viewModel.state.value
+    // val state by viewModel.state.collectAsState()
+
     Log.d("NotesScreen", "state: $state")
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
-    var currentViewType by remember { mutableStateOf(ViewType.GRID) }
+    // var currentViewType by remember { mutableStateOf(ViewType.GRID) }
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     // var expanded by remember { mutableStateOf(false) }
     var searchText by remember { mutableStateOf("") }
     var notesList = state.notes
     val focusManager = LocalFocusManager.current
 
+    val preferencesManager = remember { PreferencesManager(context) }
+    var currentViewType by remember {
+        mutableStateOf(
+            ViewType.valueOf(
+                preferencesManager.getString(
+                    "viewPreference",
+                    ViewType.GRID.name
+                )
+            )
+        )
+    }
+    LaunchedEffect(currentViewType) {
+        preferencesManager.saveString("viewPreference", currentViewType.name)
+    }
 
     NavigationDrawer(
         navController = navController,

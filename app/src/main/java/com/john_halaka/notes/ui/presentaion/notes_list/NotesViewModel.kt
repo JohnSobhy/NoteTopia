@@ -5,10 +5,10 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.john_halaka.notes.feature_note.data.PreferencesManager
 import com.john_halaka.notes.feature_note.domain.model.Note
 import com.john_halaka.notes.feature_note.domain.use_case.NoteUseCases
 import com.john_halaka.notes.feature_note.domain.util.NoteOrder
-import com.john_halaka.notes.feature_note.domain.util.OrderType
 import com.john_halaka.notes.feature_note.domain.util.notesSearch
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
@@ -19,6 +19,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class NotesViewModel @Inject constructor(
+    private val preferencesManager: PreferencesManager,
     private val noteUseCases: NoteUseCases
 ) : ViewModel() {
 
@@ -26,28 +27,27 @@ class NotesViewModel @Inject constructor(
     val state: State<NotesState> = _state
 
     private var recentlyDeletedNote: Note? = null
-
     private var getNotesJob: Job? = null
     private var getFavoritesJob: Job? = null
     private var getDeletedNotesJob: Job? = null
-    private val initialNoteOrder: NoteOrder = NoteOrder.Date(OrderType.Descending)
-    private var currentNoteOrder = initialNoteOrder
+
+    private var currentNoteOrder = preferencesManager.getNoteOrder()
 
     init {
         viewModelScope.launch {
             //delay(300)
             Log.d("NotesViewModel", "calling getFavorites")
-            getFavouriteNotes(initialNoteOrder)
+            getFavouriteNotes(currentNoteOrder)
         }
         viewModelScope.launch {
             //delay(500)
             Log.d("NotesViewModel", "calling getDeleted")
-            getDeletedNotes(initialNoteOrder)
+            getDeletedNotes(currentNoteOrder)
         }
         viewModelScope.launch {
             //delay(1000) // Wait before calling getNotes
             Log.d("NotesViewModel", "calling getNotes")
-            getNotes(initialNoteOrder)
+            getNotes(currentNoteOrder)
         }
 
     }
@@ -66,7 +66,8 @@ class NotesViewModel @Inject constructor(
                     // delay(500)
                     getNotes(event.noteOrder)
                 }
-                currentNoteOrder = event.noteOrder
+                updateNoteOrder(event.noteOrder)
+                // currentNoteOrder = event.noteOrder
 
             }
 
@@ -163,7 +164,6 @@ class NotesViewModel @Inject constructor(
     private fun getDeletedNotes(noteOrder: NoteOrder) {
         getDeletedNotesJob?.cancel()
         try {
-
             getDeletedNotesJob = noteUseCases.getDeletedNotes(noteOrder)
                 .onEach { notes ->
                     Log.d("NotesViewModel", "getDeletedNotes: $notes")
@@ -177,4 +177,17 @@ class NotesViewModel @Inject constructor(
             Log.e("NotesViewModel", "Error getting favNotes: ${e.message}")
         }
     }
+
+    // Save the user's preference whenever currentNoteOrder changes
+    private fun updateNoteOrder(noteOrder: NoteOrder) {
+        currentNoteOrder = noteOrder
+        preferencesManager.saveNoteOrder(noteOrder)
+
+    }
+
+//    fun refreshNotes() {
+//        getNotes(currentNoteOrder)
+//    }
+
+
 }
