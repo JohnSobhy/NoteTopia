@@ -127,6 +127,26 @@ fun NotesScreen(
 
                         },
                         actions = {
+                            if (currentViewType.name == "GRID") {
+                                IconButton(onClick = {
+                                    currentViewType = ViewType.LIST
+                                }) {
+                                    Icon(
+                                        imageVector = Icons.Default.List,
+                                        contentDescription = "change Notes view to List"
+                                    )
+                                }
+                            } else {
+                                IconButton(onClick = {
+                                    currentViewType = ViewType.GRID
+                                }) {
+                                    Icon(
+                                        painter = painterResource(id = R.drawable.baseline_grid_view_24),
+                                        contentDescription = "change Notes view to Grid"
+                                    )
+                                }
+
+                            }
                             IconButton(
                                 onClick = {
                                     viewModel.onEvent(NotesEvent.ToggleOrderSection)
@@ -172,30 +192,30 @@ fun NotesScreen(
 
                     ) {
 
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.End,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            IconButton(
-                                onClick = { currentViewType = ViewType.LIST }
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Default.List,
-                                    contentDescription = "List View"
-                                )
-                            }
-
-                            IconButton(
-                                onClick = { currentViewType = ViewType.GRID }
-                            ) {
-                                Icon(
-                                    painter = painterResource(id = R.drawable.baseline_grid_view_24),
-                                    contentDescription = "Grid View"
-                                )
-                            }
-
-                        }
+//                        Row(
+//                            modifier = Modifier.fillMaxWidth(),
+//                            horizontalArrangement = Arrangement.End,
+//                            verticalAlignment = Alignment.CenterVertically
+//                        ) {
+//                            IconButton(
+//                                onClick = { currentViewType = ViewType.LIST }
+//                            ) {
+//                                Icon(
+//                                    imageVector = Icons.Default.List,
+//                                    contentDescription = "List View"
+//                                )
+//                            }
+//
+//                            IconButton(
+//                                onClick = { currentViewType = ViewType.GRID }
+//                            ) {
+//                                Icon(
+//                                    painter = painterResource(id = R.drawable.baseline_grid_view_24),
+//                                    contentDescription = "Grid View"
+//                                )
+//                            }
+//
+//                        }
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
