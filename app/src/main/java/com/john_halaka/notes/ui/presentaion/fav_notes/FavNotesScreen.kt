@@ -100,8 +100,6 @@ fun FavNotesScreen(
                 .padding(values)
 
         ) {
-
-
             AnimatedVisibility(
                 visible = state.isOrderSectionVisible,
                 enter = fadeIn() + slideInVertically(),
