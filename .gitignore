@@ -16,3 +16,4 @@ local.properties
 # my sensitive data
 ApiConst.kt
 google-services.json
+gradle.properties
