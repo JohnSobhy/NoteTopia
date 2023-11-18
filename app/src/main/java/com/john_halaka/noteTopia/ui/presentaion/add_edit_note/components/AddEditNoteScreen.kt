@@ -106,7 +106,7 @@ fun AddEditNoteScreen(
                         Log.d("addEditScreen", "backButton is clicked noteId = $noteId")
                         viewModel.onEvent(AddEditNoteEvent.BackButtonClick)
                         if (noteId != null) {
-                            mToast(context, (R.string.note_saved.toString()))
+                            mToast(context, "Note saved")
                         }
                     })
                     {
@@ -140,7 +140,7 @@ fun AddEditNoteScreen(
                                     )
                                 )
 
-                                mToast(context, (R.string.note_is_moved_to_the_trash.toString()))
+                                mToast(context, "Note is moved to trash")
                             }
                         }
                     ) {
