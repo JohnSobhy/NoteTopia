@@ -49,6 +49,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
@@ -113,7 +114,10 @@ fun NotesScreen(
                     CenterAlignedTopAppBar(
 
                         title = {
-                            Text(text = "Notes", style = Typography.headlineLarge)
+                            Text(
+                                text = stringResource(R.string.notes),
+                                style = Typography.headlineLarge
+                            )
                         },
                         navigationIcon = {
                             IconButton(onClick = {
@@ -122,7 +126,10 @@ fun NotesScreen(
                                 }
                             })
                             {
-                                Icon(Icons.Filled.Menu, contentDescription = "menu")
+                                Icon(
+                                    Icons.Filled.Menu,
+                                    contentDescription = stringResource(R.string.menu)
+                                )
                             }
 
                         },
@@ -133,7 +140,7 @@ fun NotesScreen(
                                 }) {
                                     Icon(
                                         imageVector = Icons.Default.List,
-                                        contentDescription = "change Notes view to List"
+                                        contentDescription = stringResource(R.string.change_notes_view_to_list)
                                     )
                                 }
                             } else {
@@ -142,7 +149,7 @@ fun NotesScreen(
                                 }) {
                                     Icon(
                                         painter = painterResource(id = R.drawable.baseline_grid_view_24),
-                                        contentDescription = "change Notes view to Grid"
+                                        contentDescription = stringResource(R.string.change_notes_view_to_grid)
                                     )
                                 }
 
@@ -154,7 +161,7 @@ fun NotesScreen(
                             ) {
                                 Icon(
                                     painter = painterResource(id = R.drawable.baseline_sort_24),
-                                    contentDescription = "Sort notes"
+                                    contentDescription = stringResource(R.string.sort_notes)
                                 )
                             }
                         }
@@ -173,7 +180,10 @@ fun NotesScreen(
                             navController.navigate(Screen.AddEditNoteScreen.route)
                         }
                     ) {
-                        Icon(imageVector = Icons.Default.Add, contentDescription = "Add a note")
+                        Icon(
+                            imageVector = Icons.Default.Add,
+                            contentDescription = stringResource(R.string.add_a_note)
+                        )
                     }
                 }
             ) { values ->
@@ -192,30 +202,6 @@ fun NotesScreen(
 
                     ) {
 
-//                        Row(
-//                            modifier = Modifier.fillMaxWidth(),
-//                            horizontalArrangement = Arrangement.End,
-//                            verticalAlignment = Alignment.CenterVertically
-//                        ) {
-//                            IconButton(
-//                                onClick = { currentViewType = ViewType.LIST }
-//                            ) {
-//                                Icon(
-//                                    imageVector = Icons.Default.List,
-//                                    contentDescription = "List View"
-//                                )
-//                            }
-//
-//                            IconButton(
-//                                onClick = { currentViewType = ViewType.GRID }
-//                            ) {
-//                                Icon(
-//                                    painter = painterResource(id = R.drawable.baseline_grid_view_24),
-//                                    contentDescription = "Grid View"
-//                                )
-//                            }
-//
-//                        }
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -234,7 +220,7 @@ fun NotesScreen(
                                 leadingIcon = {
                                     Icon(
                                         imageVector = Icons.Default.Search,
-                                        contentDescription = "Search Icon",
+                                        contentDescription = stringResource(R.string.search_icon),
                                         modifier = Modifier.clickable(
                                             onClick = {
                                                 viewModel.onEvent(NotesEvent.SearchNotes(searchText))
@@ -246,7 +232,7 @@ fun NotesScreen(
                                 },
                                 placeholder = {
                                     Text(
-                                        "Find in your notes",
+                                        stringResource(R.string.find_in_your_notes),
                                         style = Typography.bodySmall,
                                         color = MaterialTheme.colorScheme.onSecondary
                                     )
@@ -288,7 +274,7 @@ fun NotesScreen(
                                 if (showProgress) {
                                     CircularProgressIndicator(color = BabyBlue)
                                 } else
-                                    Text(text = "Add your first Note")
+                                    Text(text = stringResource(R.string.add_your_first_note))
                             }
                         } else {
                             when (currentViewType) {

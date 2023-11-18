@@ -17,9 +17,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.john_halaka.noteTopia.R
 import com.john_halaka.noteTopia.ui.theme.Typography
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -37,14 +39,17 @@ fun DailyQuote(
         topBar = {
             TopAppBar(
                 title = {
-                    Text(text = "Daily Quote")
+                    Text(text = stringResource(R.string.daily_quote))
                 },
                 navigationIcon = {
                     IconButton(onClick = {
                         navController.navigateUp()
                     }
                     ) {
-                        Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Back")
+                        Icon(
+                            imageVector = Icons.Default.ArrowBack,
+                            contentDescription = stringResource(R.string.back)
+                        )
                     }
                 }
             )
@@ -55,10 +60,9 @@ fun DailyQuote(
                 .fillMaxSize()
                 .padding(values)
         ) {
-            val quotes = dailyQuote
-            when (quotes) {
+            when (val quotes = dailyQuote) {
                 null -> Text(
-                    text = "Loading...",
+                    text = stringResource(R.string.loading),
                     modifier = Modifier.padding(16.dp)
                 )
 

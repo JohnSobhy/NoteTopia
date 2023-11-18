@@ -34,6 +34,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
@@ -65,14 +66,17 @@ fun FavNotesScreen(
         topBar = {
             TopAppBar(
                 title = {
-                    Text(text = "Favorites")
+                    Text(text = stringResource(R.string.favorites))
                 },
                 navigationIcon = {
                     IconButton(onClick = {
                         navController.navigateUp()
                     })
                     {
-                        Icon(Icons.Filled.ArrowBack, contentDescription = "back")
+                        Icon(
+                            Icons.Filled.ArrowBack,
+                            contentDescription = stringResource(R.string.back)
+                        )
                     }
                 },
                 actions = {
@@ -83,7 +87,7 @@ fun FavNotesScreen(
                     ) {
                         Icon(
                             painter = painterResource(id = R.drawable.baseline_sort_24),
-                            contentDescription = "Sort notes"
+                            contentDescription = stringResource(R.string.sort_notes)
                         )
                     }
                 }
@@ -134,7 +138,7 @@ fun FavNotesScreen(
                     if (showProgress) {
                         CircularProgressIndicator(color = BabyBlue)
                     } else
-                        Text(text = "You have no favorite notes")
+                        Text(text = stringResource(R.string.you_have_no_favorite_notes))
                 }
             } else {
                 ListViewNotes(

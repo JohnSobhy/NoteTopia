@@ -40,6 +40,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
@@ -67,8 +68,8 @@ fun DeletedNotesScreen(
     val scope = rememberCoroutineScope()
     val notesList = state.deletedNotes
     val dropDownItems = listOf(
-        DropDownItem("Restore", icon = Icons.Default.Refresh),
-        DropDownItem("Delete Permanently", icon = Icons.Outlined.Delete)
+        DropDownItem(stringResource(R.string.restore), icon = Icons.Default.Refresh),
+        DropDownItem(stringResource(R.string.delete_permanently), icon = Icons.Outlined.Delete)
     )
     val cellHeight = 120.dp
 
@@ -78,13 +79,16 @@ fun DeletedNotesScreen(
         },
         topBar = {
             TopAppBar(
-                title = { Text(text = "Recently deleted notes") },
+                title = { Text(text = stringResource(R.string.recently_deleted_notes)) },
                 navigationIcon = {
                     IconButton(onClick = {
                         navController.navigateUp()
                     })
                     {
-                        Icon(Icons.Filled.ArrowBack, contentDescription = "back")
+                        Icon(
+                            Icons.Filled.ArrowBack,
+                            contentDescription = stringResource(R.string.back)
+                        )
                     }
 
                 },
@@ -96,7 +100,7 @@ fun DeletedNotesScreen(
                     ) {
                         Icon(
                             painter = painterResource(id = R.drawable.baseline_sort_24),
-                            contentDescription = "Sort notes"
+                            contentDescription = stringResource(R.string.sort_notes)
                         )
                     }
                 }
@@ -144,7 +148,7 @@ fun DeletedNotesScreen(
                     if (showProgress) {
                         CircularProgressIndicator(color = BabyBlue)
                     } else
-                        Text(text = "Trash can is empty")
+                        Text(text = stringResource(R.string.trash_can_is_empty))
                 }
             } else {
                 LazyVerticalGrid(
@@ -162,7 +166,7 @@ fun DeletedNotesScreen(
                             showFavoriteIcon = false,
                             dropDownItems = dropDownItems,
                             onItemClick = { item ->
-                                if (item.text == "Restore") {
+                                if (item.text == (R.string.restore.toString())) {
                                     viewModel.onEvent(
                                         NotesEvent.MoveNoteToTrash(
                                             note.copy(
@@ -170,13 +174,13 @@ fun DeletedNotesScreen(
                                             )
                                         )
                                     )
-                                    mToast(context, "Note Restored")
+                                    mToast(context, (R.string.note_restored.toString()))
                                 } else {
                                     viewModel.onEvent(NotesEvent.DeleteNote(note))
                                     scope.launch {
                                         val result = snackbarHostState.showSnackbar(
-                                            message = "Note removed",
-                                            actionLabel = "Undo"
+                                            message = (R.string.note_removed.toString()),
+                                            actionLabel = (R.string.undo.toString())
                                         )
                                         if (result == SnackbarResult.ActionPerformed) {
                                             viewModel.onEvent(NotesEvent.RestoreNote)

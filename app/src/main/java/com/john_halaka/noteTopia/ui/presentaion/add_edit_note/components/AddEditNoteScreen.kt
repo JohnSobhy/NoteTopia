@@ -2,7 +2,6 @@ package com.john_halaka.noteTopia.ui.presentaion.add_edit_note.components
 
 import android.content.Context
 import android.util.Log
-import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -42,6 +41,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -50,6 +50,7 @@ import com.john_halaka.noteTopia.R
 import com.john_halaka.noteTopia.feature_note.domain.model.Note
 import com.john_halaka.noteTopia.ui.presentaion.add_edit_note.AddEditNoteEvent
 import com.john_halaka.noteTopia.ui.presentaion.add_edit_note.AddEditNoteViewModel
+import com.john_halaka.noteTopia.ui.presentaion.notes_list.components.mToast
 import kotlinx.coroutines.flow.collectLatest
 
 
@@ -61,7 +62,6 @@ fun AddEditNoteScreen(
     context: Context,
     viewModel: AddEditNoteViewModel = hiltViewModel()
 ) {
-
     val titleState = viewModel.noteTitle.value
     val contentState = viewModel.noteContent.value
     val snackbarHostState = remember { SnackbarHostState() }
@@ -106,11 +106,14 @@ fun AddEditNoteScreen(
                         Log.d("addEditScreen", "backButton is clicked noteId = $noteId")
                         viewModel.onEvent(AddEditNoteEvent.BackButtonClick)
                         if (noteId != null) {
-                            mToast(context, "Note Saved")
+                            mToast(context, (R.string.note_saved.toString()))
                         }
                     })
                     {
-                        Icon(Icons.Filled.ArrowBack, contentDescription = "back")
+                        Icon(
+                            Icons.Filled.ArrowBack,
+                            contentDescription = stringResource(R.string.back)
+                        )
                     }
 
                 },
@@ -137,13 +140,13 @@ fun AddEditNoteScreen(
                                     )
                                 )
 
-                                mToast(context, "Note is moved to the trash")
+                                mToast(context, (R.string.note_is_moved_to_the_trash.toString()))
                             }
                         }
                     ) {
                         Icon(
                             Icons.Filled.Delete,
-                            contentDescription = "Delete note",
+                            contentDescription = stringResource(R.string.delete_note),
 
                             )
 
@@ -159,7 +162,7 @@ fun AddEditNoteScreen(
                                 ImageVector.vectorResource(R.drawable.fav_note_selected)
                             else ImageVector.vectorResource(R.drawable.fav_note_unselected),
                             tint = Color.Unspecified,
-                            contentDescription = "is favorite"
+                            contentDescription = stringResource(R.string.mark_note_as_favorite)
                         )
                     }
                 }
@@ -180,7 +183,7 @@ fun AddEditNoteScreen(
             ) {
                 Icon(
                     painter = painterResource(R.drawable.baseline_save_24),
-                    contentDescription = "Save",
+                    contentDescription = stringResource(R.string.save),
 
                     )
 
@@ -263,9 +266,4 @@ fun AddEditNoteScreen(
             )
         }
     }
-}
-
-
-private fun mToast(context: Context, msg: String) {
-    Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
 }

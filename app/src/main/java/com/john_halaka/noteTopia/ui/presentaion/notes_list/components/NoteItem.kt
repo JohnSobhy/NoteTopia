@@ -37,6 +37,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.DpOffset
@@ -129,7 +130,7 @@ fun NoteItem(
                 ) {
                     Icon(
                         imageVector = ImageVector.vectorResource(R.drawable.note_color_trans),
-                        contentDescription = "note color",
+                        contentDescription = stringResource(R.string.note_color),
                         tint = Color(note.color)
                     )
                 }
@@ -175,7 +176,7 @@ fun NoteItem(
                         imageVector = if (note.isFavourite)
                             ImageVector.vectorResource(R.drawable.fav_note_selected)
                         else ImageVector.vectorResource(R.drawable.fav_note_unselected),
-                        contentDescription = "Favorite note",
+                        contentDescription = stringResource(R.string.mark_note_as_favorite),
                         tint = Color.Unspecified,
                     )
                 }

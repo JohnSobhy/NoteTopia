@@ -2,11 +2,13 @@ package com.john_halaka.noteTopia.ui.presentaion.add_edit_note
 
 import android.util.Log
 import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.toArgb
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.john_halaka.noteTopia.R
 import com.john_halaka.noteTopia.feature_note.domain.model.InvalidNoteException
 import com.john_halaka.noteTopia.feature_note.domain.model.Note
 import com.john_halaka.noteTopia.feature_note.domain.use_case.NoteUseCases
@@ -24,19 +26,19 @@ class AddEditNoteViewModel @Inject constructor(
 ) : ViewModel() {
     private val _noteTitle = mutableStateOf(
         NoteTextFieldState(
-            hint = "Enter Title.."
+            hint = (R.string.enter_title.toString())
         )
     )
     val noteTitle: State<NoteTextFieldState> = _noteTitle
 
     private val _noteContent = mutableStateOf(
         NoteTextFieldState(
-            hint = "Enter the content of your note"
+            hint = (R.string.enter_the_content_of_your_note.toString())
         )
     )
     val noteContent: State<NoteTextFieldState> = _noteContent
 
-    private val _noteColor = mutableStateOf(Note.noteColors.random().toArgb())
+    private val _noteColor = mutableIntStateOf(Note.noteColors.random().toArgb())
     val noteColor: State<Int> = _noteColor
 
     private val _noteIsFavorite = mutableStateOf(false)
@@ -74,7 +76,7 @@ class AddEditNoteViewModel @Inject constructor(
                             text = note.content,
                             isHintVisible = false
                         )
-                        _noteColor.value = note.color
+                        _noteColor.intValue = note.color
                         _noteIsFavorite.value = note.isFavourite
 
                     }
@@ -139,7 +141,7 @@ class AddEditNoteViewModel @Inject constructor(
                     } catch (e: InvalidNoteException) {
                         _eventFlow.emit(
                             UiEvent.ShowSnackbar(
-                                message = e.message ?: "Couldn't save note"
+                                message = e.message ?: (R.string.couldn_t_save_note.toString())
                             )
                         )
 
@@ -166,7 +168,7 @@ class AddEditNoteViewModel @Inject constructor(
                     } else {
                         _eventFlow.emit(
                             UiEvent.ShowSnackbar(
-                                message = "Couldn't save note"
+                                message = (R.string.couldn_t_save_note.toString())
                             )
                         )
                     }
@@ -193,29 +195,6 @@ class AddEditNoteViewModel @Inject constructor(
                     _eventFlow.emit(UiEvent.DeleteNote)
                 }
             }
-
-//            is AddEditNoteEvent.UpdateNote -> {
-//                Log.d("EditScreen", "OnFavourite clicked isFavorite= ${event.note.isFavourite}")
-//                viewModelScope.launch {
-//                    event.note.id?.let { noteUseCases.updateNote(it, event.note.isFavourite) }
-//                    _noteIsFavorite.value = event.note.isFavourite
-//                    Log.d("EditScreen", "noteIsFavorite = $_noteIsFavorite")
-//                }
-//            }
-
-//            is AddEditNoteEvent.DeleteNote -> {
-//                viewModelScope.launch {
-//
-//                    currentNoteId?.let { noteUseCases.getNoteById(it) }
-//                        ?.let { note ->
-//                            noteUseCases.deleteNotes(note)
-//                            recentlyDeletedNote = note
-//
-//                            _eventFlow.emit(UiEvent.DeleteNote)
-//                        }
-//
-//                }
-//          }
         }
 
     }

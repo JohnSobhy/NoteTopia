@@ -33,6 +33,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -149,20 +150,20 @@ fun BottomNavigationBar(
     val itemList: List<NavigationItem> = listOf(
 
         NavigationItem(
-            title = "To-do List",
+            title = stringResource(R.string.todo_list),
             selectedIcon = ImageVector.vectorResource(R.drawable.unselected_todo),
             unselectedIcon = ImageVector.vectorResource(R.drawable.unselected_todo),
             route = Screen.TodoListScreen.route
         ),
         NavigationItem(
-            title = "Notes",
+            title = stringResource(R.string.notes),
             selectedIcon = ImageVector.vectorResource(R.drawable.unselected_note),
             unselectedIcon = ImageVector.vectorResource(R.drawable.unselected_note),
             route = Screen.NotesScreen.route
         ),
 
         NavigationItem(
-            title = "Favorites",
+            title = stringResource(R.string.favorites),
             selectedIcon = ImageVector.vectorResource(R.drawable.unselected_fav),
             unselectedIcon = ImageVector.vectorResource(R.drawable.unselected_fav),
             route = Screen.FavNotesScreen.route

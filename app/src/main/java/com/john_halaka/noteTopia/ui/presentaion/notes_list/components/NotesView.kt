@@ -17,8 +17,10 @@ import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.john_halaka.noteTopia.R
 import com.john_halaka.noteTopia.feature_note.domain.model.Note
 import com.john_halaka.noteTopia.ui.Screen
 import com.john_halaka.noteTopia.ui.presentaion.notes_list.NotesEvent
@@ -117,7 +119,7 @@ fun ListViewNotes(
     //showCheckBox: Boolean
 ) {
     val dropDownItems = listOf(
-        DropDownItem("Delete", icon = Icons.Outlined.Delete)
+        DropDownItem(stringResource(R.string.delete), icon = Icons.Outlined.Delete)
     )
     LazyColumn(
         modifier = Modifier
@@ -132,9 +134,9 @@ fun ListViewNotes(
                     .height(140.dp),
                 onFavoriteClick = {
                     if (note.isFavourite)
-                        mToast(context, "Removed from Favourites")
+                        mToast(context, (R.string.removed_from_favourites.toString()))
                     else
-                        mToast(context, "Added to Favorites")
+                        mToast(context, (R.string.added_to_favorites.toString()))
 
                     viewModel.onEvent(
                         NotesEvent.UpdateNote(
@@ -149,7 +151,7 @@ fun ListViewNotes(
                 // showCheckBox = showCheckBox
                 dropDownItems = dropDownItems,
                 onItemClick = { item ->
-                    if (item.text == "Delete") {
+                    if (item.text == (R.string.delete.toString())) {
                         viewModel.onEvent(
                             NotesEvent.MoveNoteToTrash(
                                 note.copy(
@@ -157,7 +159,7 @@ fun ListViewNotes(
                                 )
                             )
                         )
-                        mToast(context, "Note Moved to trash")
+                        mToast(context, (R.string.note_moved_to_trash.toString()))
                     } else {
 
                     }

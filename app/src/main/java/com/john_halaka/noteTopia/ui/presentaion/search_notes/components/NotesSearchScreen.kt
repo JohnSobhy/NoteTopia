@@ -27,9 +27,11 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.john_halaka.noteTopia.R
 import com.john_halaka.noteTopia.ui.presentaion.notes_list.NotesEvent
 import com.john_halaka.noteTopia.ui.presentaion.notes_list.NotesViewModel
 import com.john_halaka.noteTopia.ui.presentaion.notes_list.components.ListViewNotes
@@ -78,7 +80,7 @@ fun NotesSearchScreen(
                 singleLine = true,
                 placeholder = {
                     Text(
-                        "Find in your notes",
+                        stringResource(R.string.find_in_your_notes),
                         style = Typography.titleLarge,
                         color = MaterialTheme.colorScheme.onTertiary
                     )
@@ -86,7 +88,7 @@ fun NotesSearchScreen(
                 leadingIcon = {
                     Icon(
                         imageVector = Icons.Default.ArrowBack,
-                        contentDescription = "Back",
+                        contentDescription = stringResource(R.string.back),
                         modifier = Modifier
                             .clickable(
                                 true,
@@ -100,7 +102,7 @@ fun NotesSearchScreen(
                 trailingIcon = {
                     Icon(
                         imageVector = Icons.Default.Search,
-                        contentDescription = "Search Icon",
+                        contentDescription = stringResource(R.string.search_icon),
                         modifier = Modifier
                             .align(Alignment.CenterVertically)
                             .padding(start = 16.dp)
