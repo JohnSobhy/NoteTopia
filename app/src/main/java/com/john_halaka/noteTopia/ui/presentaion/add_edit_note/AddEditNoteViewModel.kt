@@ -8,7 +8,6 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.john_halaka.noteTopia.R
 import com.john_halaka.noteTopia.feature_note.domain.model.InvalidNoteException
 import com.john_halaka.noteTopia.feature_note.domain.model.Note
 import com.john_halaka.noteTopia.feature_note.domain.use_case.NoteUseCases
@@ -26,14 +25,14 @@ class AddEditNoteViewModel @Inject constructor(
 ) : ViewModel() {
     private val _noteTitle = mutableStateOf(
         NoteTextFieldState(
-            hint = (R.string.enter_title.toString())
+            hint = ("Enter title")
         )
     )
     val noteTitle: State<NoteTextFieldState> = _noteTitle
 
     private val _noteContent = mutableStateOf(
         NoteTextFieldState(
-            hint = (R.string.enter_the_content_of_your_note.toString())
+            hint = ("Enter the content of your note")
         )
     )
     val noteContent: State<NoteTextFieldState> = _noteContent
@@ -141,7 +140,7 @@ class AddEditNoteViewModel @Inject constructor(
                     } catch (e: InvalidNoteException) {
                         _eventFlow.emit(
                             UiEvent.ShowSnackbar(
-                                message = e.message ?: (R.string.couldn_t_save_note.toString())
+                                message = e.message ?: "Couldn't save note"
                             )
                         )
 
@@ -168,7 +167,7 @@ class AddEditNoteViewModel @Inject constructor(
                     } else {
                         _eventFlow.emit(
                             UiEvent.ShowSnackbar(
-                                message = (R.string.couldn_t_save_note.toString())
+                                message = "Couldn't save note"
                             )
                         )
                     }

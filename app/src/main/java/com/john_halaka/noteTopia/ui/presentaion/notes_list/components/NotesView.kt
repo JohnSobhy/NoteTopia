@@ -134,9 +134,9 @@ fun ListViewNotes(
                     .height(140.dp),
                 onFavoriteClick = {
                     if (note.isFavourite)
-                        mToast(context, (R.string.removed_from_favourites.toString()))
+                        mToast(context, "Removed from favorites")
                     else
-                        mToast(context, (R.string.added_to_favorites.toString()))
+                        mToast(context, "Added to favorites")
 
                     viewModel.onEvent(
                         NotesEvent.UpdateNote(
@@ -151,7 +151,7 @@ fun ListViewNotes(
                 // showCheckBox = showCheckBox
                 dropDownItems = dropDownItems,
                 onItemClick = { item ->
-                    if (item.text == (R.string.delete.toString())) {
+                    if (item.text == "Delete") {
                         viewModel.onEvent(
                             NotesEvent.MoveNoteToTrash(
                                 note.copy(
@@ -159,7 +159,7 @@ fun ListViewNotes(
                                 )
                             )
                         )
-                        mToast(context, (R.string.note_moved_to_trash.toString()))
+                        mToast(context, "Note moved to trash")
                     } else {
 
                     }
