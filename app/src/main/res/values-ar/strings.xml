@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">NoteTopia</string>
+    <string name="select">اختار</string>
+    <string name="cancel">الغاء</string>
+    <string name="enter_url">ادخل الرابط</string>
+    <string name="add">اضافة</string>
+    <string name="enter_website_name">ادخل اسم الموقع</string>
+    <string name="todo_list">قائمة المهام</string>
+    <string name="notes">ملاحظات</string>
+    <string name="favorites">المفضلة</string>
+    <string name="find_in_your_notes">ابحث في ملاحظاتك</string>
+    <string name="back">العودة</string>
+    <string name="search_icon">بحث</string>
+    <string name="menu">القائمة</string>
+    <string name="change_notes_view_to_list">تغيير طريقة العرض لقائمة رأسية</string>
+    <string name="change_notes_view_to_grid">تغيير طريقة العرض لشبكة</string>
+    <string name="sort_notes">ترتيب الملاحظات</string>
+    <string name="add_a_note">اضافة ملحوظة</string>
+    <string name="add_your_first_note">اضف ملحوظتك الاولي</string>
+    <string name="title">العنوان</string>
+    <string name="note_color">لون الملحوظة</string>
+    <string name="mark_note_as_favorite">اضف الي المفضلة</string>
+    <string name="removed_from_favourites">حذف من المفضلة</string>
+    <string name="added_to_favorites">تم الاضافة الي المفضلة</string>
+    <string name="note_moved_to_trash">تم النقل الي سلة المهملات</string>
+    <string name="delete">حذف</string>
+    <string name="date">التاريخ</string>
+    <string name="color">اللون</string>
+    <string name="ascending">تصاعدي</string>
+    <string name="descending">تنازلي</string>
+    <string name="you_have_no_favorite_notes">ليس لديك ملحوظات مفضلة</string>
+    <string name="restore">استرجاع</string>
+    <string name="delete_permanently">حذف نهائي</string>
+    <string name="recently_deleted_notes">الملاحظات المحذوفة</string>
+    <string name="trash_can_is_empty">سلة المهملات فارغة</string>
+    <string name="note_restored">تم الاسترجاع</string>
+    <string name="note_removed">تم الحذف نهائيا</string>
+    <string name="undo">تراجع</string>
+    <string name="daily_quote">مقولة يومية</string>
+    <string name="loading">جاري التحميل...</string>
+    <string name="save_todo">حفظ المهمة</string>
+    <string name="description">الوصف</string>
+    <string name="enter_title">اضف عنوانا</string>
+    <string name="enter_the_content_of_your_note">اضف محتوي الملحوظة</string>
+    <string name="couldn_t_save_note">لم يتم حفظ الملحوظة</string>
+    <string name="save">حفظ</string>
+    <string name="delete_note">حذف الملحوظة</string>
+    <string name="note_saved">تم الحفظ</string>
+    <string name="the_title_cannot_be_empty">العنوان لا يمكن انا يترك فارغا</string>
+    <string name="the_content_of_the_note_cannot_be_empty">محتوي الملحوظة لايمكن ان يترك فارغا</string>
+    <string name="home">الرئيسية</string>
+    <string name="deleted">المحذوفات</string>
+</resources>

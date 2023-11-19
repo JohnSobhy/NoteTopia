@@ -281,19 +281,19 @@ fun NavigationDrawer(
     val currentRoute = navController.currentDestination?.route
     val itemList: List<NavigationItem> = listOf(
         NavigationItem(
-            title = "Home",
+            title = stringResource(R.string.home),
             selectedIcon = Icons.Filled.Home,
             unselectedIcon = Icons.Outlined.Home,
             route = Screen.NotesScreen.route
         ),
         NavigationItem(
-            title = "Deleted",
+            title = stringResource(R.string.deleted),
             selectedIcon = Icons.Filled.Delete,
             unselectedIcon = Icons.Outlined.Delete,
             route = Screen.DeletedNotesScreen.route
         ),
         NavigationItem(
-            title = "Daily Quote",
+            title = stringResource(R.string.daily_quote),
             selectedIcon = Icons.Default.Email,
             unselectedIcon = Icons.Outlined.Email,
             route = Screen.DailyQuoteScreen.route

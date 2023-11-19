@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">NoteTopia</string>
+    <string name="app_name" translatable="false">NoteTopia</string>
     <string name="select">Select</string>
     <string name="cancel">Cancel</string>
     <string name="enter_url">Enter URL</string>
@@ -46,9 +46,10 @@
     <string name="couldn_t_save_note">Couldn\'t save note</string>
     <string name="save">Save</string>
     <string name="delete_note">Delete note</string>
-    <string name="note_is_moved_to_the_trash">Note is moved to the trash</string>
     <string name="note_saved">Note Saved</string>
     <string name="the_title_cannot_be_empty">The title cannot be empty</string>
     <string name="the_content_of_the_note_cannot_be_empty">The content of the note cannot be empty</string>
+    <string name="home">Home</string>
+    <string name="deleted">Deleted</string>
 
 </resources>

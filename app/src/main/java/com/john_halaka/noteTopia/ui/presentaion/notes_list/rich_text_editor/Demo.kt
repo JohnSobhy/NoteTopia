@@ -116,7 +116,7 @@ fun MainScreen() {
                             updateSelectedColor(composeColor)  // Update selectedColor
 
                         }
-                        positiveButton(R.string.select)
+                        positiveButton(R.string.add)
                         negativeButton(R.string.cancel)
                     }
                 },
