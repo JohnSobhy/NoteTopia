@@ -67,9 +67,9 @@ fun GridViewNotes(
                     },
                 onFavoriteClick = {
                     if (note.isFavourite)
-                        mToast(context, "Removed from Favourites")
+                        mToast(context, context.resources.getString(R.string.removed_from_favourites))
                     else
-                        mToast(context, "Added to Favorites")
+                        mToast(context, context.resources.getString(R.string.added_to_favorites))
 
                     viewModel.onEvent(
                         NotesEvent.UpdateNote(
@@ -91,7 +91,7 @@ fun GridViewNotes(
                                 )
                             )
                         )
-                        mToast(context, "Note Moved to trash")
+                        mToast(context, context.resources.getString(R.string.note_moved_to_trash))
                     } else {
 
                     }
@@ -134,9 +134,9 @@ fun ListViewNotes(
                     .height(140.dp),
                 onFavoriteClick = {
                     if (note.isFavourite)
-                        mToast(context, "Removed from favorites")
+                        mToast(context, context.resources.getString(R.string.removed_from_favourites))
                     else
-                        mToast(context, "Added to favorites")
+                        mToast(context, context.resources.getString(R.string.added_to_favorites))
 
                     viewModel.onEvent(
                         NotesEvent.UpdateNote(
@@ -159,7 +159,7 @@ fun ListViewNotes(
                                 )
                             )
                         )
-                        mToast(context, "Note moved to trash")
+                        mToast(context, context.resources.getString(R.string.note_moved_to_trash))
                     } else {
 
                     }

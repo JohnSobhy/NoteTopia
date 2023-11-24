@@ -166,7 +166,7 @@ fun DeletedNotesScreen(
                             showFavoriteIcon = false,
                             dropDownItems = dropDownItems,
                             onItemClick = { item ->
-                                if (item.text == "Restore") {
+                                if (item.text == context.resources.getString(R.string.restore)) {
                                     viewModel.onEvent(
                                         NotesEvent.MoveNoteToTrash(
                                             note.copy(
@@ -174,13 +174,13 @@ fun DeletedNotesScreen(
                                             )
                                         )
                                     )
-                                    mToast(context, "Note Restored")
+                                    mToast(context, context.resources.getString(R.string.note_restored))
                                 } else {
                                     viewModel.onEvent(NotesEvent.DeleteNote(note))
                                     scope.launch {
                                         val result = snackbarHostState.showSnackbar(
-                                            message = "Note removed",
-                                            actionLabel = "Undo"
+                                            message = context.resources.getString(R.string.note_removed),
+                                            actionLabel = context.resources.getString(R.string.undo)
                                         )
                                         if (result == SnackbarResult.ActionPerformed) {
                                             viewModel.onEvent(NotesEvent.RestoreNote)

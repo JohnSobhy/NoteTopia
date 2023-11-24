@@ -51,11 +51,11 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideNoteUseCases(repository: NoteRepository): NoteUseCases {
+    fun provideNoteUseCases(repository: NoteRepository, context: Context): NoteUseCases {
         return NoteUseCases(
             getNotes = GetNotes(repository),
             deleteNotes = DeleteNote(repository),
-            addNote = AddNote(repository),
+            addNote = AddNote(repository,context),
             getNoteById = GetNoteById(repository),
             getFavouriteNotes = GetFavouriteNotes(repository),
             updateNote = UpdateNote(repository),
@@ -84,4 +84,14 @@ object AppModule {
     fun providePreferencesManager(@ApplicationContext context: Context): PreferencesManager {
         return PreferencesManager(context)
     }
+
+//    @Provides
+//    @Singleton
+//    fun provideContext (@ApplicationContext context: Context) : Context {
+//        return context
+//    }
+
+    @Provides
+    @Singleton
+    fun provideContext(application: Application) : Context = application.applicationContext
 }

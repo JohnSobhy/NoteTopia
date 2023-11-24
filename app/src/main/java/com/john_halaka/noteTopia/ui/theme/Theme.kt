@@ -19,16 +19,21 @@ private val LightColorScheme = lightColorScheme(
     primary = White,
     onPrimary = Black,
     background = White,
+    //the color of sort radioButtons and text of editNote hints
     onBackground = DarkerGray,
     surface = White,
     primaryContainer = BrandGreen,
     onPrimaryContainer = Black,
+    //the color of search box
     secondary = Gray,
+    //the color of text inside search box
     onSecondary = DarkGray,
     onSecondaryContainer = Black,
+    //the color of colorPicker border
     onSurface = Black,
     secondaryContainer = BrandGreen,
-    onSurfaceVariant = BarItemGray,
+    //the color of topBar action items
+    onSurfaceVariant = Black,
     onTertiary = DividerShadowLight
 
 
@@ -41,9 +46,11 @@ private val DarkColorScheme = darkColorScheme(
     surface = Black, // colors the top and bottom bars
     primaryContainer = BrandGreen,
     onPrimaryContainer = Black,
+    //the color of search box
     secondary = Gray,
     onSecondary = DarkGray,
     onSecondaryContainer = Black,
+    //the color of colorPicker border
     onSurface = White,
     secondaryContainer = BrandGreen,
     onSurfaceVariant = BarItemGray,

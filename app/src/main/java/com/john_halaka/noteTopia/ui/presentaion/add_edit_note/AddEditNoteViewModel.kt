@@ -1,13 +1,16 @@
 package com.john_halaka.noteTopia.ui.presentaion.add_edit_note
 
+import android.content.Context
 import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.john_halaka.noteTopia.R
 import com.john_halaka.noteTopia.feature_note.domain.model.InvalidNoteException
 import com.john_halaka.noteTopia.feature_note.domain.model.Note
 import com.john_halaka.noteTopia.feature_note.domain.use_case.NoteUseCases
@@ -21,18 +24,19 @@ import javax.inject.Inject
 @HiltViewModel
 class AddEditNoteViewModel @Inject constructor(
     private val noteUseCases: NoteUseCases,
-    savedStateHandle: SavedStateHandle
+    savedStateHandle: SavedStateHandle,
+    context: Context
 ) : ViewModel() {
     private val _noteTitle = mutableStateOf(
         NoteTextFieldState(
-            hint = ("Enter title")
+             hint = context.resources.getString(R.string.enter_title)
         )
     )
     val noteTitle: State<NoteTextFieldState> = _noteTitle
 
     private val _noteContent = mutableStateOf(
         NoteTextFieldState(
-            hint = ("Enter the content of your note")
+            hint = context.resources.getString(R.string.enter_the_content_of_your_note)
         )
     )
     val noteContent: State<NoteTextFieldState> = _noteContent
@@ -58,6 +62,7 @@ class AddEditNoteViewModel @Inject constructor(
         )
     )
     var note: State<Note> = _note
+    private val snackBarMessage = context.resources.getString(R.string.couldn_t_save_note)
 
     init {
         savedStateHandle.get<Int>("noteId")?.let { noteId ->
@@ -140,7 +145,7 @@ class AddEditNoteViewModel @Inject constructor(
                     } catch (e: InvalidNoteException) {
                         _eventFlow.emit(
                             UiEvent.ShowSnackbar(
-                                message = e.message ?: "Couldn't save note"
+                                message = e.message ?: snackBarMessage
                             )
                         )
 
@@ -158,7 +163,7 @@ class AddEditNoteViewModel @Inject constructor(
                         onEvent(AddEditNoteEvent.SaveNote)
 
                     } else if (
-                        noteTitle.value.text.isBlank() &&
+                        noteTitle.value.text.isBlank() ||
                         noteContent.value.text.isBlank()
                     ) {
 
@@ -167,7 +172,7 @@ class AddEditNoteViewModel @Inject constructor(
                     } else {
                         _eventFlow.emit(
                             UiEvent.ShowSnackbar(
-                                message = "Couldn't save note"
+                                message = snackBarMessage
                             )
                         )
                     }

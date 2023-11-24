@@ -30,6 +30,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -99,14 +100,16 @@ fun AddEditNoteScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { /*TODO*/ },
+                title = { 
+                        Text(text = currentNote.title)
+                        },
 
                 navigationIcon = {
                     IconButton(onClick = {
                         Log.d("addEditScreen", "backButton is clicked noteId = $noteId")
                         viewModel.onEvent(AddEditNoteEvent.BackButtonClick)
                         if (noteId != null) {
-                            mToast(context, "Note saved")
+                            mToast(context, context.resources.getString(R.string.note_saved))
                         }
                     })
                     {
@@ -140,7 +143,7 @@ fun AddEditNoteScreen(
                                     )
                                 )
 
-                                mToast(context, "Note is moved to trash")
+                                mToast(context, context.resources.getString(R.string.note_moved_to_trash))
                             }
                         }
                     ) {
@@ -175,7 +178,7 @@ fun AddEditNoteScreen(
                     Log.d("addEditScreen", "saveButton is clicked noteId = $noteId")
                     viewModel.onEvent(AddEditNoteEvent.SaveNote)
                     if (titleState.text.isNotBlank() && contentState.text.isNotBlank())
-                        mToast(context, "Notes Saved")
+                        mToast(context, context.resources.getString(R.string.note_saved))
                 },
 //                containerColor = MaterialTheme.colorScheme.primaryContainer,
 //                contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
@@ -216,7 +219,7 @@ fun AddEditNoteScreen(
                             .border(
                                 width = 3.dp,
                                 color = if (viewModel.noteColor.value == colorInt) {
-                                    MaterialTheme.colorScheme.secondary
+                                    MaterialTheme.colorScheme.onSurface
                                 } else Color.Transparent,
                                 shape = CircleShape
                             )

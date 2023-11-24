@@ -22,7 +22,7 @@
     <string name="title">العنوان</string>
     <string name="note_color">لون الملحوظة</string>
     <string name="mark_note_as_favorite">اضف الي المفضلة</string>
-    <string name="removed_from_favourites">حذف من المفضلة</string>
+    <string name="removed_from_favourites">تم الحذف من المفضلة</string>
     <string name="added_to_favorites">تم الاضافة الي المفضلة</string>
     <string name="note_moved_to_trash">تم النقل الي سلة المهملات</string>
     <string name="delete">حذف</string>
