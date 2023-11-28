@@ -38,7 +38,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.john_halaka.noteTopia.BottomNavigationBar
+import com.john_halaka.noteTopia.NavigationItemsBar
 import com.john_halaka.noteTopia.R
 import com.john_halaka.noteTopia.ui.presentaion.notes_list.NotesEvent
 import com.john_halaka.noteTopia.ui.presentaion.notes_list.NotesViewModel
@@ -94,7 +94,7 @@ fun FavNotesScreen(
             )
         },
         bottomBar = {
-            BottomNavigationBar(navController = navController)
+            NavigationItemsBar(navController = navController)
         },
 
         ) { values ->

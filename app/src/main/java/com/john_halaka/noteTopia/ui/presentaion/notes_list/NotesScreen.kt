@@ -37,6 +37,9 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
+import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
+import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -47,14 +50,15 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.john_halaka.noteTopia.BottomNavigationBar
 import com.john_halaka.noteTopia.NavigationDrawer
+import com.john_halaka.noteTopia.NavigationItemsBar
 import com.john_halaka.noteTopia.R
 import com.john_halaka.noteTopia.feature_note.data.PreferencesManager
 import com.john_halaka.noteTopia.feature_note.domain.util.ViewType
@@ -63,13 +67,14 @@ import com.john_halaka.noteTopia.ui.presentaion.notes_list.components.GridViewNo
 import com.john_halaka.noteTopia.ui.presentaion.notes_list.components.ListViewNotes
 import com.john_halaka.noteTopia.ui.presentaion.notes_list.components.OrderSection
 import com.john_halaka.noteTopia.ui.presentaion.notes_list.components.SearchTextField
+import com.john_halaka.noteTopia.ui.presentaion.util.findActivity
 import com.john_halaka.noteTopia.ui.theme.BabyBlue
 import com.john_halaka.noteTopia.ui.theme.Typography
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3WindowSizeClassApi::class)
 @Composable
 fun NotesScreen(
     navController: NavController,
@@ -77,18 +82,15 @@ fun NotesScreen(
     context: Context
 ) {
     val state = viewModel.state.value
-    // val state by viewModel.state.collectAsState()
-
+    var notesList = state.notes
     Log.d("NotesScreen", "state: $state")
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
-    // var currentViewType by remember { mutableStateOf(ViewType.GRID) }
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
-    // var expanded by remember { mutableStateOf(false) }
-    var searchText by remember { mutableStateOf("") }
-    var notesList = state.notes
+    val currentActivity = LocalContext.current.findActivity()
+    val windowSize = calculateWindowSizeClass(activity = currentActivity)
     val focusManager = LocalFocusManager.current
-
+    var searchText by remember { mutableStateOf("") }
     val preferencesManager = remember { PreferencesManager(context) }
     var currentViewType by remember {
         mutableStateOf(
@@ -103,7 +105,6 @@ fun NotesScreen(
     LaunchedEffect(currentViewType) {
         preferencesManager.saveString("viewPreference", currentViewType.name)
     }
-
     NavigationDrawer(
         navController = navController,
         drawerState = drawerState,
@@ -119,17 +120,22 @@ fun NotesScreen(
                                 style = Typography.headlineLarge
                             )
                         },
+
                         navigationIcon = {
-                            IconButton(onClick = {
-                                scope.launch {
-                                    drawerState.open()
+                            if (windowSize.widthSizeClass == WindowWidthSizeClass.Compact)
+                                IconButton(onClick = {
+                                    scope.launch {
+                                        drawerState.open()
+                                    }
+                                })
+                                {
+                                    Icon(
+                                        Icons.Filled.Menu,
+                                        contentDescription = stringResource(R.string.menu)
+                                    )
                                 }
-                            })
-                            {
-                                Icon(
-                                    Icons.Filled.Menu,
-                                    contentDescription = stringResource(R.string.menu)
-                                )
+                            else {
+
                             }
 
                         },
@@ -168,7 +174,7 @@ fun NotesScreen(
                     )
                 },
                 bottomBar = {
-                    BottomNavigationBar(navController = navController)
+                    NavigationItemsBar(navController = navController)
                 },
                 snackbarHost = {
                     SnackbarHost(snackbarHostState)
@@ -185,7 +191,7 @@ fun NotesScreen(
                             contentDescription = stringResource(R.string.add_a_note)
                         )
                     }
-                }
+                },
             ) { values ->
                 Box(
                     modifier = Modifier
@@ -194,7 +200,6 @@ fun NotesScreen(
                             detectTapGestures(onTap = { focusManager.clearFocus() })
                         }
                 ) {
-
                     Column(
                         modifier = Modifier
                             .fillMaxSize()
@@ -300,7 +305,6 @@ fun NotesScreen(
                                 )
                             }
                         }
-
                     }
                 }
             }

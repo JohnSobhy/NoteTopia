@@ -23,24 +23,31 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
+import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
+import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.john_halaka.mytodo.ui.todo_list.TodoListEvent
 import com.john_halaka.mytodo.ui.todo_list.TodoListViewModel
-import com.john_halaka.noteTopia.BottomNavigationBar
 import com.john_halaka.noteTopia.NavigationDrawer
+import com.john_halaka.noteTopia.NavigationItemsBar
+import com.john_halaka.noteTopia.R
 import com.john_halaka.noteTopia.ui.Screen
+import com.john_halaka.noteTopia.ui.presentaion.util.findActivity
 import kotlinx.coroutines.launch
 
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3WindowSizeClassApi::class)
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter", "UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun TodoListScreen(
@@ -52,6 +59,8 @@ fun TodoListScreen(
     val scaffoldState = remember {
         SnackbarHostState()
     }
+    val currentActivity = LocalContext.current.findActivity()
+    val windowSize = calculateWindowSizeClass(activity = currentActivity)
     val scope = rememberCoroutineScope()
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
 
@@ -86,18 +95,25 @@ fun TodoListScreen(
                             Text(text = "To-do List")
                         },
                         navigationIcon = {
-                            IconButton(onClick = {
-                                scope.launch {
-                                    drawerState.open()
+                            if (windowSize.widthSizeClass == WindowWidthSizeClass.Compact)
+                                IconButton(onClick = {
+                                    scope.launch {
+                                        drawerState.open()
+                                    }
+                                })
+                                {
+                                    Icon(
+                                        Icons.Filled.Menu,
+                                        contentDescription = stringResource(R.string.menu)
+                                    )
                                 }
-                            })
-                            {
-                                Icon(Icons.Filled.Menu, contentDescription = "menu")
+                            else {
+
                             }
                         })
                 },
                 bottomBar = {
-                    BottomNavigationBar(navController = navController)
+                    NavigationItemsBar(navController = navController)
                 },
                 snackbarHost = {
                     SnackbarHost(scaffoldState)
