@@ -18,6 +18,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.PushPin
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
@@ -123,47 +125,52 @@ fun NoteItem(
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(end = 32.dp)
+                    .padding(end = 8.dp)
             ) {
                 Row(
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Icon(
                         imageVector = ImageVector.vectorResource(R.drawable.note_color_trans),
                         contentDescription = stringResource(R.string.note_color),
                         tint = Color(note.color)
                     )
+
+                    if (note.isPinned && !note.isDeleted) {
+                        Icon(
+                            imageVector = Icons.Default.PushPin,
+                            modifier = Modifier.padding(top = 8.dp),
+                            contentDescription = stringResource(R.string.pinned_note)
+                        )
+                    }
                 }
-                Text(
-                    text = note.title,
-                    modifier = Modifier.padding(start = 16.dp, top = 4.dp, end = 16.dp),
-                    style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.onPrimaryContainer,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
-
-                Spacer(modifier = Modifier.height(8.dp))
-
-                Text(
-                    text = note.content,
-                    modifier = Modifier.padding(start = 16.dp, end = 16.dp),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onPrimaryContainer,
-                    maxLines = 2,
-                    overflow = TextOverflow.Ellipsis
-                )
-                Spacer(modifier = Modifier.height(8.dp))
-
-                Row(
+                Column(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp),
-                    horizontalArrangement = Arrangement.End,
+                        .fillMaxSize()
+                        .padding(end = 16.dp)
                 ) {
+                    Text(
+                        text = note.title,
+                        modifier = Modifier.padding(start = 16.dp, top = 4.dp, end = 16.dp),
+                        style = MaterialTheme.typography.titleMedium,
+                        color = MaterialTheme.colorScheme.onPrimaryContainer,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
 
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    Text(
+                        text = note.content,
+                        modifier = Modifier.padding(start = 16.dp, end = 16.dp),
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onPrimaryContainer,
+                        maxLines = 2,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
                 }
-
             }
 
             if (showFavoriteIcon) {

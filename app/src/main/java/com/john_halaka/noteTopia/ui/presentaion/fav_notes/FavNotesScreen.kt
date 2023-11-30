@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.List
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -40,8 +41,11 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.john_halaka.noteTopia.NavigationItemsBar
 import com.john_halaka.noteTopia.R
+import com.john_halaka.noteTopia.feature_note.data.PreferencesManager
+import com.john_halaka.noteTopia.feature_note.domain.util.ViewType
 import com.john_halaka.noteTopia.ui.presentaion.notes_list.NotesEvent
 import com.john_halaka.noteTopia.ui.presentaion.notes_list.NotesViewModel
+import com.john_halaka.noteTopia.ui.presentaion.notes_list.components.GridViewNotes
 import com.john_halaka.noteTopia.ui.presentaion.notes_list.components.ListViewNotes
 import com.john_halaka.noteTopia.ui.presentaion.notes_list.components.OrderSection
 import com.john_halaka.noteTopia.ui.theme.BabyBlue
@@ -62,6 +66,21 @@ fun FavNotesScreen(
     val notesList = state.favouriteNotes
     // val enableCheckBox = remember { mutableStateOf(false) }
 
+    val preferencesManager = remember { PreferencesManager(context) }
+    var currentViewType by remember {
+        mutableStateOf(
+            ViewType.valueOf(
+                preferencesManager.getString(
+                    "viewPreference",
+                    ViewType.GRID.name
+                )
+            )
+        )
+    }
+    LaunchedEffect(currentViewType) {
+        preferencesManager.saveString("viewPreference", currentViewType.name)
+    }
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -80,6 +99,26 @@ fun FavNotesScreen(
                     }
                 },
                 actions = {
+                    if (currentViewType.name == "GRID") {
+                        IconButton(onClick = {
+                            currentViewType = ViewType.LIST
+                        }) {
+                            Icon(
+                                imageVector = Icons.Default.List,
+                                contentDescription = stringResource(R.string.change_notes_view_to_list)
+                            )
+                        }
+                    } else {
+                        IconButton(onClick = {
+                            currentViewType = ViewType.GRID
+                        }) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.baseline_grid_view_24),
+                                contentDescription = stringResource(R.string.change_notes_view_to_grid)
+                            )
+                        }
+
+                    }
                     IconButton(
                         onClick = {
                             viewModel.onEvent(NotesEvent.ToggleOrderSection)
@@ -141,16 +180,28 @@ fun FavNotesScreen(
                         Text(text = stringResource(R.string.you_have_no_favorite_notes))
                 }
             } else {
-                ListViewNotes(
-                    navController = navController,
-                    viewModel = viewModel,
-                    scope = scope,
-                    snackbarHostState = snackbarHostState,
-                    notesList = notesList,
-                    context = context,
-                    showFavoriteIcon = true,
-                    //   showCheckBox = enableCheckBox.value
-                )
+                when (currentViewType) {
+                    ViewType.GRID -> GridViewNotes(
+                        navController = navController,
+                        viewModel = viewModel,
+                        scope = scope,
+                        snackbarHostState = snackbarHostState,
+                        notesList = notesList,
+                        context = context,
+                        showFavoriteIcon = true
+
+                    )
+
+                    ViewType.LIST -> ListViewNotes(
+                        navController = navController,
+                        viewModel = viewModel,
+                        scope = scope,
+                        snackbarHostState = snackbarHostState,
+                        notesList = notesList,
+                        context = context,
+                        showFavoriteIcon = true
+                    )
+                }
             }
         }
     }

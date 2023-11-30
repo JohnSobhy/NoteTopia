@@ -17,11 +17,12 @@ data class Note(
     val timestamp: Long,
     val color: Int,
     val isFavourite: Boolean = false,
-    val isDeleted: Boolean = false
+    val isDeleted: Boolean = false,
+    val isPinned: Boolean = false
 ) {
     companion object {
         val noteColors = listOf(SandyBrown, VistaBlue, DarkTurquoise, LightGreen, Purple80)
-        val noteCategory = listOf("Work", "Personal", "Family", "Shopping")
+        // val noteCategory = listOf("Work", "Personal", "Family", "Shopping")
     }
 
 

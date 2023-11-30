@@ -9,6 +9,8 @@ sealed class NotesEvent {
     data class DeleteNote(val note: Note) : NotesEvent()
 
     data class UpdateNote(val note: Note) : NotesEvent()
+    data class PinNote(val note: Note) : NotesEvent()
+    data class UnpinNote(val note: Note) : NotesEvent()
 
     object RestoreNote : NotesEvent()
 

@@ -21,4 +21,5 @@ interface NoteRepository {
 
     suspend fun moveNoteToTrash(noteId: Int, isDeleted: Boolean)
 
+    suspend fun pinNote(noteId: Int, isPinned: Boolean) // new function
 }

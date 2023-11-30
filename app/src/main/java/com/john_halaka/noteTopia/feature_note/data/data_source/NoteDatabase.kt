@@ -9,7 +9,7 @@ import com.john_halaka.noteTopia.feature_todo.domain.model.Todo
 
 @Database(
     entities = [Note::class, Todo::class],
-    version = 1
+    version = 2
 )
 abstract class NoteDatabase : RoomDatabase() {
     abstract val noteDao: NoteDao

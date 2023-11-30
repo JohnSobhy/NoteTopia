@@ -52,4 +52,9 @@
     <string name="the_content_of_the_note_cannot_be_empty">محتوي الملحوظة لايمكن ان يترك فارغا</string>
     <string name="home">الرئيسية</string>
     <string name="deleted">المحذوفات</string>
+    <string name="note_pinned">تم التثبيت</string>
+    <string name="note_unpinned">تم إلغاء التثبيت</string>
+    <string name="unpin">إلغاء التثبيت</string>
+    <string name="pin">تثبيت</string>
+    <string name="pinned_note">ملحوظة مثبتة</string>
 </resources>

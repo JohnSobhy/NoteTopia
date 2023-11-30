@@ -32,6 +32,7 @@ class NotesViewModel @Inject constructor(
     private var getDeletedNotesJob: Job? = null
 
     private var currentNoteOrder = preferencesManager.getNoteOrder()
+//    val noteOrderComparator: Comparator<Note> = currentNoteOrder.comparator()
 
     init {
         viewModelScope.launch {
@@ -112,6 +113,19 @@ class NotesViewModel @Inject constructor(
                 }
             }
 
+            is NotesEvent.PinNote -> {
+                viewModelScope.launch {
+                    noteUseCases.togglePinNote(event.note.id!!, true)
+                    getNotes(currentNoteOrder)
+                }
+            }
+
+            is NotesEvent.UnpinNote -> {
+                viewModelScope.launch {
+                    noteUseCases.togglePinNote(event.note.id!!, false)
+                    getNotes(currentNoteOrder)
+                }
+            }
 
             is NotesEvent.MoveNoteToTrash -> {
                 //used when restoring a note back from the trash
@@ -184,10 +198,4 @@ class NotesViewModel @Inject constructor(
         preferencesManager.saveNoteOrder(noteOrder)
 
     }
-
-//    fun refreshNotes() {
-//        getNotes(currentNoteOrder)
-//    }
-
-
 }

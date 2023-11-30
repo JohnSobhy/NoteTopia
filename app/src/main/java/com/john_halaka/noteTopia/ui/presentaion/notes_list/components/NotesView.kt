@@ -14,6 +14,7 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Delete
+import androidx.compose.material.icons.outlined.PushPin
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -43,9 +44,8 @@ fun GridViewNotes(
 //    val heightPxValue = 450
 //    val density = LocalDensity.current.density
     val cellHeightDpValue = 140.dp
-    val dropDownItems = listOf(
-        DropDownItem("Delete", icon = Icons.Outlined.Delete)
-    )
+
+
 
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
@@ -53,6 +53,28 @@ fun GridViewNotes(
 
     ) {
         items(notesList) { note ->
+            val dropDownItems = mutableListOf<DropDownItem>()
+            if (note.isPinned) {
+                dropDownItems.add(
+                    DropDownItem(
+                        stringResource(R.string.unpin),
+                        icon = Icons.Outlined.PushPin
+                    )
+                )
+            } else {
+                dropDownItems.add(
+                    DropDownItem(
+                        stringResource(R.string.pin),
+                        icon = Icons.Outlined.PushPin
+                    )
+                )
+            }
+            dropDownItems.add(
+                DropDownItem(
+                    stringResource(R.string.delete),
+                    icon = Icons.Outlined.Delete
+                )
+            )
 
             NoteItem(
                 note = note,
@@ -83,17 +105,31 @@ fun GridViewNotes(
                 //showCheckBox = showCheckBox,
                 dropDownItems = dropDownItems,
                 onItemClick = { item ->
-                    if (item.text == "Delete") {
-                        viewModel.onEvent(
-                            NotesEvent.MoveNoteToTrash(
-                                note.copy(
-                                    isDeleted = !note.isDeleted
+                    when (item.text) {
+
+                        context.resources.getString(R.string.delete) -> {
+                            viewModel.onEvent(
+                                NotesEvent.MoveNoteToTrash(
+                                    note.copy(
+                                        isDeleted = !note.isDeleted
+                                    )
                                 )
                             )
-                        )
-                        mToast(context, context.resources.getString(R.string.note_moved_to_trash))
-                    } else {
+                            mToast(
+                                context,
+                                context.resources.getString(R.string.note_moved_to_trash)
+                            )
+                        }
 
+                        context.resources.getString(R.string.pin) -> {
+                            viewModel.onEvent(NotesEvent.PinNote(note))
+                            mToast(context, context.resources.getString(R.string.note_pinned))
+                        }
+
+                        context.resources.getString(R.string.unpin) -> {
+                            viewModel.onEvent(NotesEvent.UnpinNote(note))
+                            mToast(context, context.resources.getString(R.string.note_unpinned))
+                        }
                     }
                 },
                 onClick = {
@@ -118,15 +154,36 @@ fun ListViewNotes(
     showFavoriteIcon: Boolean,
     //showCheckBox: Boolean
 ) {
-    val dropDownItems = listOf(
-        DropDownItem(stringResource(R.string.delete), icon = Icons.Outlined.Delete)
-    )
+
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
             .padding(start = 8.dp, end = 8.dp)
     ) {
         items(notesList) { note ->
+            val dropDownItems = mutableListOf<DropDownItem>()
+            if (note.isPinned) {
+                dropDownItems.add(
+                    DropDownItem(
+                        stringResource(R.string.unpin),
+                        icon = Icons.Outlined.PushPin
+                    )
+                )
+            } else {
+                dropDownItems.add(
+                    DropDownItem(
+                        stringResource(R.string.pin),
+                        icon = Icons.Outlined.PushPin
+                    )
+                )
+            }
+            dropDownItems.add(
+                DropDownItem(
+                    stringResource(R.string.delete),
+                    icon = Icons.Outlined.Delete
+                )
+            )
+
             NoteItem(
                 note = note,
                 modifier = Modifier
@@ -134,7 +191,10 @@ fun ListViewNotes(
                     .height(140.dp),
                 onFavoriteClick = {
                     if (note.isFavourite)
-                        mToast(context, context.resources.getString(R.string.removed_from_favourites))
+                        mToast(
+                            context,
+                            context.resources.getString(R.string.removed_from_favourites)
+                        )
                     else
                         mToast(context, context.resources.getString(R.string.added_to_favorites))
 
@@ -151,17 +211,31 @@ fun ListViewNotes(
                 // showCheckBox = showCheckBox
                 dropDownItems = dropDownItems,
                 onItemClick = { item ->
-                    if (item.text == "Delete") {
-                        viewModel.onEvent(
-                            NotesEvent.MoveNoteToTrash(
-                                note.copy(
-                                    isDeleted = !note.isDeleted
+                    when (item.text) {
+
+                        context.resources.getString(R.string.delete) -> {
+                            viewModel.onEvent(
+                                NotesEvent.MoveNoteToTrash(
+                                    note.copy(
+                                        isDeleted = !note.isDeleted
+                                    )
                                 )
                             )
-                        )
-                        mToast(context, context.resources.getString(R.string.note_moved_to_trash))
-                    } else {
+                            mToast(
+                                context,
+                                context.resources.getString(R.string.note_moved_to_trash)
+                            )
+                        }
 
+                        context.resources.getString(R.string.pin) -> {
+                            viewModel.onEvent(NotesEvent.PinNote(note))
+                            mToast(context, context.resources.getString(R.string.note_pinned))
+                        }
+
+                        context.resources.getString(R.string.unpin) -> {
+                            viewModel.onEvent(NotesEvent.UnpinNote(note))
+                            mToast(context, context.resources.getString(R.string.note_unpinned))
+                        }
                     }
                 },
                 onClick = {

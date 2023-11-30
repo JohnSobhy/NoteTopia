@@ -4,15 +4,25 @@ sealed class NoteOrder(val orderType: OrderType) {
 
     class Title(orderType: OrderType) : NoteOrder(orderType) {
         override fun toString() = "Title"
+//        override fun comparator(): Comparator<Note> {
+//            return compareByDescending<Note> { it.isPinned }.thenBy { it.title }
+//        }
     }
 
     class Date(orderType: OrderType) : NoteOrder(orderType) {
         override fun toString() = "Date"
+//        override fun comparator(): Comparator<Note> {
+//            return compareByDescending<Note> { it.isPinned }.thenBy { it.timestamp }
+//        }
     }
 
     class Color(orderType: OrderType) : NoteOrder(orderType) {
         override fun toString() = "Color"
+//       override fun comparator(): Comparator<Note> {
+//            return compareByDescending<Note> { it.isPinned }.thenBy { it.color }
+//        }
     }
+    // abstract fun comparator(): Comparator<Note>
 
     companion object {
         fun fromString(orderString: String, orderType: OrderType): NoteOrder {

@@ -51,5 +51,10 @@
     <string name="the_content_of_the_note_cannot_be_empty">The content of the note cannot be empty</string>
     <string name="home">Home</string>
     <string name="deleted">Deleted</string>
+    <string name="note_pinned">Note pinned</string>
+    <string name="note_unpinned">Note unpinned</string>
+    <string name="unpin">Unpin</string>
+    <string name="pin">Pin</string>
+    <string name="pinned_note">Pinned note</string>
 
 </resources>

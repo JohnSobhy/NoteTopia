@@ -41,4 +41,8 @@ class NoteRepositoryImpl(private val dao: NoteDao) : NoteRepository {
     override suspend fun moveNoteToTrash(noteId: Int, isDeleted: Boolean) {
         return dao.updateIsDeleted(noteId, isDeleted)
     }
+
+    override suspend fun pinNote(noteId: Int, isPinned: Boolean) {
+        return dao.updateIsPinned(noteId, isPinned)
+    }
 }

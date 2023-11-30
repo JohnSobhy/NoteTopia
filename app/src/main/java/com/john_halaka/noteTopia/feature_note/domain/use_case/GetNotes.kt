@@ -17,7 +17,16 @@ class GetNotes(
     ): Flow<List<Note>> {
         Log.d("getNotes", "GetNotes useCase is invoked")
         return repository.getNotes().map { notes ->
-            when (noteOrder.orderType) {
+            val (pinnedNotes, unpinnedNotes) = notes.partition { it.isPinned }
+            val sortedPinnedNotes = Companion.sortNotes(pinnedNotes, noteOrder)
+            val sortedUnpinnedNotes = Companion.sortNotes(unpinnedNotes, noteOrder)
+            sortedPinnedNotes + sortedUnpinnedNotes
+        }
+    }
+
+    companion object {
+        fun sortNotes(notes: List<Note>, noteOrder: NoteOrder): List<Note> {
+            return when (noteOrder.orderType) {
                 is OrderType.Ascending -> {
                     when (noteOrder) {
                         is NoteOrder.Title -> notes.sortedBy { it.title.lowercase() }
