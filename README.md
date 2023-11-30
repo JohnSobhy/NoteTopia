@@ -1,6 +1,6 @@
-# Notes - A simple and elegant note-taking app for Android
+# NoteTopia - A simple and elegant note-taking app for Android
 
-"Notes" is an Android app that lets you create and manage notes with ease. You can add, modify, and delete notes, Categorize notes with colors, and sort notes by date, name, or color, ascending or descending. 
+"NoteTopia" is an Android app that lets you create and manage notes with ease. You can add, modify, and delete notes, Categorize notes with colors, and sort notes by date, name, or color, ascending or descending. 
 There is also a Todo section for the users to have a to-do list for their daily tasks.
 "Notes" is written in Kotlin and follows the MVVM design pattern.
 it uses modern Android technologies and best practices, such as:
