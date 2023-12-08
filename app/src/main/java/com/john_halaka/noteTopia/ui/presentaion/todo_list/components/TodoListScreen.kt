@@ -92,7 +92,7 @@ fun TodoListScreen(
                 topBar = {
                     CenterAlignedTopAppBar(
                         title = {
-                            Text(text = "To-do List")
+                            Text(text = stringResource(R.string.todo_list))
                         },
                         navigationIcon = {
                             if (windowSize.widthSizeClass == WindowWidthSizeClass.Compact)
