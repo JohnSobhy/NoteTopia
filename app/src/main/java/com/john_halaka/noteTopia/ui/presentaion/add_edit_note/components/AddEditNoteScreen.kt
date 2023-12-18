@@ -70,6 +70,7 @@ fun AddEditNoteScreen(
     val noteId = currentNote.id
     var isFavorite: Boolean = currentNote.isFavourite
 
+
     LaunchedEffect(key1 = true) {
         viewModel.eventFlow.collectLatest { event ->
             when (event) {
@@ -201,6 +202,12 @@ fun AddEditNoteScreen(
                 .fillMaxSize()
                 .padding(values)
         ) {
+//            ColorPicker(
+//                noteColor = Color(noteColor),
+//                onColorChange = {
+//                    viewModel.onEvent(AddEditNoteEvent.ChangeColor(it.color.toArgb()))
+//                }
+//            )
             LazyRow(
                 modifier = Modifier
                     .fillMaxWidth()

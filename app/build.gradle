@@ -17,8 +17,8 @@ android {
         minSdk 24
         //noinspection EditedTargetSdkVersion
         targetSdk 34
-        versionCode 3
-        versionName "1.0"
+        versionCode 4
+        versionName "1.2"
         buildConfigField("String", "API_KEY", API_KEY)
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -134,6 +134,10 @@ dependencies {
 
     implementation("com.afollestad.material-dialogs:color:3.3.0")
     implementation("com.afollestad.material-dialogs:input:3.3.0")
+
+    // color picker
+    implementation "com.github.skydoves:colorpicker-compose:1.0.7"
+
 }
 // Allow references to generated code
 kapt {

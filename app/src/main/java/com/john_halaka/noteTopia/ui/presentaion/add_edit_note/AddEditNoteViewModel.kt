@@ -6,7 +6,6 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -47,6 +46,9 @@ class AddEditNoteViewModel @Inject constructor(
     private val _noteIsFavorite = mutableStateOf(false)
     val noteIsFavorite: State<Boolean> = _noteIsFavorite
 
+    private val _noteIsPinned = mutableStateOf(false)
+    val noteIsPinned: State<Boolean> = _noteIsPinned
+
     private val _eventFlow = MutableSharedFlow<UiEvent>()
     val eventFlow = _eventFlow.asSharedFlow()
 
@@ -82,6 +84,7 @@ class AddEditNoteViewModel @Inject constructor(
                         )
                         _noteColor.intValue = note.color
                         _noteIsFavorite.value = note.isFavourite
+                        _noteIsPinned.value = note.isPinned
 
                     }
                 }
@@ -120,7 +123,7 @@ class AddEditNoteViewModel @Inject constructor(
             }
 
             is AddEditNoteEvent.ChangeColor -> {
-                _noteColor.value = event.color
+                _noteColor.intValue = event.color
             }
 
             is AddEditNoteEvent.ChangeIsFavorite -> {
@@ -138,7 +141,8 @@ class AddEditNoteViewModel @Inject constructor(
                                 timestamp = System.currentTimeMillis(),
                                 color = noteColor.value,
                                 id = currentNoteId,
-                                isFavourite = noteIsFavorite.value
+                                isFavourite = noteIsFavorite.value,
+                                isPinned = noteIsPinned.value
                             )
                         )
                         _eventFlow.emit(UiEvent.SaveNote)
