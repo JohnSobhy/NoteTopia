@@ -10,12 +10,12 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.DeleteForever
 import androidx.compose.material.icons.filled.SaveAlt
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -28,6 +28,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.github.skydoves.colorpicker.compose.AlphaSlider
 import com.github.skydoves.colorpicker.compose.AlphaTile
@@ -73,7 +74,6 @@ fun ColorPicker(
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-
                 AlphaSlider(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -114,7 +114,7 @@ fun ColorPicker(
             LazyRow(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(8.dp),
+                    .padding(start = 8.dp, end = 8.dp),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 // saved colors
@@ -122,7 +122,9 @@ fun ColorPicker(
                     val colorInt = color.toArgb()
                     Box(
                         modifier = Modifier
-                            .size(35.dp)
+                            //.size(25.dp)
+                            .height(20.dp)
+                            .width(35.dp)
                             .shadow(4.dp, RectangleShape)
                             .clip(RoundedCornerShape(10))
                             .background(color)
@@ -141,7 +143,66 @@ fun ColorPicker(
                 }
 
             }
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 8.dp, end = 8.dp),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                LazyRow(
+                    modifier = Modifier
+                        .weight(5f),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    // saved colors
+                    items(Note.noteColors) { color ->
+                        val colorInt = color.toArgb()
+                        Box(
+                            modifier = Modifier
+                                //.size(25.dp)
+                                .height(20.dp)
+                                .width(35.dp)
+                                .shadow(4.dp, RectangleShape)
+                                .clip(RoundedCornerShape(10))
+                                .background(color)
+                                .border(
+                                    width = 2.dp,
+                                    color = if (noteColor.toArgb() == colorInt) {
+                                        MaterialTheme.colorScheme.onSurface
+                                    } else Color.Transparent,
+                                    shape = RoundedCornerShape(10)
+                                )
+                                .clickable {
+
+                                }
+
+                        )
+                    }
+
+                }
+                IconButton(
+                    modifier = Modifier.weight(1f),
+                    onClick = { /*TODO*/ }
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.DeleteForever,
+                        contentDescription = "delete saved colors"
+                    )
+
+                }
+            }
         }
     }
 
+}
+
+@Preview
+@Composable
+fun ColorPickerPreview() {
+
+    ColorPicker(
+        noteColor = Color.Red,
+        onColorChange = {}
+    )
 }
