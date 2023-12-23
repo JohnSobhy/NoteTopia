@@ -23,6 +23,15 @@ import com.john_halaka.noteTopia.feature_note.domain.use_case.MoveNoteToTrash
 import com.john_halaka.noteTopia.feature_note.domain.use_case.NoteUseCases
 import com.john_halaka.noteTopia.feature_note.domain.use_case.TogglePinNote
 import com.john_halaka.noteTopia.feature_note.domain.use_case.UpdateNote
+import com.john_halaka.noteTopia.feature_note_color.data.data_source.NoteColorDao
+import com.john_halaka.noteTopia.feature_note_color.data.repository.NoteColorRepositoryImpl
+import com.john_halaka.noteTopia.feature_note_color.domain.repository.NoteColorRepository
+import com.john_halaka.noteTopia.feature_note_color.domain.use_case.AddColorUseCase
+import com.john_halaka.noteTopia.feature_note_color.domain.use_case.ColorExistsUseCase
+import com.john_halaka.noteTopia.feature_note_color.domain.use_case.DeleteAllColorsUseCase
+import com.john_halaka.noteTopia.feature_note_color.domain.use_case.DeleteNoteColorUseCase
+import com.john_halaka.noteTopia.feature_note_color.domain.use_case.GetNoteColorsUseCase
+import com.john_halaka.noteTopia.feature_note_color.domain.use_case.NoteColorUseCases
 import com.john_halaka.noteTopia.feature_todo.data.repository.TodoRepositoryImpl
 import com.john_halaka.noteTopia.feature_todo.domain.repository.TodoRepository
 import dagger.Module
@@ -41,6 +50,11 @@ object AppModule {
             database.execSQL("ALTER TABLE note ADD COLUMN isPinned INTEGER NOT NULL DEFAULT 0")
         }
     }
+    private val MIGRATION_2_3 = object : Migration(2, 3) {
+        override fun migrate(database: SupportSQLiteDatabase) {
+            database.execSQL("CREATE TABLE IF NOT EXISTS `note_color_table` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `argb` INTEGER NOT NULL)")
+        }
+    }
 
     @Provides
     @Singleton
@@ -50,9 +64,22 @@ object AppModule {
             NoteDatabase::class.java,
             NoteDatabase.DATABASE_NAME
         )
-            .addMigrations(MIGRATION_1_2)
+            .addMigrations(MIGRATION_1_2, MIGRATION_2_3)
             .build()
     }
+
+    @Provides
+    @Singleton
+    fun provideNoteColorDao(db: NoteDatabase): NoteColorDao {
+        return db.noteColorDao
+    }
+
+    @Provides
+    @Singleton
+    fun provideNoteColorRepository(dao: NoteColorDao): NoteColorRepository {
+        return NoteColorRepositoryImpl(dao)
+    }
+
 
     @Provides
     @Singleton
@@ -76,6 +103,18 @@ object AppModule {
         )
     }
 
+    @Provides
+    @Singleton
+    fun provideNoteColorUseCases(repository: NoteColorRepository): NoteColorUseCases {
+        return NoteColorUseCases(
+            addColorUseCase = AddColorUseCase(repository),
+            deleteAllColorsUseCase = DeleteAllColorsUseCase(repository),
+            deleteNoteColorUseCase = DeleteNoteColorUseCase(repository),
+            getNoteColorsUseCase = GetNoteColorsUseCase(repository),
+            colorExistsUseCase = ColorExistsUseCase(repository)
+        )
+    }
+
 
     @Provides
     @Singleton
@@ -96,11 +135,6 @@ object AppModule {
         return PreferencesManager(context)
     }
 
-//    @Provides
-//    @Singleton
-//    fun provideContext (@ApplicationContext context: Context) : Context {
-//        return context
-//    }
 
     @Provides
     @Singleton

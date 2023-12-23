@@ -47,6 +47,7 @@ import androidx.compose.ui.unit.dp
 import com.john_halaka.noteTopia.R
 import com.john_halaka.noteTopia.feature_note.domain.model.Note
 import com.john_halaka.noteTopia.ui.theme.LightGray
+import com.john_halaka.noteTopia.ui.theme.MetallicGold
 
 
 data class DropDownItem(
@@ -141,7 +142,8 @@ fun NoteItem(
                         Icon(
                             imageVector = Icons.Default.PushPin,
                             modifier = Modifier.padding(top = 8.dp),
-                            contentDescription = stringResource(R.string.pinned_note)
+                            contentDescription = stringResource(R.string.pinned_note),
+                            tint = MetallicGold
                         )
                     }
                 }

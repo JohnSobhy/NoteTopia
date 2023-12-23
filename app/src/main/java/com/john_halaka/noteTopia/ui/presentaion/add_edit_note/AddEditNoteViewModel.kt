@@ -6,6 +6,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.toArgb
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -13,6 +14,8 @@ import com.john_halaka.noteTopia.R
 import com.john_halaka.noteTopia.feature_note.domain.model.InvalidNoteException
 import com.john_halaka.noteTopia.feature_note.domain.model.Note
 import com.john_halaka.noteTopia.feature_note.domain.use_case.NoteUseCases
+import com.john_halaka.noteTopia.feature_note_color.domain.model.NoteColor
+import com.john_halaka.noteTopia.feature_note_color.domain.use_case.NoteColorUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -23,6 +26,7 @@ import javax.inject.Inject
 @HiltViewModel
 class AddEditNoteViewModel @Inject constructor(
     private val noteUseCases: NoteUseCases,
+    private val noteColorUsesCases: NoteColorUseCases,
     savedStateHandle: SavedStateHandle,
     context: Context
 ) : ViewModel() {
@@ -43,6 +47,9 @@ class AddEditNoteViewModel @Inject constructor(
     private val _noteColor = mutableIntStateOf(Note.noteColors.random().toArgb())
     val noteColor: State<Int> = _noteColor
 
+    private val _tempNoteColor = mutableIntStateOf(_noteColor.intValue)
+    val tempNoteColor: State<Int> = _tempNoteColor
+
     private val _noteIsFavorite = mutableStateOf(false)
     val noteIsFavorite: State<Boolean> = _noteIsFavorite
 
@@ -54,6 +61,9 @@ class AddEditNoteViewModel @Inject constructor(
 
     private var currentNoteId: Int? = null
     val noteId: Int = currentNoteId ?: -1
+
+    private val _savedNoteColors = MutableLiveData<List<NoteColor>>()
+    val savedNoteColors = _savedNoteColors
 
     private val _note = mutableStateOf(
         Note(
@@ -82,7 +92,9 @@ class AddEditNoteViewModel @Inject constructor(
                             text = note.content,
                             isHintVisible = false
                         )
+                        _tempNoteColor.intValue = note.color
                         _noteColor.intValue = note.color
+                        Log.d("color", "note color is $_noteColor")
                         _noteIsFavorite.value = note.isFavourite
                         _noteIsPinned.value = note.isPinned
 
@@ -91,6 +103,9 @@ class AddEditNoteViewModel @Inject constructor(
             }
             Log.d("AddEditNoteViewModel", "getNoteById is Not call $noteId")
         }
+        // Fetch the saved colors
+        fetchNoteColors()
+
     }
 
     fun onEvent(event: AddEditNoteEvent) {
@@ -123,7 +138,8 @@ class AddEditNoteViewModel @Inject constructor(
             }
 
             is AddEditNoteEvent.ChangeColor -> {
-                _noteColor.intValue = event.color
+                _tempNoteColor.intValue = event.color
+                Log.d("changeTempColor()", "${_tempNoteColor.intValue}")
             }
 
             is AddEditNoteEvent.ChangeIsFavorite -> {
@@ -206,6 +222,56 @@ class AddEditNoteViewModel @Inject constructor(
         }
 
     }
+
+    fun doneClicked() {
+        viewModelScope.launch {
+            _noteColor.intValue = _tempNoteColor.intValue
+        }
+    }
+
+    fun cancelClicked() {
+        viewModelScope.launch {
+            _tempNoteColor.intValue = _noteColor.intValue
+        }
+    }
+
+    // Function to fetch all the saved colors
+    fun fetchNoteColors() {
+        viewModelScope.launch {
+            _savedNoteColors.value = noteColorUsesCases.getNoteColorsUseCase()
+        }
+    }
+
+    // Function to add a color
+    fun addNoteColor(argb: Int) {
+        viewModelScope.launch {
+            // Check if the color already exists in the database
+            val colorCount = noteColorUsesCases.colorExistsUseCase(argb)
+            if (colorCount == 0) {
+                // If the color doesn't exist, insert it
+                noteColorUsesCases.addColorUseCase(argb)
+                fetchNoteColors() // Refresh the colors
+            }
+        }
+    }
+
+
+    // Function to delete all colors
+    fun deleteAllNoteColors() {
+        viewModelScope.launch {
+            noteColorUsesCases.deleteAllColorsUseCase()
+            fetchNoteColors() // Refresh the colors
+        }
+    }
+
+    // Function to delete a specific color
+    fun deleteNoteColor(noteColor: NoteColor) {
+        viewModelScope.launch {
+            noteColorUsesCases.deleteNoteColorUseCase(noteColor)
+            fetchNoteColors() // Refresh the colors
+        }
+    }
+
 
     sealed class UiEvent {
         data class ShowSnackbar(val message: String) : UiEvent()

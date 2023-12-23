@@ -56,5 +56,13 @@
     <string name="unpin">Unpin</string>
     <string name="pin">Pin</string>
     <string name="pinned_note">Pinned note</string>
+    <string name="save_color">save color</string>
+    <string name="delete_color">Delete color</string>
+    <string name="delete_saved_colors">delete saved colors</string>
+    <string name="done">Done</string>
+    <string name="warning">Warning</string>
+    <string name="delete_all_colors_permanently">Delete All colors permanently?</string>
+    <string name="confirm">Confirm</string>
+    <string name="delete_this_color">Delete This Color?</string>
 
 </resources>

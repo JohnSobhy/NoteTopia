@@ -57,4 +57,12 @@
     <string name="unpin">إلغاء التثبيت</string>
     <string name="pin">تثبيت</string>
     <string name="pinned_note">ملحوظة مثبتة</string>
+    <string name="save_color">حفظ اللون</string>
+    <string name="delete_color">حذف اللون</string>
+    <string name="delete_saved_colors">حذف جميع الالوان المحفوظة</string>
+    <string name="done">تم</string>
+    <string name="warning">تحذير</string>
+    <string name="delete_all_colors_permanently">حذف جميع الالوان المحفوظة؟</string>
+    <string name="confirm">تأكيد</string>
+    <string name="delete_this_color">حذف هذا اللون؟</string>
 </resources>

@@ -49,4 +49,5 @@ val VistaBlue = Color(0xff7699D4)
 val IconBackground = Color(0x80D9D9D9)
 val IconColorGray = Color(0x99999999)
 
-
+val Gold = Color(0XffE5B80B)
+val MetallicGold = Color(0xE4E0B321)

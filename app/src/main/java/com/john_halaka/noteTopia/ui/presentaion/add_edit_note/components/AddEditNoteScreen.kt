@@ -2,26 +2,18 @@ package com.john_halaka.noteTopia.ui.presentaion.add_edit_note.components
 
 import android.content.Context
 import android.util.Log
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -34,21 +26,23 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.layout.positionInRoot
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.john_halaka.noteTopia.R
-import com.john_halaka.noteTopia.feature_note.domain.model.Note
 import com.john_halaka.noteTopia.ui.presentaion.add_edit_note.AddEditNoteEvent
 import com.john_halaka.noteTopia.ui.presentaion.add_edit_note.AddEditNoteViewModel
 import com.john_halaka.noteTopia.ui.presentaion.notes_list.components.mToast
@@ -70,6 +64,9 @@ fun AddEditNoteScreen(
     val noteId = currentNote.id
     var isFavorite: Boolean = currentNote.isFavourite
 
+    val showColorMenu = remember { mutableStateOf(false) }
+
+    val anchor = remember { mutableStateOf(Offset.Zero) }
 
     LaunchedEffect(key1 = true) {
         viewModel.eventFlow.collectLatest { event ->
@@ -101,9 +98,12 @@ fun AddEditNoteScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { 
-                        Text(text = currentNote.title)
-                        },
+                title = {
+                    Text(
+                        text = currentNote.title,
+                        maxLines = 1
+                    )
+                },
 
                 navigationIcon = {
                     IconButton(onClick = {
@@ -122,6 +122,55 @@ fun AddEditNoteScreen(
 
                 },
                 actions = {
+                    Box(
+
+                    ) {
+                        IconButton(
+                            onClick = {
+                                showColorMenu.value = true
+                            },
+
+                            ) {
+                            Icon(
+                                imageVector = ImageVector.vectorResource(R.drawable.note_color_trans),
+                                contentDescription = stringResource(R.string.note_color),
+                                tint = Color(viewModel.tempNoteColor.value),
+                                modifier = Modifier.onGloballyPositioned { coordinates ->
+                                    anchor.value = coordinates.positionInRoot()
+                                }
+                            )
+                        }
+                        DropdownMenu(
+                            offset = DpOffset(
+                                x = (anchor.value.x.dp), // need a way to make the menu goes from end to start when near the edge
+                                y = (anchor.value.y.dp - 50.dp) // the -50 value is based on trial and error only
+                            ),
+                            expanded = showColorMenu.value,
+                            onDismissRequest = {
+                                showColorMenu.value = false
+                                viewModel.cancelClicked()
+                            }
+                        ) {
+                            ColorPicker(
+                                onColorChange = { colorEnvelope ->
+                                    viewModel.onEvent(AddEditNoteEvent.ChangeColor(colorEnvelope.color.toArgb()))
+                                    Log.d(
+                                        "colorEnvelope",
+                                        "the hex code is ${colorEnvelope.hexCode}"
+                                    )
+                                },
+                                viewModel = viewModel,
+
+                                onCancelClick = {
+                                    showColorMenu.value = false
+                                },
+                                onDoneClick = {
+                                    showColorMenu.value = false
+                                },
+                            )
+
+                        }
+                    }
 
                     IconButton(
                         onClick = {
@@ -203,41 +252,12 @@ fun AddEditNoteScreen(
                 .padding(values)
         ) {
 //            ColorPicker(
-//                noteColor = Color(noteColor),
+//                //noteColor = noteColor,
 //                onColorChange = {
 //                    viewModel.onEvent(AddEditNoteEvent.ChangeColor(it.color.toArgb()))
-//                }
+//                },
+//                viewModel = viewModel
 //            )
-            LazyRow(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                items(Note.noteColors) { color ->
-                    val colorInt = color.toArgb()
-
-                    Box(
-                        modifier = Modifier
-                            .size(50.dp)
-                            .shadow(15.dp, CircleShape)
-                            .clip(CircleShape)
-                            .background(color)
-                            .border(
-                                width = 3.dp,
-                                color = if (viewModel.noteColor.value == colorInt) {
-                                    MaterialTheme.colorScheme.onSurface
-                                } else Color.Transparent,
-                                shape = CircleShape
-                            )
-                            .clickable {
-                                viewModel.onEvent(AddEditNoteEvent.ChangeColor(colorInt))
-                            }
-                    )
-                    Spacer(Modifier.width(4.dp))
-                }
-            }
-
 
             Spacer(Modifier.height(16.dp))
 
