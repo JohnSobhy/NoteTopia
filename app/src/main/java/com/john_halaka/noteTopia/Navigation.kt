@@ -412,9 +412,7 @@ fun NavigationSideBar(
             route = Screen.FavNotesScreen.route
         )
     )
-    NavigationRail(
-
-    ) {
+    NavigationRail {
         Column(
             modifier = Modifier.fillMaxHeight(),
             verticalArrangement = Arrangement.spacedBy(12.dp, Alignment.Bottom)

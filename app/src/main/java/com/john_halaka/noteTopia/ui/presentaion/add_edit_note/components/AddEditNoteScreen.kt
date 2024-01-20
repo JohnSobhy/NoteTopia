@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
@@ -122,9 +124,7 @@ fun AddEditNoteScreen(
 
                 },
                 actions = {
-                    Box(
-
-                    ) {
+                    Box {
                         IconButton(
                             onClick = {
                                 showColorMenu.value = true
@@ -193,7 +193,10 @@ fun AddEditNoteScreen(
                                     )
                                 )
 
-                                mToast(context, context.resources.getString(R.string.note_moved_to_trash))
+                                mToast(
+                                    context,
+                                    context.resources.getString(R.string.note_moved_to_trash)
+                                )
                             }
                         }
                     ) {
@@ -220,6 +223,9 @@ fun AddEditNoteScreen(
                     }
                 }
             )
+        },
+        bottomBar = {
+            Spacer(modifier = Modifier.navigationBarsPadding())
         },
         floatingActionButton = {
             FloatingActionButton(
@@ -251,14 +257,6 @@ fun AddEditNoteScreen(
                 .fillMaxSize()
                 .padding(values)
         ) {
-//            ColorPicker(
-//                //noteColor = noteColor,
-//                onColorChange = {
-//                    viewModel.onEvent(AddEditNoteEvent.ChangeColor(it.color.toArgb()))
-//                },
-//                viewModel = viewModel
-//            )
-
             Spacer(Modifier.height(16.dp))
 
             TransparentHintTextField(
@@ -274,26 +272,29 @@ fun AddEditNoteScreen(
                 singleLine = true,
                 textStyle =
                 MaterialTheme.typography.titleLarge.copy(color = MaterialTheme.colorScheme.onPrimary),
-
-                )
-
-            Spacer(Modifier.height(16.dp))
-
-            TransparentHintTextField(
-                text = contentState.text,
-                hint = contentState.hint,
-                onValueChange = {
-                    viewModel.onEvent(AddEditNoteEvent.EnteredContent(it))
-
-                },
-                onFocusChange = {
-                    viewModel.onEvent(AddEditNoteEvent.ChangeContentFocus(it))
-                },
-                isHintVisible = contentState.isHintVisible,
-                textStyle = MaterialTheme.typography.bodyLarge.copy(color = MaterialTheme.colorScheme.onPrimary),
-
-                modifier = Modifier.fillMaxHeight()
             )
+
+            Spacer(Modifier.height(2.dp))
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .imePadding()
+            ) {
+
+                TransparentHintTextField(
+                    text = contentState.text,
+                    hint = contentState.hint,
+                    onValueChange = {
+                        viewModel.onEvent(AddEditNoteEvent.EnteredContent(it))
+                    },
+                    onFocusChange = {
+                        viewModel.onEvent(AddEditNoteEvent.ChangeContentFocus(it))
+                    },
+                    isHintVisible = contentState.isHintVisible,
+                    textStyle = MaterialTheme.typography.bodyLarge.copy(color = MaterialTheme.colorScheme.onPrimary),
+                    modifier = Modifier.fillMaxHeight()
+                )
+            }
         }
     }
 }

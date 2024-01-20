@@ -15,10 +15,10 @@ android {
     defaultConfig {
         applicationId "com.john_halaka.noteTopia"
         minSdk 24
-        //noinspection EditedTargetSdkVersion
         targetSdk 34
-        versionCode 4
-        versionName "1.2"
+        // latest version 6 (added text selection for copying)
+        versionCode 6
+        versionName "1.4"
         buildConfigField("String", "API_KEY", API_KEY)
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
