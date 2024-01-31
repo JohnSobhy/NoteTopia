@@ -65,4 +65,7 @@
     <string name="delete_all_colors_permanently">حذف جميع الالوان المحفوظة؟</string>
     <string name="confirm">تأكيد</string>
     <string name="delete_this_color">حذف هذا اللون؟</string>
+    <string name="todo_deleted">تم حذف هذه المهمة</string>
+    <string name="the_title_can_t_be_empty">العنوان لايمكن ان يترك فارغا</string>
+    <string name="description_optional">الوصف (اختياري)</string>
 </resources>

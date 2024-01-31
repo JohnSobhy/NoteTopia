@@ -42,7 +42,6 @@ import com.john_halaka.mytodo.ui.todo_list.TodoListViewModel
 import com.john_halaka.noteTopia.NavigationDrawer
 import com.john_halaka.noteTopia.NavigationItemsBar
 import com.john_halaka.noteTopia.R
-import com.john_halaka.noteTopia.ui.Screen
 import com.john_halaka.noteTopia.ui.presentaion.util.findActivity
 import kotlinx.coroutines.launch
 
@@ -64,13 +63,15 @@ fun TodoListScreen(
     val scope = rememberCoroutineScope()
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
 
+    val context = LocalContext.current
+
     LaunchedEffect(key1 = true) {
         viewModel.uiEvent.collect { event ->
             when (event) {
                 is TodoListViewModel.UiEvent.ShowSnackBar -> {
                     val result = scaffoldState.showSnackbar(
-                        message = event.message,
-                        actionLabel = event.action
+                        message = context.getString(event.messageResId),
+                        actionLabel = event.actionResId?.let { context.getString(it) }
                     )
                     if (result == SnackbarResult.ActionPerformed) {
                         viewModel.onEvent(TodoListEvent.OnUndoDeleteClick)
@@ -107,9 +108,6 @@ fun TodoListScreen(
                                         contentDescription = stringResource(R.string.menu)
                                     )
                                 }
-                            else {
-
-                            }
                         })
                 },
                 bottomBar = {
@@ -122,7 +120,7 @@ fun TodoListScreen(
                     FloatingActionButton(
                         shape = CircleShape,
                         onClick = {
-                            navController.navigate(Screen.AddEditTodoScreen.route)
+                            viewModel.onEvent(TodoListEvent.OnAddTodoClick)
                         }
                     ) {
                         Icon(imageVector = Icons.Default.Add, contentDescription = "Add a Todo")

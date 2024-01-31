@@ -1,11 +1,14 @@
 package com.john_halaka.mytodo.ui.add_edit_todo
 
+import android.util.Log
+import androidx.annotation.StringRes
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.john_halaka.noteTopia.R
 import com.john_halaka.noteTopia.feature_todo.domain.model.Todo
 import com.john_halaka.noteTopia.feature_todo.domain.repository.TodoRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -35,6 +38,7 @@ class AddEditTodoViewModel @Inject constructor(
 
     init {
         val todoId = savedStateHandle.get<Int>("todoId")!!
+        Log.d("AddEditTodoViewModel", "todoId: $todoId")
         if (todoId != -1) {
             viewModelScope.launch {
                 repository.getTodoById(todoId)?.let { todo ->
@@ -59,7 +63,8 @@ class AddEditTodoViewModel @Inject constructor(
                     if (title.isBlank()) {
                         sendUiEvent(
                             UiEvent.ShowSnackBar(
-                                message = "The title can't be empty"
+                                messageResId = R.string.the_title_can_t_be_empty,
+                                actionResId = null
                             )
                         )
                         return@launch
@@ -89,10 +94,9 @@ class AddEditTodoViewModel @Inject constructor(
 
     sealed class UiEvent {
         object PopBackStack : UiEvent()
-        data class Navigate(val route: String) : UiEvent()
         data class ShowSnackBar(
-            val message: String,
-            val action: String? = null
+            @StringRes val messageResId: Int,
+            @StringRes val actionResId: Int? = null
         ) : UiEvent()
     }
 }

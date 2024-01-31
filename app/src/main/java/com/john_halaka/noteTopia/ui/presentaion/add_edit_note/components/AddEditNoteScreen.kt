@@ -2,6 +2,7 @@ package com.john_halaka.noteTopia.ui.presentaion.add_edit_note.components
 
 import android.content.Context
 import android.util.Log
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -16,6 +17,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -40,7 +42,6 @@ import androidx.compose.ui.layout.positionInRoot
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
@@ -124,7 +125,9 @@ fun AddEditNoteScreen(
 
                 },
                 actions = {
-                    Box {
+                    Box(
+
+                    ) {
                         IconButton(
                             onClick = {
                                 showColorMenu.value = true
@@ -141,34 +144,46 @@ fun AddEditNoteScreen(
                             )
                         }
                         DropdownMenu(
-                            offset = DpOffset(
-                                x = (anchor.value.x.dp), // need a way to make the menu goes from end to start when near the edge
-                                y = (anchor.value.y.dp - 50.dp) // the -50 value is based on trial and error only
-                            ),
+//                            offset = DpOffset(
+//                                x = (anchor.value.x.dp), // need a way to make the menu goes from end to start when near the edge
+//                                y = (anchor.value.y.dp - 50.dp) // the -50 value is based on trial and error only
+//                            ),
+                            modifier = Modifier
+                                .background(MaterialTheme.colorScheme.onSecondary),
                             expanded = showColorMenu.value,
                             onDismissRequest = {
                                 showColorMenu.value = false
                                 viewModel.cancelClicked()
                             }
                         ) {
-                            ColorPicker(
-                                onColorChange = { colorEnvelope ->
-                                    viewModel.onEvent(AddEditNoteEvent.ChangeColor(colorEnvelope.color.toArgb()))
-                                    Log.d(
-                                        "colorEnvelope",
-                                        "the hex code is ${colorEnvelope.hexCode}"
+                            DropdownMenuItem(
+                                enabled = false,
+                                modifier = Modifier.fillMaxSize(),
+                                text = {
+                                    ColorPicker(
+                                        onColorChange = { colorEnvelope ->
+                                            viewModel.onEvent(
+                                                AddEditNoteEvent.ChangeColor(
+                                                    colorEnvelope.color.toArgb()
+                                                )
+                                            )
+                                            Log.d(
+                                                "colorEnvelope",
+                                                "the hex code is ${colorEnvelope.hexCode}"
+                                            )
+                                        },
+                                        viewModel = viewModel,
+
+                                        onCancelClick = {
+                                            showColorMenu.value = false
+                                        },
+                                        onDoneClick = {
+                                            showColorMenu.value = false
+                                        },
                                     )
                                 },
-                                viewModel = viewModel,
-
-                                onCancelClick = {
-                                    showColorMenu.value = false
-                                },
-                                onDoneClick = {
-                                    showColorMenu.value = false
-                                },
+                                onClick = { }
                             )
-
                         }
                     }
 

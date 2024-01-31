@@ -18,7 +18,7 @@
     <string name="sort_notes">Sort notes</string>
     <string name="add_a_note">Add a note</string>
     <string name="add_your_first_note">Add your first Note</string>
-    <string name="title">title</string>
+    <string name="title">Title</string>
     <string name="note_color">note color</string>
     <string name="mark_note_as_favorite">Mark note as Favorite</string>
     <string name="removed_from_favourites">Removed from Favourites</string>
@@ -64,5 +64,8 @@
     <string name="delete_all_colors_permanently">Delete All colors permanently?</string>
     <string name="confirm">Confirm</string>
     <string name="delete_this_color">Delete This Color?</string>
+    <string name="todo_deleted">Todo Deleted</string>
+    <string name="the_title_can_t_be_empty">The title can\'t be empty</string>
+    <string name="description_optional">Description (Optional)</string>
 
 </resources>

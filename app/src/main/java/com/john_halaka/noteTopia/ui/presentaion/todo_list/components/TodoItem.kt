@@ -4,9 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
@@ -33,9 +31,7 @@ fun TodoItem(
     modifier: Modifier
 ) {
     Row(
-        modifier = Modifier
-            .padding(8.dp)
-            .fillMaxWidth(),
+        modifier = modifier,
         verticalAlignment = Alignment.CenterVertically
 
     ) {
@@ -44,7 +40,6 @@ fun TodoItem(
             onCheckedChange = { isChecked ->
                 onEvent(TodoListEvent.OnCompletedChange(todo, isChecked))
             },
-            modifier = Modifier,
             colors = CheckboxDefaults.colors(
                 checkedColor = MaterialTheme.colorScheme.secondary,
                 uncheckedColor = MaterialTheme.colorScheme.onPrimary,
@@ -56,21 +51,22 @@ fun TodoItem(
             modifier = Modifier.weight(1f),
             verticalArrangement = Arrangement.Center,
         ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = todo.title,
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.Bold,
-                )
-
-
-            }
+//            Row(
+//                verticalAlignment = Alignment.CenterVertically
+//            ) {
+            Text(
+                text = todo.title,
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold,
+                maxLines = 2
+            )
+            // }
             todo.description?.let {
                 Spacer(modifier = Modifier.height(4.dp))
-                Text(text = it)
-
+                Text(
+                    text = it,
+                    maxLines = 3
+                )
             }
         }
 

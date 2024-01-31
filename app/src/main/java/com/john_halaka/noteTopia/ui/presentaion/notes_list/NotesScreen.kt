@@ -2,11 +2,6 @@ package com.john_halaka.noteTopia.ui.presentaion.notes_list
 
 import android.content.Context
 import android.util.Log
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
@@ -65,8 +60,8 @@ import com.john_halaka.noteTopia.feature_note.domain.util.ViewType
 import com.john_halaka.noteTopia.ui.Screen
 import com.john_halaka.noteTopia.ui.presentaion.notes_list.components.GridViewNotes
 import com.john_halaka.noteTopia.ui.presentaion.notes_list.components.ListViewNotes
-import com.john_halaka.noteTopia.ui.presentaion.notes_list.components.OrderSection
 import com.john_halaka.noteTopia.ui.presentaion.notes_list.components.SearchTextField
+import com.john_halaka.noteTopia.ui.presentaion.notes_list.components.SortDropDownMenu
 import com.john_halaka.noteTopia.ui.presentaion.util.findActivity
 import com.john_halaka.noteTopia.ui.theme.BabyBlue
 import com.john_halaka.noteTopia.ui.theme.Typography
@@ -140,6 +135,32 @@ fun NotesScreen(
 
                         },
                         actions = {
+                            var expanded by remember { mutableStateOf(false) }
+                            Box(
+
+                            ) {
+
+                                IconButton(
+                                    onClick = {
+                                        viewModel.onEvent(NotesEvent.ToggleOrderSection)
+                                        expanded = !expanded
+                                    },
+                                ) {
+                                    Icon(
+                                        painter = painterResource(id = R.drawable.baseline_sort_24),
+                                        contentDescription = stringResource(R.string.sort_notes)
+                                    )
+                                }
+                                SortDropDownMenu(
+                                    expanded = expanded,
+                                    onDismissRequest = { expanded = false },
+                                    noteOrder = state.noteOrder,
+                                    onOrderChange = {
+                                        viewModel.onEvent(NotesEvent.Order(it))
+                                    }
+                                )
+
+                            }
                             if (currentViewType.name == "GRID") {
                                 IconButton(onClick = {
                                     currentViewType = ViewType.LIST
@@ -159,16 +180,6 @@ fun NotesScreen(
                                     )
                                 }
 
-                            }
-                            IconButton(
-                                onClick = {
-                                    viewModel.onEvent(NotesEvent.ToggleOrderSection)
-                                },
-                            ) {
-                                Icon(
-                                    painter = painterResource(id = R.drawable.baseline_sort_24),
-                                    contentDescription = stringResource(R.string.sort_notes)
-                                )
                             }
                         }
                     )
@@ -245,22 +256,22 @@ fun NotesScreen(
                             )
                         }
 
-                        AnimatedVisibility(
-                            visible = state.isOrderSectionVisible,
-                            enter = fadeIn() + slideInVertically(),
-                            exit = fadeOut() + slideOutVertically()
-                        ) {
-                            OrderSection(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(vertical = 8.dp),
-                                noteOrder = state.noteOrder,
-                                onOrderChange = {
-                                    viewModel.onEvent(NotesEvent.Order(it))
-
-                                }
-                            )
-                        }
+//                        AnimatedVisibility(
+//                            visible = state.isOrderSectionVisible,
+//                            enter = fadeIn() + slideInVertically(),
+//                            exit = fadeOut() + slideOutVertically()
+//                        ) {
+//                            OrderSection(
+//                                modifier = Modifier
+//                                    .fillMaxWidth()
+//                                    .padding(vertical = 8.dp),
+//                                noteOrder = state.noteOrder,
+//                                onOrderChange = {
+//                                     viewModel.onEvent(NotesEvent.Order(it))
+//
+//                                }
+//                            )
+//                        }
 
                         Spacer(modifier = Modifier.height(8.dp))
 
