@@ -18,6 +18,7 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
@@ -71,7 +72,8 @@ fun TodoListScreen(
                 is TodoListViewModel.UiEvent.ShowSnackBar -> {
                     val result = scaffoldState.showSnackbar(
                         message = context.getString(event.messageResId),
-                        actionLabel = event.actionResId?.let { context.getString(it) }
+                        actionLabel = event.actionResId?.let { context.getString(it) },
+                        duration = SnackbarDuration.Short
                     )
                     if (result == SnackbarResult.ActionPerformed) {
                         viewModel.onEvent(TodoListEvent.OnUndoDeleteClick)
