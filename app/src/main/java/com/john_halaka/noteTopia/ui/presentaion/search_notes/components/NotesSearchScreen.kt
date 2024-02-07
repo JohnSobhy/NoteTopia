@@ -122,8 +122,8 @@ fun NotesSearchScreen(
 
             navController = navController,
             viewModel = viewModel,
-            scope = scope,
-            snackbarHostState = snackbarHostState,
+//            scope = scope,
+//            snackbarHostState = snackbarHostState,
             notesList = notesList,
             context = context,
             showFavoriteIcon = true

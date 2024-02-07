@@ -19,6 +19,7 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material.icons.filled.Sort
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -51,6 +52,7 @@ import com.john_halaka.noteTopia.ui.presentaion.notes_list.NotesViewModel
 import com.john_halaka.noteTopia.ui.presentaion.notes_list.components.DropDownItem
 import com.john_halaka.noteTopia.ui.presentaion.notes_list.components.NoteItem
 import com.john_halaka.noteTopia.ui.presentaion.notes_list.components.OrderSection
+import com.john_halaka.noteTopia.ui.presentaion.notes_list.components.SortDropDownMenu
 import com.john_halaka.noteTopia.ui.presentaion.notes_list.components.mToast
 import com.john_halaka.noteTopia.ui.theme.BabyBlue
 import kotlinx.coroutines.delay
@@ -94,15 +96,29 @@ fun DeletedNotesScreen(
 
                 },
                 actions = {
-                    IconButton(
-                        onClick = {
-                            viewModel.onEvent(NotesEvent.ToggleOrderSection)
-                        },
+                    var expanded by remember { mutableStateOf(false) }
+                    Box(
                     ) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.baseline_sort_24),
-                            contentDescription = stringResource(R.string.sort_notes)
+                        IconButton(
+                            onClick = {
+                                viewModel.onEvent(NotesEvent.ToggleOrderSection)
+                                expanded = !expanded
+                            },
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Sort,
+                                contentDescription = stringResource(R.string.sort_notes)
+                            )
+                        }
+                        SortDropDownMenu(
+                            expanded = expanded,
+                            onDismissRequest = { expanded = false },
+                            noteOrder = state.noteOrder,
+                            onOrderChange = {
+                                viewModel.onEvent(NotesEvent.Order(it))
+                            }
                         )
+
                     }
                 }
             )
@@ -116,24 +132,6 @@ fun DeletedNotesScreen(
                 .padding(values)
 
         ) {
-            AnimatedVisibility(
-                visible = state.isOrderSectionVisible,
-                enter = fadeIn() + slideInVertically(),
-                exit = fadeOut() + slideOutVertically()
-            ) {
-                OrderSection(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 8.dp),
-                    noteOrder = state.noteOrder,
-                    onOrderChange = {
-                        viewModel.onEvent(NotesEvent.Order(it))
-
-                    }
-                )
-            }
-
-            Spacer(modifier = Modifier.height(16.dp))
 
             if (state.deletedNotes.isEmpty()) {
                 var showProgress by remember { mutableStateOf(true) }

@@ -18,7 +18,9 @@ import androidx.compose.material.icons.outlined.PushPin
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.john_halaka.noteTopia.R
@@ -35,8 +37,6 @@ fun GridViewNotes(
     viewModel: NotesViewModel,
     notesList: List<Note>,
     context: Context,
-    scope: CoroutineScope,
-    snackbarHostState: SnackbarHostState,
     showFavoriteIcon: Boolean,
 ) {
     // to convert px to dp in different screens 
@@ -144,11 +144,119 @@ fun GridViewNotes(
 }
 
 @Composable
+fun SmallGridViewNotes(
+    navController: NavController,
+    viewModel: NotesViewModel,
+    notesList: List<Note>,
+    context: Context,
+    showFavoriteIcon: Boolean,
+) {
+
+    val cellHeightDpValue = 120.dp
+
+
+
+    LazyVerticalGrid(
+        columns = GridCells.Fixed(3),
+        modifier = Modifier.padding(8.dp)
+
+    ) {
+        items(notesList) { note ->
+            val dropDownItems = mutableListOf<DropDownItem>()
+            if (note.isPinned) {
+                dropDownItems.add(
+                    DropDownItem(
+                        stringResource(R.string.unpin),
+                        icon = Icons.Outlined.PushPin
+                    )
+                )
+            } else {
+                dropDownItems.add(
+                    DropDownItem(
+                        stringResource(R.string.pin),
+                        icon = Icons.Outlined.PushPin
+                    )
+                )
+            }
+            dropDownItems.add(
+                DropDownItem(
+                    stringResource(R.string.delete),
+                    icon = Icons.Outlined.Delete
+                )
+            )
+
+            NoteItem(
+                note = note,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(cellHeightDpValue)
+                    .clickable {
+                        navController.navigate(
+                            Screen.AddEditNoteScreen.route +
+                                    "?noteId=${note.id}&noteColor=${note.color}"
+                        )
+                    },
+                onFavoriteClick = {
+                    if (note.isFavourite)
+                        mToast(context, context.resources.getString(R.string.removed_from_favourites))
+                    else
+                        mToast(context, context.resources.getString(R.string.added_to_favorites))
+
+                    viewModel.onEvent(
+                        NotesEvent.UpdateNote(
+                            note.copy(
+                                isFavourite = !note.isFavourite
+                            )
+                        )
+                    )
+                },
+                showFavoriteIcon = showFavoriteIcon,
+                //showCheckBox = showCheckBox,
+                dropDownItems = dropDownItems,
+                onItemClick = { item ->
+                    when (item.text) {
+
+                        context.resources.getString(R.string.delete) -> {
+                            viewModel.onEvent(
+                                NotesEvent.MoveNoteToTrash(
+                                    note.copy(
+                                        isDeleted = !note.isDeleted
+                                    )
+                                )
+                            )
+                            mToast(
+                                context,
+                                context.resources.getString(R.string.note_moved_to_trash)
+                            )
+                        }
+
+                        context.resources.getString(R.string.pin) -> {
+                            viewModel.onEvent(NotesEvent.PinNote(note))
+                            mToast(context, context.resources.getString(R.string.note_pinned))
+                        }
+
+                        context.resources.getString(R.string.unpin) -> {
+                            viewModel.onEvent(NotesEvent.UnpinNote(note))
+                            mToast(context, context.resources.getString(R.string.note_unpinned))
+                        }
+                    }
+                },
+                onClick = {
+                    navController.navigate(
+                        Screen.AddEditNoteScreen.route +
+                                "?noteId=${note.id}&noteColor=${note.color}"
+                    )
+                }
+            )
+        }
+    }
+}
+
+
+@Composable
 fun ListViewNotes(
     navController: NavController,
     viewModel: NotesViewModel,
-    scope: CoroutineScope,
-    snackbarHostState: SnackbarHostState,
     notesList: List<Note>,
     context: Context,
     showFavoriteIcon: Boolean,

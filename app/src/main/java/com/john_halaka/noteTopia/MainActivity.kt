@@ -16,8 +16,6 @@ class MainActivity : ComponentActivity() {
         setContent {
 
             NotesTheme {
-                // A surface container using the 'background' color from the theme
-
                 Navigation()
             }
 

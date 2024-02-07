@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.GridView
 import androidx.compose.material.icons.filled.List
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -41,6 +42,8 @@ import com.john_halaka.noteTopia.ui.presentaion.notes_list.NotesEvent
 import com.john_halaka.noteTopia.ui.presentaion.notes_list.NotesViewModel
 import com.john_halaka.noteTopia.ui.presentaion.notes_list.components.GridViewNotes
 import com.john_halaka.noteTopia.ui.presentaion.notes_list.components.ListViewNotes
+import com.john_halaka.noteTopia.ui.presentaion.notes_list.components.NotesViewDropDownMenu
+import com.john_halaka.noteTopia.ui.presentaion.notes_list.components.SmallGridViewNotes
 import com.john_halaka.noteTopia.ui.presentaion.notes_list.components.SortDropDownMenu
 import com.john_halaka.noteTopia.ui.theme.BabyBlue
 import kotlinx.coroutines.delay
@@ -120,25 +123,29 @@ fun FavNotesScreen(
                         )
 
                     }
-                    if (currentViewType.name == "GRID") {
-                        IconButton(onClick = {
-                            currentViewType = ViewType.LIST
-                        }) {
-                            Icon(
-                                imageVector = Icons.Default.List,
-                                contentDescription = stringResource(R.string.change_notes_view_to_list)
-                            )
-                        }
-                    } else {
-                        IconButton(onClick = {
-                            currentViewType = ViewType.GRID
-                        }) {
-                            Icon(
-                                painter = painterResource(id = R.drawable.baseline_grid_view_24),
-                                contentDescription = stringResource(R.string.change_notes_view_to_grid)
-                            )
-                        }
+                    var viewMenuExpanded by remember { mutableStateOf(false) }
 
+                    Box(
+                    ) {
+
+                        IconButton(
+                            onClick = {
+                                viewMenuExpanded = !viewMenuExpanded
+                            },
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.GridView,
+                                contentDescription = "Change Notes view"
+                            )
+                        }
+                        NotesViewDropDownMenu(
+                            viewMenuExpanded = viewMenuExpanded,
+                            onDismiss = { viewMenuExpanded = false },
+                            viewType = currentViewType,
+                            onViewChanged = {
+                                currentViewType = it
+                            }
+                        )
                     }
                 }
             )
@@ -192,8 +199,8 @@ fun FavNotesScreen(
                     ViewType.GRID -> GridViewNotes(
                         navController = navController,
                         viewModel = viewModel,
-                        scope = scope,
-                        snackbarHostState = snackbarHostState,
+//                        scope = scope,
+//                        snackbarHostState = snackbarHostState,
                         notesList = notesList,
                         context = context,
                         showFavoriteIcon = true
@@ -203,11 +210,20 @@ fun FavNotesScreen(
                     ViewType.LIST -> ListViewNotes(
                         navController = navController,
                         viewModel = viewModel,
-                        scope = scope,
-                        snackbarHostState = snackbarHostState,
+//                        scope = scope,
+//                        snackbarHostState = snackbarHostState,
                         notesList = notesList,
                         context = context,
                         showFavoriteIcon = true
+                    )
+
+                    ViewType.SMALL_GRID -> SmallGridViewNotes(
+                        navController = navController,
+                        viewModel = viewModel,
+                        notesList = notesList,
+                        context = context,
+                        showFavoriteIcon = true
+
                     )
                 }
             }
