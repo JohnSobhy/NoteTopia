@@ -20,6 +20,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.PushPin
+import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material.icons.outlined.Delete
+import androidx.compose.material.icons.outlined.PushPin
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
@@ -44,8 +49,12 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.john_halaka.noteTopia.R
 import com.john_halaka.noteTopia.feature_note.domain.model.Note
+import com.john_halaka.noteTopia.ui.Screen
+import com.john_halaka.noteTopia.ui.presentaion.notes_list.NotesEvent
+import com.john_halaka.noteTopia.ui.presentaion.notes_list.NotesViewModel
 import com.john_halaka.noteTopia.ui.theme.LightGray
 import com.john_halaka.noteTopia.ui.theme.MetallicGold
 
@@ -59,12 +68,14 @@ data class DropDownItem(
 fun NoteItem(
     note: Note,
     modifier: Modifier,
-    onFavoriteClick: () -> Unit,
-    onClick: () -> Unit,
+    isClickable: Boolean,
+    navController: NavController,
     showFavoriteIcon: Boolean,
-    dropDownItems: List<DropDownItem>,
-    onItemClick: (DropDownItem) -> Unit
+    showDefaultDropDownMenu: Boolean,
+    viewModel: NotesViewModel,
+    context: Context,
 ) {
+    val (showDeleteNoteDialog, setShowDeleteNoteDialog) = remember { mutableStateOf(false) }
 
     var isContextMenuVisible by rememberSaveable {
         mutableStateOf(false)
@@ -85,6 +96,99 @@ fun NoteItem(
         MutableInteractionSource()
     }
 
+    val onFavoriteClick = {
+        if (note.isFavourite)
+            mToast(context, context.resources.getString(R.string.removed_from_favourites))
+        else
+            mToast(context, context.resources.getString(R.string.added_to_favorites))
+
+        viewModel.onEvent(
+            NotesEvent.UpdateNote(
+                note.copy(
+                    isFavourite = !note.isFavourite
+                )
+            )
+        )
+    }
+    val defaultDropDownItems = mutableListOf<DropDownItem>()
+    if (note.isPinned) {
+        defaultDropDownItems.add(
+            DropDownItem(
+                stringResource(R.string.unpin),
+                icon = Icons.Outlined.PushPin
+            )
+        )
+    } else {
+        defaultDropDownItems.add(
+            DropDownItem(
+                stringResource(R.string.pin),
+                icon = Icons.Outlined.PushPin
+            )
+        )
+    }
+    defaultDropDownItems.add(
+        DropDownItem(
+            stringResource(R.string.delete),
+            icon = Icons.Outlined.Delete
+        )
+    )
+
+    val deletedNoteDropDownItems = listOf(
+        DropDownItem(stringResource(R.string.restore), icon = Icons.Default.Refresh),
+        DropDownItem(stringResource(R.string.delete_permanently), icon = Icons.Outlined.Delete)
+    )
+
+    val onClick = {
+        if (isClickable) {
+            navController.navigate(
+                Screen.AddEditNoteScreen.route +
+                        "?noteId=${note.id}&noteColor=${note.color}"
+            )
+        }
+    }
+
+    val onItemClick: (DropDownItem) -> Unit = { item ->
+        if (showDefaultDropDownMenu) {
+            when (item.text) {
+                context.resources.getString(R.string.delete) -> {
+                    viewModel.onEvent(
+                        NotesEvent.MoveNoteToTrash(
+                            note.copy(
+                                isDeleted = !note.isDeleted
+                            )
+                        )
+                    )
+                    mToast(
+                        context,
+                        context.resources.getString(R.string.note_moved_to_trash)
+                    )
+                }
+
+                context.resources.getString(R.string.pin) -> {
+                    viewModel.onEvent(NotesEvent.PinNote(note))
+                    mToast(context, context.resources.getString(R.string.note_pinned))
+                }
+
+                context.resources.getString(R.string.unpin) -> {
+                    viewModel.onEvent(NotesEvent.UnpinNote(note))
+                    mToast(context, context.resources.getString(R.string.note_unpinned))
+                }
+            }
+        } else {
+            if (item.text == context.resources.getString(R.string.restore)) {
+                viewModel.onEvent(
+                    NotesEvent.MoveNoteToTrash(
+                        note.copy(
+                            isDeleted = !note.isDeleted
+                        )
+                    )
+                )
+                mToast(context, context.resources.getString(R.string.note_restored))
+            } else {
+                setShowDeleteNoteDialog(true)
+            }
+        }
+    }
     Box(
         modifier = modifier
             .fillMaxSize()
@@ -191,6 +295,7 @@ fun NoteItem(
                 }
             }
         }
+
         DropdownMenu(
             expanded = isContextMenuVisible,
             onDismissRequest = {
@@ -203,25 +308,62 @@ fun NoteItem(
 
 
         ) {
-            dropDownItems.forEach { item ->
-                DropdownMenuItem(
-                    leadingIcon = {
-                        Icon(imageVector = item.icon, contentDescription = item.text)
-                    },
-                    text = {
-                        Text(text = item.text)
-                    },
-                    onClick = {
-                        onItemClick(item)
-                        isContextMenuVisible = false
-                    }
-                )
+            if (showDefaultDropDownMenu) {
+                defaultDropDownItems.forEach { item ->
+                    DropdownMenuItem(
+                        leadingIcon = {
+                            Icon(imageVector = item.icon, contentDescription = item.text)
+                        },
+                        text = {
+                            Text(text = item.text)
+                        },
+                        onClick = {
+                            onItemClick(item)
+                            isContextMenuVisible = false
+                        }
+                    )
 
+                }
+            } else {
+                deletedNoteDropDownItems.forEach { item ->
+                    DropdownMenuItem(
+                        leadingIcon = {
+                            Icon(imageVector = item.icon, contentDescription = item.text)
+                        },
+                        text = {
+                            Text(text = item.text)
+                        },
+                        onClick = {
+                            onItemClick(item)
+                            isContextMenuVisible = false
+                        }
+                    )
+
+                }
             }
-
         }
+    }
 
 
+    if (showDeleteNoteDialog) {
+        AlertDialog(
+            onDismissRequest = { setShowDeleteNoteDialog(false) },
+            title = { Text(stringResource(R.string.warning)) },
+            text = { Text("This note will be removed permanently!") },
+            confirmButton = {
+                Button(onClick = {
+                    viewModel.onEvent(NotesEvent.DeleteNote(note))
+                    setShowDeleteNoteDialog(false)
+                }) {
+                    Text(stringResource(R.string.confirm))
+                }
+            },
+            dismissButton = {
+                Button(onClick = { setShowDeleteNoteDialog(false) }) {
+                    Text(stringResource(R.string.cancel))
+                }
+            }
+        )
     }
 }
 

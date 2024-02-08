@@ -68,4 +68,7 @@
     <string name="todo_deleted">تم حذف هذه المهمة</string>
     <string name="the_title_can_t_be_empty">العنوان لايمكن ان يترك فارغا</string>
     <string name="description_optional">الوصف (اختياري)</string>
+    <string name="grid">شبكة</string>
+    <string name="list">قائمة</string>
+    <string name="small_grid">شبكة صغيرة</string>
 </resources>

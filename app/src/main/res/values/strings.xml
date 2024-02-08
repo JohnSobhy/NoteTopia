@@ -67,5 +67,8 @@
     <string name="todo_deleted">Todo Deleted</string>
     <string name="the_title_can_t_be_empty">The title can\'t be empty</string>
     <string name="description_optional">Description (Optional)</string>
+    <string name="grid">Grid</string>
+    <string name="list">List</string>
+    <string name="small_grid">Small Grid</string>
 
 </resources>
