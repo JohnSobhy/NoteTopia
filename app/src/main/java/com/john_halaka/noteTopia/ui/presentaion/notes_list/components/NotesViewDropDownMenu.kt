@@ -14,7 +14,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import com.john_halaka.noteTopia.R
 import com.john_halaka.noteTopia.feature_note.domain.util.ViewType
-
+import com.john_halaka.noteTopia.ui.theme.BrandGreen
 
 
 data class NotesViewDropDownItem(
@@ -59,8 +59,12 @@ fun NotesViewDropDownMenu(
                                  Icon(imageVector = item.leadingIcon, contentDescription = item.text)
                               },
                 trailingIcon = {
-                               if (item.viewType.name == viewType.name){
-                                   Icon(imageVector = Icons.Default.Check, contentDescription = "")
+                               if (item.viewType.name == viewType.name) {
+                                   Icon(
+                                       imageVector = Icons.Default.Check,
+                                       tint = BrandGreen,
+                                       contentDescription = ""
+                                   )
                                }
                 },
                 onClick = {
