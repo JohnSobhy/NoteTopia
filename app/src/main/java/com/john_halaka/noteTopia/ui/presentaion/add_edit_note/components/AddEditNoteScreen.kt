@@ -125,9 +125,7 @@ fun AddEditNoteScreen(
 
                 },
                 actions = {
-                    Box(
-
-                    ) {
+                    Box {
                         IconButton(
                             onClick = {
                                 showColorMenu.value = true

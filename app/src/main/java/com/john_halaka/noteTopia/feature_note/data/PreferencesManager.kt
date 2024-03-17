@@ -35,15 +35,4 @@ class PreferencesManager(context: Context) {
         return NoteOrder.fromString(noteOrderString, orderType)
     }
 
-//    fun getNoteOrder(): Comparator<Note> {
-//        val orderTypeString = getString("order_type", "Descending")
-//        val noteOrderString = getString("note_order", "Date")
-//
-//        val orderType = OrderType.fromString(orderTypeString)
-//        val noteOrder = NoteOrder.fromString(noteOrderString, orderType)
-//
-//        return noteOrder.comparator()
-//    }
-
-
 }

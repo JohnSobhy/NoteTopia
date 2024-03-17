@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.GridView
-import androidx.compose.material.icons.filled.List
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -98,9 +97,7 @@ fun FavNotesScreen(
                 actions = {
 
                     var expanded by remember { mutableStateOf(false) }
-                    Box(
-
-                    ) {
+                    Box {
 
                         IconButton(
                             onClick = {
@@ -125,8 +122,7 @@ fun FavNotesScreen(
                     }
                     var viewMenuExpanded by remember { mutableStateOf(false) }
 
-                    Box(
-                    ) {
+                    Box {
 
                         IconButton(
                             onClick = {

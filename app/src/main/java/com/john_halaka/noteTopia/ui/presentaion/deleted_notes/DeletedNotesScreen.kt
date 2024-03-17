@@ -69,8 +69,7 @@ fun DeletedNotesScreen(
                 },
                 actions = {
                     var expanded by remember { mutableStateOf(false) }
-                    Box(
-                    ) {
+                    Box {
                         IconButton(
                             onClick = {
                                 viewModel.onEvent(NotesEvent.ToggleOrderSection)

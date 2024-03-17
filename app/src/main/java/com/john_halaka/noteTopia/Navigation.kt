@@ -71,7 +71,6 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun Navigation() {
-    // val systemUiController = rememberSystemUiController()
     val navController = rememberNavController()
 
     NavHost(
@@ -263,13 +262,6 @@ fun NavigationDrawer(
             unselectedIcon = ImageVector.vectorResource(R.drawable.unselected_todo),
             route = Screen.TodoListScreen.route
         ),
-//        NavigationItem(
-//            title = stringResource(R.string.notes),
-//            selectedIcon = ImageVector.vectorResource(R.drawable.unselected_note),
-//            unselectedIcon = ImageVector.vectorResource(R.drawable.unselected_note),
-//            route = Screen.NotesScreen.route
-//        ),
-
         NavigationItem(
             title = stringResource(R.string.favorites),
             selectedIcon = ImageVector.vectorResource(R.drawable.unselected_fav),

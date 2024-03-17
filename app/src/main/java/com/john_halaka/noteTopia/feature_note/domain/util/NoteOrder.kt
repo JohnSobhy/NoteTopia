@@ -13,8 +13,6 @@ sealed class NoteOrder(val orderType: OrderType) {
     class Color(orderType: OrderType) : NoteOrder(orderType) {
         override fun toString() = "Color"
     }
-    // abstract fun comparator(): Comparator<Note>
-
     companion object {
         fun fromString(orderString: String, orderType: OrderType): NoteOrder {
             return when (orderString) {
