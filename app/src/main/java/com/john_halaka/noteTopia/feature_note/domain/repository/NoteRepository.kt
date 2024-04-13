@@ -14,6 +14,7 @@ interface NoteRepository {
     suspend fun deleteNote(note: Note)
 
     fun getFavouriteNotes(): Flow<List<Note>>
+    fun getLockedNotes(): Flow<List<Note>>
 
     fun getDeletedNotes(): Flow<List<Note>>
 
@@ -21,5 +22,7 @@ interface NoteRepository {
 
     suspend fun moveNoteToTrash(noteId: Int, isDeleted: Boolean)
 
-    suspend fun pinNote(noteId: Int, isPinned: Boolean) // new function
+    suspend fun pinNote(noteId: Int, isPinned: Boolean)
+
+    suspend fun lockNote(noteId: Int, isLocked: Boolean)
 }

@@ -1,5 +1,6 @@
 package com.john_halaka.noteTopia.di
 
+
 import android.app.Application
 import android.content.Context
 import androidx.room.Room
@@ -8,8 +9,6 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import com.john_halaka.noteTopia.feature_daily_quote.data.repository.QuoteRepositoryImpl
 import com.john_halaka.noteTopia.feature_daily_quote.domain.repository.QuoteRepository
 import com.john_halaka.noteTopia.feature_note.data.PreferencesManager
-
-
 import com.john_halaka.noteTopia.feature_note.data.data_source.NoteDatabase
 import com.john_halaka.noteTopia.feature_note.data.repository.NoteRepositoryImpl
 import com.john_halaka.noteTopia.feature_note.domain.repository.NoteRepository
@@ -17,10 +16,12 @@ import com.john_halaka.noteTopia.feature_note.domain.use_case.AddNote
 import com.john_halaka.noteTopia.feature_note.domain.use_case.DeleteNote
 import com.john_halaka.noteTopia.feature_note.domain.use_case.GetDeletedNotes
 import com.john_halaka.noteTopia.feature_note.domain.use_case.GetFavouriteNotes
+import com.john_halaka.noteTopia.feature_note.domain.use_case.GetLockedNotes
 import com.john_halaka.noteTopia.feature_note.domain.use_case.GetNoteById
 import com.john_halaka.noteTopia.feature_note.domain.use_case.GetNotes
 import com.john_halaka.noteTopia.feature_note.domain.use_case.MoveNoteToTrash
 import com.john_halaka.noteTopia.feature_note.domain.use_case.NoteUseCases
+import com.john_halaka.noteTopia.feature_note.domain.use_case.ToggleLockNote
 import com.john_halaka.noteTopia.feature_note.domain.use_case.TogglePinNote
 import com.john_halaka.noteTopia.feature_note.domain.use_case.UpdateNote
 import com.john_halaka.noteTopia.feature_note_color.data.data_source.NoteColorDao
@@ -46,13 +47,18 @@ import javax.inject.Singleton
 object AppModule {
 
     private val MIGRATION_1_2 = object : Migration(1, 2) {
-        override fun migrate(database: SupportSQLiteDatabase) {
-            database.execSQL("ALTER TABLE note ADD COLUMN isPinned INTEGER NOT NULL DEFAULT 0")
+        override fun migrate(db: SupportSQLiteDatabase) {
+            db.execSQL("ALTER TABLE note ADD COLUMN isPinned INTEGER NOT NULL DEFAULT 0")
         }
     }
     private val MIGRATION_2_3 = object : Migration(2, 3) {
-        override fun migrate(database: SupportSQLiteDatabase) {
-            database.execSQL("CREATE TABLE IF NOT EXISTS `note_color_table` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `argb` INTEGER NOT NULL)")
+        override fun migrate(db: SupportSQLiteDatabase) {
+            db.execSQL("CREATE TABLE IF NOT EXISTS `note_color_table` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `argb` INTEGER NOT NULL)")
+        }
+    }
+    private val MIGRATION_3_4 = object : Migration(3, 4) {
+        override fun migrate(db: SupportSQLiteDatabase) {
+            db.execSQL("ALTER TABLE note ADD COLUMN isLocked INTEGER NOT NULL DEFAULT 0")
         }
     }
 
@@ -64,7 +70,7 @@ object AppModule {
             NoteDatabase::class.java,
             NoteDatabase.DATABASE_NAME
         )
-            .addMigrations(MIGRATION_1_2, MIGRATION_2_3)
+            .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4)
             .build()
     }
 
@@ -96,10 +102,12 @@ object AppModule {
             addNote = AddNote(repository, context),
             getNoteById = GetNoteById(repository),
             getFavouriteNotes = GetFavouriteNotes(repository),
+            getLockedNotes = GetLockedNotes(repository),
             updateNote = UpdateNote(repository),
             moveNoteToTrash = MoveNoteToTrash(repository),
             getDeletedNotes = GetDeletedNotes(repository),
-            togglePinNote = TogglePinNote(repository)
+            togglePinNote = TogglePinNote(repository),
+            toggleLockNote = ToggleLockNote(repository)
         )
     }
 
@@ -139,4 +147,12 @@ object AppModule {
     @Provides
     @Singleton
     fun provideContext(application: Application) : Context = application.applicationContext
+
+//    @Provides
+//    @Singleton
+//    fun provideBiometricPromptManager(@ApplicationContext context: Context): BiometricPromptManager {
+//        return BiometricPromptManager(context)
+//    }
+
+
 }

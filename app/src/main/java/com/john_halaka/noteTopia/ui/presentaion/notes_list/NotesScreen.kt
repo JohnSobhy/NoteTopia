@@ -78,7 +78,7 @@ fun NotesScreen(
     viewModel: NotesViewModel = hiltViewModel(),
     context: Context
 ) {
-    val state = viewModel.state.value
+    val state by viewModel.state
     var notesList = state.notes
     Log.d("NotesScreen", "state: $state")
     val snackbarHostState = remember { SnackbarHostState() }
@@ -102,6 +102,7 @@ fun NotesScreen(
     LaunchedEffect(currentViewType) {
         preferencesManager.saveString("viewPreference", currentViewType.name)
     }
+
     NavigationDrawer(
         navController = navController,
         drawerState = drawerState,
@@ -259,23 +260,6 @@ fun NotesScreen(
                                 }
                             )
                         }
-
-//                        AnimatedVisibility(
-//                            visible = state.isOrderSectionVisible,
-//                            enter = fadeIn() + slideInVertically(),
-//                            exit = fadeOut() + slideOutVertically()
-//                        ) {
-//                            OrderSection(
-//                                modifier = Modifier
-//                                    .fillMaxWidth()
-//                                    .padding(vertical = 8.dp),
-//                                noteOrder = state.noteOrder,
-//                                onOrderChange = {
-//                                     viewModel.onEvent(NotesEvent.Order(it))
-//
-//                                }
-//                            )
-//                        }
 
                         Spacer(modifier = Modifier.height(8.dp))
 

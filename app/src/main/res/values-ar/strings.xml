@@ -71,4 +71,16 @@
     <string name="grid">شبكة</string>
     <string name="list">قائمة</string>
     <string name="small_grid">شبكة صغيرة</string>
+    <string name="unlock">الغاء القفل</string>
+    <string name="lock">قفل</string>
+    <string name="note_is_locked">تم قفل الملحوظة</string>
+    <string name="note_is_unlocked">تم الغاء قفل الملحوظة</string>
+    <string name="locked_notes">الملحوظات المقفلة</string>
+    <string name="you_have_no_locked_notes">ليس لديك اي ملحوظات مقفلة</string>
+    <string name="unlock_note">الغاء القفل</string>
+    <string name="please_authenticate_to_unlock_the_note">من فضلك قم بالمصادقة لفتح الملحوظة</string>
+    <string name="this_note_will_be_removed_permanently">سيتم حذف هذه الملحوظة نهائياً</string>
+    <string name="biometric_authentication_required">مطلوب مصادقة المعايير الحيوية</string>
+    <string name="please_set_up_biometric_authentication_in_your_device_settings_to_lock_notes">من فضلك, قم بضبط مصادقة المعايير الحيوية في اعدادات جهازك لتتمكن من قفل الملحوظة</string>
+    <string name="go_to_settings">الانتقال الي الضبط</string>
 </resources>

@@ -21,6 +21,9 @@ interface NoteDao {
     @Query("SELECT * FROM note WHERE isDeleted = 1")
     fun getDeletedNotes(): Flow<List<Note>>
 
+    @Query("SELECT * FROM note WHERE isLocked = 1 and isDeleted = 0 ORDER BY isPinned DESC")
+    fun getLockedNotes(): Flow<List<Note>>
+
     @Query("SELECT * FROM note WHERE id = :id")
     suspend fun getNoteById(id: Int): Note?
 
@@ -38,4 +41,7 @@ interface NoteDao {
 
     @Query("UPDATE note SET isPinned = :isPinned WHERE id = :noteId") // new function
     suspend fun updateIsPinned(noteId: Int, isPinned: Boolean)
+
+    @Query("UPDATE note SET isLocked = :isLocked WHERE id = :noteId")
+    suspend fun updateIsLocked(noteId: Int, isLocked: Boolean)
 }

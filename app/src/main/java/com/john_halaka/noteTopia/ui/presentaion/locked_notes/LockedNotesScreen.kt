@@ -1,4 +1,4 @@
-package com.john_halaka.noteTopia.ui.presentaion.fav_notes
+package com.john_halaka.noteTopia.ui.presentaion.locked_notes
 
 import android.content.Context
 import android.util.Log
@@ -45,17 +45,16 @@ import com.john_halaka.noteTopia.ui.presentaion.notes_list.components.SortDropDo
 import com.john_halaka.noteTopia.ui.theme.BabyBlue
 import kotlinx.coroutines.delay
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun FavNotesScreen(
+fun LockedNotesScreen(
     navController: NavController,
     viewModel: NotesViewModel = hiltViewModel(),
     context: Context
 ) {
     val state = viewModel.state.value
-    Log.d("favNotesScreen", "state: $state")
-    val notesList = state.favouriteNotes
+    Log.d("lockedNotesScreen", "state: $state")
+    val notesList = state.lockedNotes
     val preferencesManager = remember { PreferencesManager(context) }
     var currentViewType by remember {
         mutableStateOf(
@@ -75,7 +74,7 @@ fun FavNotesScreen(
         topBar = {
             TopAppBar(
                 title = {
-                    Text(text = stringResource(R.string.favorites))
+                    Text(text = stringResource(id = R.string.locked_notes))
                 },
                 navigationIcon = {
                     IconButton(onClick = {
@@ -152,7 +151,7 @@ fun FavNotesScreen(
 
         ) {
             Spacer(modifier = Modifier.height(16.dp))
-            if (state.favouriteNotes.isEmpty()) {
+            if (state.lockedNotes.isEmpty()) {
                 var showProgress by remember { mutableStateOf(true) }
 
                 LaunchedEffect(Unit) {
@@ -166,7 +165,7 @@ fun FavNotesScreen(
                     if (showProgress) {
                         CircularProgressIndicator(color = BabyBlue)
                     } else
-                        Text(text = stringResource(R.string.you_have_no_favorite_notes))
+                        Text(text = stringResource(R.string.you_have_no_locked_notes))
                 }
             } else {
                 when (currentViewType) {
@@ -200,8 +199,3 @@ fun FavNotesScreen(
         }
     }
 }
-
-
-
-
-

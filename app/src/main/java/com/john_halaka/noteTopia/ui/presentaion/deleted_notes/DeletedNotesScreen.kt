@@ -1,6 +1,7 @@
 package com.john_halaka.noteTopia.ui.presentaion.deleted_notes
 
 import android.content.Context
+import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -47,7 +48,7 @@ fun DeletedNotesScreen(
     val state = viewModel.state.value
     val snackbarHostState = remember { SnackbarHostState() }
     val notesList = state.deletedNotes
-
+    Log.d("deleted notes", "Deleted notes are $notesList")
     Scaffold(
         snackbarHost = {
             SnackbarHost(snackbarHostState)

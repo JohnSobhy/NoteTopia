@@ -11,6 +11,8 @@ sealed class NotesEvent {
     data class UpdateNote(val note: Note) : NotesEvent()
     data class PinNote(val note: Note) : NotesEvent()
     data class UnpinNote(val note: Note) : NotesEvent()
+    data class LockNote(val note: Note) : NotesEvent()
+    data class UnlockNote(val note: Note) : NotesEvent()
 
     object RestoreNote : NotesEvent()
 

@@ -29,6 +29,10 @@ class NoteRepositoryImpl(private val dao: NoteDao) : NoteRepository {
         return dao.getFavouriteNotes()
     }
 
+    override fun getLockedNotes(): Flow<List<Note>> {
+        return dao.getLockedNotes()
+    }
+
     override fun getDeletedNotes(): Flow<List<Note>> {
         return dao.getDeletedNotes()
     }
@@ -44,5 +48,9 @@ class NoteRepositoryImpl(private val dao: NoteDao) : NoteRepository {
 
     override suspend fun pinNote(noteId: Int, isPinned: Boolean) {
         return dao.updateIsPinned(noteId, isPinned)
+    }
+
+    override suspend fun lockNote(noteId: Int, isLocked: Boolean) {
+        return dao.updateIsLocked(noteId, isLocked)
     }
 }

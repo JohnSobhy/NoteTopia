@@ -70,5 +70,17 @@
     <string name="grid">Grid</string>
     <string name="list">List</string>
     <string name="small_grid">Small Grid</string>
+    <string name="unlock">Unlock</string>
+    <string name="lock">Lock</string>
+    <string name="note_is_locked">Note is locked</string>
+    <string name="note_is_unlocked">Note is unlocked</string>
+    <string name="locked_notes">Locked Notes</string>
+    <string name="you_have_no_locked_notes">You have no locked notes</string>
+    <string name="unlock_note">Unlock Note</string>
+    <string name="please_authenticate_to_unlock_the_note">Please authenticate to unlock the note</string>
+    <string name="this_note_will_be_removed_permanently">This note will be removed permanently!</string>
+    <string name="biometric_authentication_required">Biometric Authentication Required</string>
+    <string name="please_set_up_biometric_authentication_in_your_device_settings_to_lock_notes">Please set up biometric authentication in your device settings to lock notes.</string>
+    <string name="go_to_settings">Go to settings</string>
 
 </resources>

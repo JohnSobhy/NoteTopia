@@ -11,7 +11,7 @@ import com.john_halaka.noteTopia.feature_todo.domain.model.Todo
 
 @Database(
     entities = [Note::class, Todo::class, NoteColor::class],
-    version = 3,
+    version = 4,
     exportSchema = true,
 )
 abstract class NoteDatabase : RoomDatabase() {

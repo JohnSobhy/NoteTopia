@@ -18,7 +18,8 @@ data class Note(
     val color: Int,
     val isFavourite: Boolean = false,
     val isDeleted: Boolean = false,
-    val isPinned: Boolean = false
+    val isPinned: Boolean = false,
+    val isLocked: Boolean = false,
 ) {
     companion object {
         val noteColors = listOf(SandyBrown, VistaBlue, DarkTurquoise, LightGreen, Purple80)

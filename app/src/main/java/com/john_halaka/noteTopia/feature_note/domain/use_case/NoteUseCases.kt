@@ -7,8 +7,10 @@ data class NoteUseCases(
     val addNote: AddNote,
     val getNoteById: GetNoteById,
     val getFavouriteNotes: GetFavouriteNotes,
+    val getLockedNotes: GetLockedNotes,
     val getDeletedNotes: GetDeletedNotes,
     val updateNote: UpdateNote,
     val moveNoteToTrash: MoveNoteToTrash,
-    val togglePinNote: TogglePinNote
+    val togglePinNote: TogglePinNote,
+    val toggleLockNote: ToggleLockNote
 )

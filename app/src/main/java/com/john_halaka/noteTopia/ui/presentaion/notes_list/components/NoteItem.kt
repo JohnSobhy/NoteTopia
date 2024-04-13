@@ -1,7 +1,15 @@
 package com.john_halaka.noteTopia.ui.presentaion.notes_list.components
 
 import android.content.Context
+import android.content.Intent
+import android.os.Build
+import android.provider.Settings
+import android.util.Log
 import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
+import androidx.biometric.BiometricManager
 import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
@@ -19,6 +27,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material.icons.filled.LockOpen
 import androidx.compose.material.icons.filled.PushPin
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.outlined.Delete
@@ -32,9 +42,12 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -51,12 +64,18 @@ import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.john_halaka.noteTopia.R
+import com.john_halaka.noteTopia.feature_lock_note.BiometricPromptManager
 import com.john_halaka.noteTopia.feature_note.domain.model.Note
 import com.john_halaka.noteTopia.ui.Screen
 import com.john_halaka.noteTopia.ui.presentaion.notes_list.NotesEvent
 import com.john_halaka.noteTopia.ui.presentaion.notes_list.NotesViewModel
 import com.john_halaka.noteTopia.ui.theme.LightGray
 import com.john_halaka.noteTopia.ui.theme.MetallicGold
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 data class DropDownItem(
@@ -75,7 +94,36 @@ fun NoteItem(
     viewModel: NotesViewModel,
     context: Context,
 ) {
+    val biometricPromptManager = BiometricPromptManager(context as AppCompatActivity)
     val (showDeleteNoteDialog, setShowDeleteNoteDialog) = remember { mutableStateOf(false) }
+    val (showBiometricPrompt, setShowBiometricPrompt) = remember { mutableStateOf(false) }
+
+
+    val coroutineScope = rememberCoroutineScope()
+
+    val biometricResult by biometricPromptManager.promptResults.collectAsState(
+        initial = null
+    )
+    val enrollLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartActivityForResult()
+    ) {
+        println("Activity result: $it")
+    }
+    LaunchedEffect(biometricResult) {
+        if (biometricResult is BiometricPromptManager.BiometricResult.AuthenticationNotSet) {
+            if (Build.VERSION.SDK_INT >= 30) {
+                val enrollIntent = Intent(Settings.ACTION_BIOMETRIC_ENROLL).apply {
+                    putExtra(
+                        Settings.EXTRA_BIOMETRIC_AUTHENTICATORS_ALLOWED,
+                        BiometricManager.Authenticators.BIOMETRIC_STRONG
+                                or BiometricManager.Authenticators.DEVICE_CREDENTIAL
+                    )
+                }
+                enrollLauncher.launch(enrollIntent)
+            }
+        }
+
+    }
 
     var isContextMenuVisible by rememberSaveable {
         mutableStateOf(false)
@@ -126,6 +174,21 @@ fun NoteItem(
             )
         )
     }
+    if (note.isLocked) {
+        defaultDropDownItems.add(
+            DropDownItem(
+                stringResource(R.string.unlock),
+                icon = Icons.Default.LockOpen
+            )
+        )
+    } else {
+        defaultDropDownItems.add(
+            DropDownItem(
+                stringResource(R.string.lock),
+                icon = Icons.Default.Lock
+            )
+        )
+    }
     defaultDropDownItems.add(
         DropDownItem(
             stringResource(R.string.delete),
@@ -140,10 +203,21 @@ fun NoteItem(
 
     val onClick = {
         if (isClickable) {
-            navController.navigate(
-                Screen.AddEditNoteScreen.route +
-                        "?noteId=${note.id}&noteColor=${note.color}"
-            )
+            // Get the latest note object from the ViewModel
+            val latestNote = viewModel.state.value.notes.find { it.id == note.id }
+            if (latestNote?.isLocked == true) {
+                unlockNote(
+                    biometricPromptManager,
+                    note,
+                    navController,
+                    context
+                )
+            } else {
+                navController.navigate(
+                    Screen.AddEditNoteScreen.route +
+                            "?noteId=${note.id}&noteColor=${note.color}"
+                )
+            }
         }
     }
 
@@ -151,19 +225,45 @@ fun NoteItem(
         if (showDefaultDropDownMenu) {
             when (item.text) {
                 context.resources.getString(R.string.delete) -> {
-                    viewModel.onEvent(
-                        NotesEvent.MoveNoteToTrash(
-                            note.copy(
-                                isDeleted = !note.isDeleted
+                    val latestNote = viewModel.state.value.notes.find { it.id == note.id }
+                    if (latestNote?.isLocked == true) {
+                        biometricPromptManager.showBiometricPrompt(
+                            title = context.getString(R.string.unlock_note),
+                            description = context.getString(R.string.please_authenticate_to_unlock_the_note)
+                        )
+                        coroutineScope.launch {
+                            biometricPromptManager.promptResults.collect { result ->
+                                when (result) {
+                                    is BiometricPromptManager.BiometricResult.AuthenticationSuccess -> {
+                                        viewModel.onEvent(
+                                            NotesEvent.MoveNoteToTrash(
+                                                note.copy(isDeleted = !note.isDeleted)
+                                            )
+                                        )
+                                        mToast(
+                                            context,
+                                            context.resources.getString(R.string.note_moved_to_trash)
+                                        )
+                                    }
+
+                                    is BiometricPromptManager.BiometricResult.AuthenticationError -> {}
+                                    BiometricPromptManager.BiometricResult.AuthenticationFailed -> {}
+                                    BiometricPromptManager.BiometricResult.AuthenticationNotSet -> {}
+                                    BiometricPromptManager.BiometricResult.FeatureUnavailable -> {}
+                                    BiometricPromptManager.BiometricResult.HardwareUnavailable -> {}
+                                }
+                            }
+                        }
+                    } else {
+                        viewModel.onEvent(
+                            NotesEvent.MoveNoteToTrash(
+                                note.copy(isDeleted = !note.isDeleted)
                             )
                         )
-                    )
-                    mToast(
-                        context,
-                        context.resources.getString(R.string.note_moved_to_trash)
-                    )
-                }
+                        mToast(context, context.resources.getString(R.string.note_moved_to_trash))
+                    }
 
+                }
                 context.resources.getString(R.string.pin) -> {
                     viewModel.onEvent(NotesEvent.PinNote(note))
                     mToast(context, context.resources.getString(R.string.note_pinned))
@@ -172,6 +272,57 @@ fun NoteItem(
                 context.resources.getString(R.string.unpin) -> {
                     viewModel.onEvent(NotesEvent.UnpinNote(note))
                     mToast(context, context.resources.getString(R.string.note_unpinned))
+                }
+
+                context.resources.getString(R.string.lock) -> {
+                    val canAuthenticate = biometricPromptManager.canAuthenticate()
+                    if (canAuthenticate == BiometricManager.BIOMETRIC_SUCCESS) {
+                        viewModel.onEvent(NotesEvent.LockNote(note))
+                        Log.d("lock", "lock is clicked and the isLocked is ${note.isLocked}")
+                    } else {
+                        // If biometric authentication is not set up, ask the user to set it up
+                        // You can show a dialog or a toast message to inform the user
+                        setShowBiometricPrompt(true)
+                    }
+                    mToast(context, context.resources.getString(R.string.note_is_locked))
+                }
+
+                context.resources.getString(R.string.unlock) -> {
+                    biometricPromptManager.showBiometricPrompt(
+                        title = context.getString(R.string.unlock_note),
+                        description = context.getString(R.string.please_authenticate_to_unlock_the_note)
+                    )
+                    coroutineScope.launch {
+                        biometricPromptManager.promptResults.collect { result ->
+                            when (result) {
+                                is BiometricPromptManager.BiometricResult.AuthenticationSuccess -> {
+                                    mToast(
+                                        context,
+                                        context.resources.getString(R.string.note_is_unlocked)
+                                    )
+                                    viewModel.onEvent(NotesEvent.UnlockNote(note))
+                                }
+
+                                is BiometricPromptManager.BiometricResult.AuthenticationError -> {
+                                    // Handle authentication error
+                                    // You can show a message to the user about the error
+                                }
+
+                                is BiometricPromptManager.BiometricResult.AuthenticationFailed -> {
+                                    // Handle authentication failure
+                                    // You can show a message to the user that the authentication failed
+                                }
+
+                                is BiometricPromptManager.BiometricResult.HardwareUnavailable,
+                                is BiometricPromptManager.BiometricResult.FeatureUnavailable,
+                                is BiometricPromptManager.BiometricResult.AuthenticationNotSet -> {
+                                    // Handle cases where biometric authentication is not available or not set up
+                                    // You can show a message to the user to set up biometric authentication
+                                }
+                            }
+                        }
+                    }
+
                 }
             }
         } else {
@@ -185,10 +336,34 @@ fun NoteItem(
                 )
                 mToast(context, context.resources.getString(R.string.note_restored))
             } else {
-                setShowDeleteNoteDialog(true)
+
+                if (note.isLocked) {
+                    biometricPromptManager.showBiometricPrompt(
+                        title = context.getString(R.string.unlock_note),
+                        description = context.getString(R.string.please_authenticate_to_unlock_the_note)
+                    )
+                    coroutineScope.launch {
+                        biometricPromptManager.promptResults.collect { result ->
+                            when (result) {
+                                is BiometricPromptManager.BiometricResult.AuthenticationSuccess -> {
+                                    setShowDeleteNoteDialog(true)
+                                }
+
+                                is BiometricPromptManager.BiometricResult.AuthenticationError -> {}
+                                BiometricPromptManager.BiometricResult.AuthenticationFailed -> {}
+                                BiometricPromptManager.BiometricResult.AuthenticationNotSet -> {}
+                                BiometricPromptManager.BiometricResult.FeatureUnavailable -> {}
+                                BiometricPromptManager.BiometricResult.HardwareUnavailable -> {}
+                            }
+                        }
+                    }
+                } else {
+                }
+
             }
         }
     }
+
     Box(
         modifier = modifier
             .fillMaxSize()
@@ -266,16 +441,23 @@ fun NoteItem(
                     )
 
                     Spacer(modifier = Modifier.height(8.dp))
-
-                    Text(
-                        text = note.content,
-                        modifier = Modifier.padding(start = 16.dp, end = 16.dp),
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onPrimaryContainer,
-                        maxLines = 2,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                    Spacer(modifier = Modifier.height(8.dp))
+                    if (note.isLocked) {
+                        Icon(
+                            imageVector = Icons.Default.Lock,
+                            contentDescription = stringResource(id = R.string.note_is_locked),
+                            tint = MaterialTheme.colorScheme.onPrimaryContainer
+                        )
+                    } else {
+                        Text(
+                            text = note.content,
+                            modifier = Modifier.padding(start = 16.dp, end = 16.dp),
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onPrimaryContainer,
+                            maxLines = 2,
+                            overflow = TextOverflow.Ellipsis
+                        )
+                        Spacer(modifier = Modifier.height(8.dp))
+                    }
                 }
             }
 
@@ -349,7 +531,7 @@ fun NoteItem(
         AlertDialog(
             onDismissRequest = { setShowDeleteNoteDialog(false) },
             title = { Text(stringResource(R.string.warning)) },
-            text = { Text("This note will be removed permanently!") },
+            text = { Text(stringResource(R.string.this_note_will_be_removed_permanently)) },
             confirmButton = {
                 Button(onClick = {
                     viewModel.onEvent(NotesEvent.DeleteNote(note))
@@ -365,7 +547,88 @@ fun NoteItem(
             }
         )
     }
+    // Add the AlertDialog here
+    if (showBiometricPrompt) {
+        AlertDialog(
+            onDismissRequest = { setShowBiometricPrompt(false) },
+            title = { Text(stringResource(R.string.biometric_authentication_required)) },
+            text = { Text(stringResource(R.string.please_set_up_biometric_authentication_in_your_device_settings_to_lock_notes)) },
+            confirmButton = {
+                Button(onClick = {
+                    // Open device settings
+                    val intent = Intent(Settings.ACTION_SETTINGS)
+                    context.startActivity(intent)
+                }) {
+                    Text(stringResource(R.string.go_to_settings))
+                }
+            },
+            dismissButton = {
+                Button(onClick = { setShowBiometricPrompt(false) }) {
+                    Text(stringResource(id = R.string.cancel))
+                }
+            }
+        )
+    }
 }
+
+fun unlockNote(
+    biometricPromptManager: BiometricPromptManager,
+    note: Note,
+    navController: NavController,
+    context: Context
+) {
+
+    val job = Job()
+    val scope = CoroutineScope(Dispatchers.Default + job)
+
+    fun cleanup() {
+        job.cancel()
+    }
+
+    biometricPromptManager.showBiometricPrompt(
+        title = context.getString(R.string.unlock_note),
+        description = context.getString(R.string.please_authenticate_to_unlock_the_note)
+    )
+    scope.launch {
+        biometricPromptManager.promptResults.collect { result ->
+            when (result) {
+                is BiometricPromptManager.BiometricResult.AuthenticationSuccess -> {
+                    withContext(Dispatchers.Main) {
+                        navController.navigate(
+                            Screen.AddEditNoteScreen.route +
+                                    "?noteId=${note.id}&noteColor=${note.color}"
+                        )
+                    }
+                    cleanup()
+                }
+
+                is BiometricPromptManager.BiometricResult.AuthenticationError -> {
+                    // Handle authentication error
+                    // You can show a message to the user about the error
+                    cleanup()
+                }
+
+                is BiometricPromptManager.BiometricResult.AuthenticationFailed -> {
+                    // Handle authentication failure
+                    // You can show a message to the user that the authentication failed
+                    cleanup()
+                }
+
+                is BiometricPromptManager.BiometricResult.HardwareUnavailable,
+                is BiometricPromptManager.BiometricResult.FeatureUnavailable,
+                is BiometricPromptManager.BiometricResult.AuthenticationNotSet -> {
+                    // Handle cases where biometric authentication is not available or not set up
+                    // You can show a message to the user to set up biometric authentication
+                    cleanup()
+
+                }
+            }
+        }
+    }
+
+}
+
+
 
 fun mToast(context: Context, msg: String) {
     Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()

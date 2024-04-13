@@ -14,9 +14,11 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.Email
 import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material3.Divider
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.Icon
@@ -61,6 +63,7 @@ import com.john_halaka.noteTopia.ui.presentaion.add_edit_note.components.AddEdit
 import com.john_halaka.noteTopia.ui.presentaion.daily_quote.DailyQuote
 import com.john_halaka.noteTopia.ui.presentaion.deleted_notes.DeletedNotesScreen
 import com.john_halaka.noteTopia.ui.presentaion.fav_notes.FavNotesScreen
+import com.john_halaka.noteTopia.ui.presentaion.locked_notes.LockedNotesScreen
 import com.john_halaka.noteTopia.ui.presentaion.notes_list.NotesScreen
 import com.john_halaka.noteTopia.ui.presentaion.search_notes.components.NotesSearchScreen
 import com.john_halaka.noteTopia.ui.presentaion.util.findActivity
@@ -86,6 +89,10 @@ fun Navigation() {
         composable(route = Screen.FavNotesScreen.route) {
             FavNotesScreen(navController = navController, context = LocalContext.current)
         }
+        composable(route = Screen.LockedNotesScreen.route) {
+            LockedNotesScreen(navController = navController, context = LocalContext.current)
+        }
+
         composable(route = Screen.DeletedNotesScreen.route) {
             DeletedNotesScreen(navController = navController, context = LocalContext.current)
         }
@@ -253,6 +260,12 @@ fun NavigationDrawer(
             selectedIcon = Icons.Default.Email,
             unselectedIcon = Icons.Outlined.Email,
             route = Screen.DailyQuoteScreen.route
+        ),
+        NavigationItem(
+            title = stringResource(R.string.locked_notes),
+            selectedIcon = Icons.Default.Lock,
+            unselectedIcon = Icons.Outlined.Lock,
+            route = Screen.LockedNotesScreen.route
         )
     )
     val basicNavigationItems: List<NavigationItem> = listOf(

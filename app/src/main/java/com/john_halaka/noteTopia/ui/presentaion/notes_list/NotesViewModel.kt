@@ -20,25 +20,30 @@ import javax.inject.Inject
 @HiltViewModel
 class NotesViewModel @Inject constructor(
     private val preferencesManager: PreferencesManager,
-    private val noteUseCases: NoteUseCases
+    private val noteUseCases: NoteUseCases,
 ) : ViewModel() {
-
+    //private val biometricPromptManager = BiometricPromptManager(LocalContext.current as AppCompatActivity)
     private val _state = mutableStateOf(NotesState())
     val state: State<NotesState> = _state
 
     private var recentlyDeletedNote: Note? = null
     private var getNotesJob: Job? = null
     private var getFavoritesJob: Job? = null
+    private var getLockedNotesJob: Job? = null
     private var getDeletedNotesJob: Job? = null
 
     private var currentNoteOrder = preferencesManager.getNoteOrder()
-//    val noteOrderComparator: Comparator<Note> = currentNoteOrder.comparator()
 
     init {
         viewModelScope.launch {
             //delay(300)
             Log.d("NotesViewModel", "calling getFavorites")
             getFavouriteNotes(currentNoteOrder)
+        }
+        viewModelScope.launch {
+            //delay(300)
+            Log.d("NotesViewModel", "calling getLockedNotes")
+            getLockedNotes(currentNoteOrder)
         }
         viewModelScope.launch {
             //delay(500)
@@ -50,7 +55,6 @@ class NotesViewModel @Inject constructor(
             Log.d("NotesViewModel", "calling getNotes")
             getNotes(currentNoteOrder)
         }
-
     }
 
     fun onEvent(event: NotesEvent) {
@@ -66,12 +70,10 @@ class NotesViewModel @Inject constructor(
                     getFavouriteNotes(event.noteOrder)
                     getNotes(event.noteOrder)
                     getDeletedNotes(event.noteOrder)
+                    getLockedNotes(event.noteOrder)
                 }
                 updateNoteOrder(event.noteOrder)
-                // currentNoteOrder = event.noteOrder
-
             }
-
             is NotesEvent.DeleteNote -> {
                 // used when removing a note permanently from the trash
                 viewModelScope.launch {
@@ -80,7 +82,6 @@ class NotesViewModel @Inject constructor(
                     getDeletedNotes(currentNoteOrder)
                 }
             }
-
             is NotesEvent.RestoreNote -> {
                 // used when the undo button is clicked after removing a note permanently from the trash
                 viewModelScope.launch {
@@ -89,20 +90,16 @@ class NotesViewModel @Inject constructor(
                     getDeletedNotes(currentNoteOrder)
                 }
             }
-
             is NotesEvent.ToggleOrderSection -> {
                 _state.value = state.value.copy(
                     isOrderSectionVisible = !state.value.isOrderSectionVisible
                 )
             }
-
             is NotesEvent.SearchNotes -> {
                 _state.value = state.value.copy(
                     searchResult = notesSearch(state.value.notes, event.searchPhrase)
                 )
-
             }
-
             is NotesEvent.UpdateNote -> {
                 Log.d("HomeScreen", "OnFavourite clicked isFavorite= ${event.note.isFavourite}")
                 viewModelScope.launch {
@@ -112,17 +109,32 @@ class NotesViewModel @Inject constructor(
                     getNotes(currentNoteOrder)
                 }
             }
-
             is NotesEvent.PinNote -> {
                 viewModelScope.launch {
                     noteUseCases.togglePinNote(event.note.id!!, true)
                     getNotes(currentNoteOrder)
                 }
             }
-
             is NotesEvent.UnpinNote -> {
                 viewModelScope.launch {
                     noteUseCases.togglePinNote(event.note.id!!, false)
+                    getNotes(currentNoteOrder)
+                }
+            }
+
+            is NotesEvent.LockNote -> {
+//                val canAuthenticate = biometricPromptManager.canAuthenticate()
+//                if (canAuthenticate == BiometricManager.BIOMETRIC_SUCCESS) {
+                // If biometric authentication is set up, lock the note
+                viewModelScope.launch {
+                    noteUseCases.toggleLockNote(event.note.id!!, true)
+                    getNotes(currentNoteOrder)
+                }
+            }
+
+            is NotesEvent.UnlockNote -> {
+                viewModelScope.launch {
+                    noteUseCases.toggleLockNote(event.note.id!!, false)
                     getNotes(currentNoteOrder)
                 }
             }
@@ -171,6 +183,24 @@ class NotesViewModel @Inject constructor(
                 .launchIn(viewModelScope)
         } catch (e: Exception) {
             Log.e("NotesViewModel", "Error getting favNotes: ${e.message}")
+        }
+
+    }
+
+    private fun getLockedNotes(noteOrder: NoteOrder) {
+        getLockedNotesJob?.cancel()
+        try {
+            getLockedNotesJob = noteUseCases.getLockedNotes(noteOrder)
+                .onEach { notes ->
+                    Log.d("NotesViewModel", "getLockedNotes: $notes")
+                    _state.value = state.value.copy(
+                        lockedNotes = notes,
+                        noteOrder = noteOrder
+                    )
+                }
+                .launchIn(viewModelScope)
+        } catch (e: Exception) {
+            Log.e("NotesViewModel", "Error getting lockedNotes: ${e.message}")
         }
 
     }

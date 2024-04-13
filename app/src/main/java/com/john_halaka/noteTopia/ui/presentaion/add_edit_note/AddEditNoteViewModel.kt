@@ -53,6 +53,9 @@ class AddEditNoteViewModel @Inject constructor(
     private val _noteIsFavorite = mutableStateOf(false)
     val noteIsFavorite: State<Boolean> = _noteIsFavorite
 
+    private val _noteIsLocked = mutableStateOf(false)
+    val noteIsLocked: State<Boolean> = _noteIsLocked
+
     private val _noteIsPinned = mutableStateOf(false)
     val noteIsPinned: State<Boolean> = _noteIsPinned
 
@@ -97,7 +100,7 @@ class AddEditNoteViewModel @Inject constructor(
                         Log.d("color", "note color is $_noteColor")
                         _noteIsFavorite.value = note.isFavourite
                         _noteIsPinned.value = note.isPinned
-
+                        _noteIsLocked.value = note.isLocked
                     }
                 }
             }
@@ -105,7 +108,6 @@ class AddEditNoteViewModel @Inject constructor(
         }
         // Fetch the saved colors
         fetchNoteColors()
-
     }
 
     fun onEvent(event: AddEditNoteEvent) {
@@ -158,7 +160,8 @@ class AddEditNoteViewModel @Inject constructor(
                                 color = noteColor.value,
                                 id = currentNoteId,
                                 isFavourite = noteIsFavorite.value,
-                                isPinned = noteIsPinned.value
+                                isPinned = noteIsPinned.value,
+                                isLocked = noteIsLocked.value
                             )
                         )
                         _eventFlow.emit(UiEvent.SaveNote)
@@ -214,6 +217,7 @@ class AddEditNoteViewModel @Inject constructor(
                     event.note.id?.let { noteId ->
                         noteUseCases.moveNoteToTrash(noteId, event.note.isDeleted)
                         noteUseCases.updateNote(noteId, event.note.isFavourite)
+                        noteUseCases.toggleLockNote(noteId, event.note.isLocked)
                     }
 
                     _eventFlow.emit(UiEvent.DeleteNote)
