@@ -22,7 +22,7 @@ class NotesViewModel @Inject constructor(
     private val preferencesManager: PreferencesManager,
     private val noteUseCases: NoteUseCases,
 ) : ViewModel() {
-    //private val biometricPromptManager = BiometricPromptManager(LocalContext.current as AppCompatActivity)
+
     private val _state = mutableStateOf(NotesState())
     val state: State<NotesState> = _state
 
@@ -101,11 +101,11 @@ class NotesViewModel @Inject constructor(
                 )
             }
             is NotesEvent.UpdateNote -> {
+                // change the isFavorite property
                 Log.d("HomeScreen", "OnFavourite clicked isFavorite= ${event.note.isFavourite}")
                 viewModelScope.launch {
                     noteUseCases.updateNote(event.note.id!!, event.note.isFavourite)
                     getFavouriteNotes(currentNoteOrder)
-                    // delay(500)
                     getNotes(currentNoteOrder)
                 }
             }
@@ -121,7 +121,6 @@ class NotesViewModel @Inject constructor(
                     getNotes(currentNoteOrder)
                 }
             }
-
             is NotesEvent.LockNote -> {
 //                val canAuthenticate = biometricPromptManager.canAuthenticate()
 //                if (canAuthenticate == BiometricManager.BIOMETRIC_SUCCESS) {
@@ -131,16 +130,14 @@ class NotesViewModel @Inject constructor(
                     getNotes(currentNoteOrder)
                 }
             }
-
             is NotesEvent.UnlockNote -> {
                 viewModelScope.launch {
                     noteUseCases.toggleLockNote(event.note.id!!, false)
                     getNotes(currentNoteOrder)
                 }
             }
-
             is NotesEvent.MoveNoteToTrash -> {
-                //used when restoring a note back from the trash
+                //used when sending a note to trash and restoring a note back from the trash
                 viewModelScope.launch {
                     noteUseCases.moveNoteToTrash(event.note.id!!, event.note.isDeleted)
                     getDeletedNotes(currentNoteOrder)
@@ -148,8 +145,6 @@ class NotesViewModel @Inject constructor(
             }
         }
     }
-
-
     private fun getNotes(noteOrder: NoteOrder) {
         getNotesJob?.cancel()
         Log.d("NotesViewModel", "getNotes called")
@@ -184,7 +179,6 @@ class NotesViewModel @Inject constructor(
         } catch (e: Exception) {
             Log.e("NotesViewModel", "Error getting favNotes: ${e.message}")
         }
-
     }
 
     private fun getLockedNotes(noteOrder: NoteOrder) {
@@ -202,7 +196,6 @@ class NotesViewModel @Inject constructor(
         } catch (e: Exception) {
             Log.e("NotesViewModel", "Error getting lockedNotes: ${e.message}")
         }
-
     }
 
     private fun getDeletedNotes(noteOrder: NoteOrder) {

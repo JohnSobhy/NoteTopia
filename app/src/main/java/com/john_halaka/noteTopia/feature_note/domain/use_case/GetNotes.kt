@@ -11,15 +11,14 @@ import kotlinx.coroutines.flow.map
 class GetNotes(
     private val repository: NoteRepository
 ) {
-
     operator fun invoke(
         noteOrder: NoteOrder = NoteOrder.Date(OrderType.Descending)
     ): Flow<List<Note>> {
         Log.d("getNotes", "GetNotes useCase is invoked")
         return repository.getNotes().map { notes ->
             val (pinnedNotes, unpinnedNotes) = notes.partition { it.isPinned }
-            val sortedPinnedNotes = Companion.sortNotes(pinnedNotes, noteOrder)
-            val sortedUnpinnedNotes = Companion.sortNotes(unpinnedNotes, noteOrder)
+            val sortedPinnedNotes = sortNotes(pinnedNotes, noteOrder)
+            val sortedUnpinnedNotes = sortNotes(unpinnedNotes, noteOrder)
             sortedPinnedNotes + sortedUnpinnedNotes
         }
     }

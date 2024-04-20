@@ -10,7 +10,6 @@ class AddNote(
     private val repository: NoteRepository,
     private val context: Context
 ) {
-
     @Throws(InvalidNoteException::class)
     suspend operator fun invoke(note: Note) {
         if (note.title.isBlank()) {

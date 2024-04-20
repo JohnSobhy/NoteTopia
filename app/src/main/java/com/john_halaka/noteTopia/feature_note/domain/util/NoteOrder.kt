@@ -23,13 +23,4 @@ sealed class NoteOrder(val orderType: OrderType) {
             }
         }
     }
-
-    fun copy(orderType: OrderType): NoteOrder {
-        return when (this) {
-            is Title -> Title(orderType)
-            is Date -> Date(orderType)
-            is Color -> Color(orderType)
-        }
-    }
-
 }

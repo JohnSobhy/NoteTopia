@@ -65,7 +65,6 @@ import com.john_halaka.noteTopia.ui.presentaion.deleted_notes.DeletedNotesScreen
 import com.john_halaka.noteTopia.ui.presentaion.fav_notes.FavNotesScreen
 import com.john_halaka.noteTopia.ui.presentaion.locked_notes.LockedNotesScreen
 import com.john_halaka.noteTopia.ui.presentaion.notes_list.NotesScreen
-import com.john_halaka.noteTopia.ui.presentaion.search_notes.components.NotesSearchScreen
 import com.john_halaka.noteTopia.ui.presentaion.util.findActivity
 import com.john_halaka.noteTopia.ui.theme.BrandGreen
 import com.john_halaka.noteTopia.ui.theme.IconColorGray
@@ -97,9 +96,9 @@ fun Navigation() {
             DeletedNotesScreen(navController = navController, context = LocalContext.current)
         }
 
-        composable(route = Screen.NotesSearchScreen.route) {
-            NotesSearchScreen(navController = navController, context = LocalContext.current)
-        }
+//        composable(route = Screen.NotesSearchScreen.route) {
+//            NotesSearchScreen(navController = navController, context = LocalContext.current)
+//        }
         composable(
             route = Screen.AddEditNoteScreen.route +
                     "?noteId={noteId}&noteColor={noteColor}",
@@ -121,9 +120,7 @@ fun Navigation() {
             val color = it.arguments?.getInt("noteColor") ?: -1
 
             AddEditNoteScreen(
-                navController = navController,
-                noteColor = color,
-                context = LocalContext.current
+                navController = navController, context = LocalContext.current
             )
         }
 

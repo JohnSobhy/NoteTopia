@@ -62,7 +62,6 @@ fun AddEditTodoScreen(
                         actionLabel = event.actionResId?.let { context.getString(it) }
                     )
                 }
-
                 else -> Unit
             }
         }
@@ -150,24 +149,6 @@ fun AddEditTodoScreen(
         }
     }
 }
-//
-//@Composable
-//fun MySnackbar(
-//    snackbarHostState: SnackbarHostState,
-//    modifier: Modifier = Modifier,
-//    durationMillis: Long = 5000,  // Duration in milliseconds
-//) {
-//    LaunchedEffect(key1 = snackbarHostState.currentSnackbarData) {
-//        delay(durationMillis)
-//        snackbarHostState.currentSnackbarData?.dismiss()
-//    }
-//
-//    SnackbarHost(
-//        hostState = snackbarHostState,
-//        modifier = modifier
-//    )
-//}
-
 
 @Preview
 @Composable

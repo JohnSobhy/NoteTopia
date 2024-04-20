@@ -98,16 +98,14 @@ fun NoteItem(
     val (showDeleteNoteDialog, setShowDeleteNoteDialog) = remember { mutableStateOf(false) }
     val (showBiometricPrompt, setShowBiometricPrompt) = remember { mutableStateOf(false) }
 
-
     val coroutineScope = rememberCoroutineScope()
-
     val biometricResult by biometricPromptManager.promptResults.collectAsState(
         initial = null
     )
     val enrollLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult()
     ) {
-        println("Activity result: $it")
+//        println("Activity result: $it")
     }
     LaunchedEffect(biometricResult) {
         if (biometricResult is BiometricPromptManager.BiometricResult.AuthenticationNotSet) {
@@ -122,9 +120,8 @@ fun NoteItem(
                 enrollLauncher.launch(enrollIntent)
             }
         }
-
     }
-
+// used to show options menu, either in notes screen or for deleted notes
     var isContextMenuVisible by rememberSaveable {
         mutableStateOf(false)
     }
@@ -149,12 +146,9 @@ fun NoteItem(
             mToast(context, context.resources.getString(R.string.removed_from_favourites))
         else
             mToast(context, context.resources.getString(R.string.added_to_favorites))
-
         viewModel.onEvent(
             NotesEvent.UpdateNote(
-                note.copy(
-                    isFavourite = !note.isFavourite
-                )
+                note.copy(isFavourite = !note.isFavourite)
             )
         )
     }
@@ -245,7 +239,6 @@ fun NoteItem(
                                             context.resources.getString(R.string.note_moved_to_trash)
                                         )
                                     }
-
                                     is BiometricPromptManager.BiometricResult.AuthenticationError -> {}
                                     BiometricPromptManager.BiometricResult.AuthenticationFailed -> {}
                                     BiometricPromptManager.BiometricResult.AuthenticationNotSet -> {}
@@ -257,12 +250,13 @@ fun NoteItem(
                     } else {
                         viewModel.onEvent(
                             NotesEvent.MoveNoteToTrash(
-                                note.copy(isDeleted = !note.isDeleted)
+                                note.copy(
+                                    isDeleted = !note.isDeleted
+                                )
                             )
                         )
                         mToast(context, context.resources.getString(R.string.note_moved_to_trash))
                     }
-
                 }
                 context.resources.getString(R.string.pin) -> {
                     viewModel.onEvent(NotesEvent.PinNote(note))
@@ -281,7 +275,7 @@ fun NoteItem(
                         Log.d("lock", "lock is clicked and the isLocked is ${note.isLocked}")
                     } else {
                         // If biometric authentication is not set up, ask the user to set it up
-                        // You can show a dialog or a toast message to inform the user
+                        // You can show a dialog to inform the user
                         setShowBiometricPrompt(true)
                     }
                     mToast(context, context.resources.getString(R.string.note_is_locked))
@@ -322,7 +316,6 @@ fun NoteItem(
                             }
                         }
                     }
-
                 }
             }
         } else {
@@ -336,7 +329,6 @@ fun NoteItem(
                 )
                 mToast(context, context.resources.getString(R.string.note_restored))
             } else {
-
                 if (note.isLocked) {
                     biometricPromptManager.showBiometricPrompt(
                         title = context.getString(R.string.unlock_note),
@@ -348,7 +340,6 @@ fun NoteItem(
                                 is BiometricPromptManager.BiometricResult.AuthenticationSuccess -> {
                                     setShowDeleteNoteDialog(true)
                                 }
-
                                 is BiometricPromptManager.BiometricResult.AuthenticationError -> {}
                                 BiometricPromptManager.BiometricResult.AuthenticationFailed -> {}
                                 BiometricPromptManager.BiometricResult.AuthenticationNotSet -> {}
@@ -358,12 +349,12 @@ fun NoteItem(
                         }
                     }
                 } else {
+                    setShowDeleteNoteDialog(true)
                 }
 
             }
         }
     }
-
     Box(
         modifier = modifier
             .fillMaxSize()
@@ -487,8 +478,6 @@ fun NoteItem(
                 y = pressOffset.y - itemHeight,
                 x = pressOffset.x
             )
-
-
         ) {
             if (showDefaultDropDownMenu) {
                 defaultDropDownItems.forEach { item ->
@@ -504,7 +493,6 @@ fun NoteItem(
                             isContextMenuVisible = false
                         }
                     )
-
                 }
             } else {
                 deletedNoteDropDownItems.forEach { item ->
@@ -520,12 +508,10 @@ fun NoteItem(
                             isContextMenuVisible = false
                         }
                     )
-
                 }
             }
         }
     }
-
 
     if (showDeleteNoteDialog) {
         AlertDialog(
@@ -547,7 +533,7 @@ fun NoteItem(
             }
         )
     }
-    // Add the AlertDialog here
+    // AlertDialog for configuring Biometrics in the settings
     if (showBiometricPrompt) {
         AlertDialog(
             onDismissRequest = { setShowBiometricPrompt(false) },
@@ -577,7 +563,6 @@ fun unlockNote(
     navController: NavController,
     context: Context
 ) {
-
     val job = Job()
     val scope = CoroutineScope(Dispatchers.Default + job)
 

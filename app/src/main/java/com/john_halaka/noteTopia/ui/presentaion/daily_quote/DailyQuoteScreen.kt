@@ -68,7 +68,7 @@ fun DailyQuote(
 
                 else -> quotes.forEach { quote ->
                     Text(
-                        text = "'" + quote.quote + "'",
+                        text = "'${quote.quote}'",
                         style = Typography.headlineMedium,
                         modifier = Modifier.padding(16.dp)
                     )

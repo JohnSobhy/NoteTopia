@@ -14,8 +14,9 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Save
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -39,7 +40,6 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInRoot
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
@@ -56,7 +56,6 @@ import kotlinx.coroutines.flow.collectLatest
 @Composable
 fun AddEditNoteScreen(
     navController: NavController,
-    noteColor: Int,
     context: Context,
     viewModel: AddEditNoteViewModel = hiltViewModel()
 ) {
@@ -66,7 +65,6 @@ fun AddEditNoteScreen(
     val currentNote = viewModel.note.value
     val noteId = currentNote.id
     var isFavorite: Boolean = currentNote.isFavourite
-
     val showColorMenu = remember { mutableStateOf(false) }
 
     val anchor = remember { mutableStateOf(Offset.Zero) }
@@ -76,6 +74,7 @@ fun AddEditNoteScreen(
             when (event) {
                 is AddEditNoteViewModel.UiEvent.SaveNote -> {
                     navController.navigateUp()
+                    mToast(context, context.getString(R.string.note_saved))
                 }
 
                 is AddEditNoteViewModel.UiEvent.ShowSnackbar -> {
@@ -83,17 +82,13 @@ fun AddEditNoteScreen(
                         message = event.message
                     )
                 }
-
                 is AddEditNoteViewModel.UiEvent.DeleteNote -> {
                     navController.navigateUp()
-
                 }
-
                 is AddEditNoteViewModel.UiEvent.NavigateBack -> {
                     navController.navigateUp()
                 }
             }
-
         }
     }
 
@@ -118,7 +113,7 @@ fun AddEditNoteScreen(
                     })
                     {
                         Icon(
-                            Icons.Filled.ArrowBack,
+                            Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = stringResource(R.string.back)
                         )
                     }
@@ -129,9 +124,8 @@ fun AddEditNoteScreen(
                         IconButton(
                             onClick = {
                                 showColorMenu.value = true
-                            },
-
-                            ) {
+                            }
+                        ) {
                             Icon(
                                 imageVector = ImageVector.vectorResource(R.drawable.note_color_trans),
                                 contentDescription = stringResource(R.string.note_color),
@@ -142,10 +136,6 @@ fun AddEditNoteScreen(
                             )
                         }
                         DropdownMenu(
-//                            offset = DpOffset(
-//                                x = (anchor.value.x.dp), // need a way to make the menu goes from end to start when near the edge
-//                                y = (anchor.value.y.dp - 50.dp) // the -50 value is based on trial and error only
-//                            ),
                             modifier = Modifier
                                 .background(MaterialTheme.colorScheme.onSecondary),
                             expanded = showColorMenu.value,
@@ -205,7 +195,6 @@ fun AddEditNoteScreen(
                                         )
                                     )
                                 )
-
                                 mToast(
                                     context,
                                     context.resources.getString(R.string.note_moved_to_trash)
@@ -216,9 +205,7 @@ fun AddEditNoteScreen(
                         Icon(
                             Icons.Filled.Delete,
                             contentDescription = stringResource(R.string.delete_note),
-
                             )
-
                     }
                     IconButton(
                         onClick = {
@@ -249,16 +236,11 @@ fun AddEditNoteScreen(
                     if (titleState.text.isNotBlank() && contentState.text.isNotBlank())
                         mToast(context, context.resources.getString(R.string.note_saved))
                 },
-//                containerColor = MaterialTheme.colorScheme.primaryContainer,
-//                contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
-
             ) {
                 Icon(
-                    painter = painterResource(R.drawable.baseline_save_24),
+                    Icons.Default.Save,
                     contentDescription = stringResource(R.string.save),
-
                     )
-
             }
         },
         snackbarHost = {
@@ -293,7 +275,6 @@ fun AddEditNoteScreen(
                     .fillMaxSize()
                     .imePadding()
             ) {
-
                 TransparentHintTextField(
                     text = contentState.text,
                     hint = contentState.hint,

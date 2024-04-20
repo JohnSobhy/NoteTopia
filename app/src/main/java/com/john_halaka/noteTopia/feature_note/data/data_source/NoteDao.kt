@@ -39,7 +39,7 @@ interface NoteDao {
     @Query("UPDATE note SET isDeleted = :isDeleted WHERE id = :noteId")
     suspend fun updateIsDeleted(noteId: Int, isDeleted: Boolean)
 
-    @Query("UPDATE note SET isPinned = :isPinned WHERE id = :noteId") // new function
+    @Query("UPDATE note SET isPinned = :isPinned WHERE id = :noteId")
     suspend fun updateIsPinned(noteId: Int, isPinned: Boolean)
 
     @Query("UPDATE note SET isLocked = :isLocked WHERE id = :noteId")

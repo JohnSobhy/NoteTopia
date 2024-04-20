@@ -10,12 +10,9 @@ sealed class AddEditNoteEvent {
     data class EnteredContent(val value: String) : AddEditNoteEvent()
     data class ChangeContentFocus(val focusState: FocusState) : AddEditNoteEvent()
     data class ChangeColor(val color: Int) : AddEditNoteEvent()
-
     data class ChangeIsFavorite(val isFavorite: Boolean) : AddEditNoteEvent()
     object SaveNote : AddEditNoteEvent()
-
     data class MoveNoteToTrash(val note: Note) : AddEditNoteEvent()
-
     object BackButtonClick : AddEditNoteEvent()
 }
 

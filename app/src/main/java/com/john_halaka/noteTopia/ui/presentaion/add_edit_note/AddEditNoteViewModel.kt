@@ -184,14 +184,11 @@ class AddEditNoteViewModel @Inject constructor(
                         noteContent.value.text.isNotBlank()
                     ) {
                         onEvent(AddEditNoteEvent.SaveNote)
-
                     } else if (
-                        noteTitle.value.text.isBlank() ||
+                        noteTitle.value.text.isBlank() &&
                         noteContent.value.text.isBlank()
                     ) {
-
                         _eventFlow.emit(UiEvent.NavigateBack)
-
                     } else {
                         _eventFlow.emit(
                             UiEvent.ShowSnackbar(
@@ -199,8 +196,6 @@ class AddEditNoteViewModel @Inject constructor(
                             )
                         )
                     }
-
-
                 }
             }
 
@@ -208,6 +203,7 @@ class AddEditNoteViewModel @Inject constructor(
                 Log.d("AddEditNoteViewModel", "trashButtonClicked")
                 viewModelScope.launch {
                     if (
+                    //Logical error needs reviewing
                         noteTitle.value.text.isBlank() ||
                         noteContent.value.text.isBlank()
                     ) {
@@ -240,7 +236,7 @@ class AddEditNoteViewModel @Inject constructor(
     }
 
     // Function to fetch all the saved colors
-    fun fetchNoteColors() {
+    private fun fetchNoteColors() {
         viewModelScope.launch {
             _savedNoteColors.value = noteColorUsesCases.getNoteColorsUseCase()
         }

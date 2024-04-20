@@ -6,8 +6,6 @@ interface NoteColorRepository {
     suspend fun getAll(): List<NoteColor>
     suspend fun insert(noteColor: NoteColor)
     suspend fun delete(noteColor: NoteColor)
-
     suspend fun deleteAll()
-
     suspend fun colorExists(argb: Int): Int
 }
