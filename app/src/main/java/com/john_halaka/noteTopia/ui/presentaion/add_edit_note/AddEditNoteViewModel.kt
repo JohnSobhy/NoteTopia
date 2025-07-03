@@ -11,6 +11,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.john_halaka.noteTopia.R
+import com.john_halaka.noteTopia.feature_note.domain.NoteContentState
 import com.john_halaka.noteTopia.feature_note.domain.model.InvalidNoteException
 import com.john_halaka.noteTopia.feature_note.domain.model.Note
 import com.john_halaka.noteTopia.feature_note.domain.use_case.NoteUseCases
@@ -30,6 +31,11 @@ class AddEditNoteViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     context: Context
 ) : ViewModel() {
+
+    private val _noteContentState = mutableStateOf(NoteContentState())
+    val noteContentState = _noteContentState
+
+
     private val _noteTitle = mutableStateOf(
         NoteTextFieldState(
              hint = context.resources.getString(R.string.enter_title)
@@ -79,12 +85,23 @@ class AddEditNoteViewModel @Inject constructor(
     var note: State<Note> = _note
     private val snackBarMessage = context.resources.getString(R.string.couldn_t_save_note)
 
+
     init {
         savedStateHandle.get<Int>("noteId")?.let { noteId ->
             if (noteId != -1) {
                 Log.d("AddEditNoteViewModel", "getNoteById is call $noteId")
                 viewModelScope.launch {
                     noteUseCases.getNoteById(noteId)?.also { note ->
+//                        _noteContentState.value = noteContentState.value.copy(
+//                            noteId = note.id!!,
+//                            noteTitle = note.title,
+//                            noteContent = note.content,
+//                            noteColor = note.color,
+//                            noteIsPinned = note.isPinned,
+//                            noteIsDeleted = note.isDeleted,
+//                            noteIsFavorite = note.isFavourite,
+//                            timestamp = note.timestamp
+//                        )
                         _note.value = note
                         currentNoteId = note.id
                         _noteTitle.value = noteTitle.value.copy(

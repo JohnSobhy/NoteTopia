@@ -141,6 +141,7 @@ class NotesViewModel @Inject constructor(
                 viewModelScope.launch {
                     noteUseCases.moveNoteToTrash(event.note.id!!, event.note.isDeleted)
                     getDeletedNotes(currentNoteOrder)
+                    getNotes(currentNoteOrder)
                 }
             }
         }

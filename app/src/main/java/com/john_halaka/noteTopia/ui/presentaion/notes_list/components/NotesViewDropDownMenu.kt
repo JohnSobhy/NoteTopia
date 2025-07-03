@@ -1,10 +1,10 @@
 package com.john_halaka.noteTopia.ui.presentaion.notes_list.components
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.List
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.GridOn
 import androidx.compose.material.icons.filled.GridView
-import androidx.compose.material.icons.filled.List
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
@@ -37,7 +37,7 @@ fun NotesViewDropDownMenu(
         ),
         NotesViewDropDownItem(
             text = stringResource(R.string.list),
-            leadingIcon = Icons.Default.List,
+            leadingIcon = Icons.AutoMirrored.Filled.List,
             viewType = ViewType.LIST
         ),
         NotesViewDropDownItem(

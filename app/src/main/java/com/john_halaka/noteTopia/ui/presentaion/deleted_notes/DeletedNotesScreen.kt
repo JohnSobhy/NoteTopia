@@ -7,8 +7,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Sort
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.Sort
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -62,7 +62,7 @@ fun DeletedNotesScreen(
                     })
                     {
                         Icon(
-                            Icons.Filled.ArrowBack,
+                            Icons.AutoMirrored.Filled.ArrowBack,
                             contentDescription = stringResource(R.string.back)
                         )
                     }
@@ -78,7 +78,7 @@ fun DeletedNotesScreen(
                             },
                         ) {
                             Icon(
-                                imageVector = Icons.Default.Sort,
+                                imageVector = Icons.AutoMirrored.Filled.Sort,
                                 contentDescription = stringResource(R.string.sort_notes)
                             )
                         }

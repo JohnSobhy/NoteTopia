@@ -1,12 +1,13 @@
 [versions]
-activity-compose = "1.8.2"
+activity-compose = "1.9.0"
 androidx-junit = "1.1.5"
 
+appcompat = "1.6.1"
 biometric = "1.2.0-alpha05"
 color = "3.3.0"
 colorpicker-compose = "1.0.7"
-core-ktx = "1.12.0"
-datastore-preferences = "1.0.0"
+core-ktx = "1.13.0"
+datastore-preferences = "1.1.0"
 espresso-core = "3.5.1"
 gradle = "8.3.2"
 hilt-android = "2.49"
@@ -14,22 +15,26 @@ hilt-compiler = "1.2.0"
 hilt-navigation-compose = "1.2.0"
 input = "3.3.0"
 junit = "4.13.2"
-kotlin-gradle-plugin = "1.8.22"
-kotlinx-coroutines-core = "1.7.2"
+
+kotlin = "2.0.20"
+kotlin-gradle-plugin = "2.0.20"
+kotlinx-coroutines-core = "1.7.3"
 lifecycle-runtime-ktx = "2.7.0"
 lifecycle-viewmodel-compose = "2.7.0"
 material = "1.11.0"
-material-icons-extended = "1.6.3"
+material-icons-extended = "1.6.6"
 navigation-compose = "2.7.7"
 retrofit = "2.9.0"
 richeditor-compose = "1.0.0-beta03"
-room-runtime = "2.6.1"
-runtime-livedata = "1.6.3"
+room = "2.7.2"
+ksp = "2.0.20-1.0.24"
+runtime-livedata = "1.6.6"
 security-crypto = "1.1.0-alpha06"
 
 [libraries]
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activity-compose" }
 
+androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
 androidx-biometric = { module = "androidx.biometric:biometric", version.ref = "biometric" }
 androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "core-ktx" }
 androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore-preferences" }
@@ -40,9 +45,9 @@ androidx-junit = { module = "androidx.test.ext:junit", version.ref = "androidx-j
 androidx-lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycle-runtime-ktx" }
 androidx-material-icons-extended = { module = "androidx.compose.material:material-icons-extended", version.ref = "material-icons-extended" }
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigation-compose" }
-androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "room-runtime" }
-androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "room-runtime" }
-androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "room-runtime" }
+androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
+androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
+androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
 androidx-runtime-livedata = { module = "androidx.compose.runtime:runtime-livedata", version.ref = "runtime-livedata" }
 androidx-security-crypto = { module = "androidx.security:security-crypto", version.ref = "security-crypto" }
 color = { module = "com.afollestad.material-dialogs:color", version.ref = "color" }
@@ -54,6 +59,7 @@ hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", ve
 hilt-android-gradle-plugin = { module = "com.google.dagger:hilt-android-gradle-plugin", version.ref = "hilt-android" }
 input = { module = "com.afollestad.material-dialogs:input", version.ref = "input" }
 junit = { module = "junit:junit", version.ref = "junit" }
+kotlin-bom = { module = "org.jetbrains.kotlin:kotlin-bom", version.ref = "kotlin" }
 kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin-gradle-plugin" }
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinx-coroutines-core" }
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines-core" }
@@ -63,3 +69,6 @@ retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit
 richeditor-compose = { module = "com.mohamedrejeb.richeditor:richeditor-compose", version.ref = "richeditor-compose" }
 
 [plugins]
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+room = { id = "androidx.room", version.ref = "room" }
+composeCompiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }

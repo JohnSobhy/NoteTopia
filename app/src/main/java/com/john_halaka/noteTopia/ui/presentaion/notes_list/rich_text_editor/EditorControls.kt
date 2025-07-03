@@ -6,9 +6,9 @@ import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.FormatAlignLeft
+import androidx.compose.material.icons.automirrored.filled.FormatAlignRight
 import androidx.compose.material.icons.filled.FormatAlignCenter
-import androidx.compose.material.icons.filled.FormatAlignLeft
-import androidx.compose.material.icons.filled.FormatAlignRight
 import androidx.compose.material.icons.filled.FormatBold
 import androidx.compose.material.icons.filled.FormatColorText
 import androidx.compose.material.icons.filled.FormatItalic
@@ -210,7 +210,7 @@ fun EditorControls(
             onClick = onStartAlignClick
         ) {
             Icon(
-                imageVector = Icons.Default.FormatAlignLeft,
+                imageVector = Icons.AutoMirrored.Filled.FormatAlignLeft,
                 contentDescription = "Start Align Control",
                 tint = MaterialTheme.colorScheme.onPrimary
             )
@@ -232,7 +232,7 @@ fun EditorControls(
             onClick = onEndAlignClick
         ) {
             Icon(
-                imageVector = Icons.Default.FormatAlignRight,
+                imageVector = Icons.AutoMirrored.Filled.FormatAlignRight,
                 contentDescription = "End Align Control",
                 tint = MaterialTheme.colorScheme.onPrimary
             )

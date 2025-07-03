@@ -19,8 +19,8 @@ import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.Email
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Lock
-import androidx.compose.material3.Divider
 import androidx.compose.material3.DrawerState
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalDrawerSheet
@@ -215,10 +215,10 @@ fun NavigationItemsBar(
 
                 }
 
-                Divider(
+                HorizontalDivider(
+                    modifier = Modifier.align(Alignment.TopCenter),
                     thickness = 1.dp,
-                    color = MaterialTheme.colorScheme.onTertiary,
-                    modifier = Modifier.align(Alignment.TopCenter)
+                    color = MaterialTheme.colorScheme.onTertiary
                 )
             }
         }
